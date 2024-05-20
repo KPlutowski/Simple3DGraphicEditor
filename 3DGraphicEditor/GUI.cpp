@@ -55,7 +55,7 @@ MyFrame1::MyFrame1( wxWindow* parent, wxWindowID id, const wxString& title, cons
 
 	bSizer1->Add( bSizer2, 1, wxEXPAND, 5 );
 
-	Command_panel = new wxTextCtrl( this, wxID_ANY, wxT(">>"), wxDefaultPosition, wxSize( 400,-1 ), 0 );
+	Command_panel = new wxTextCtrl( this, wxID_ANY, wxT(">>"), wxDefaultPosition, wxSize( 400,-1 ), wxTE_PROCESS_ENTER );
 	bSizer1->Add( Command_panel, 0, wxALL, 10 );
 
 

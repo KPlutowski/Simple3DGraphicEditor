@@ -7,7 +7,9 @@ MyFrame1( parent )
 
 }
 
-void GUIMyFrame1::Update( wxCommandEvent& event )
+void GUIMyFrame1::Update(wxCommandEvent& event)
 {
-// TODO: Implement Update
+	// TODO: Implement Update
+	Command_panel->SetValue(wxT(">>"));
+	Command_panel->SetInsertionPointEnd();
 }
