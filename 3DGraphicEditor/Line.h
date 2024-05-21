@@ -34,5 +34,6 @@ protected:
 private:
 	Position _start; /// @brief Poczatek linii
 	Position _end; /// @brief Koniec linii
-	wxColour _color /// @brief Kolor linii
+	wxColour _color; /// @brief Kolor linii
+	// Tu zakladam ze kazda figura bedzie miala inny kolor linii, jesli nie to mozna ta zmienna usunac
 };
