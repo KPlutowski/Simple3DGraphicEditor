@@ -14,14 +14,15 @@ enum class view {
 /// Pozycja w przestrzeni 3D
 /// </summary>
 struct Position {
+	Position(double a, double b, double c) { x = a, y = b, z = c; }
 	double x, y, z;
 };
 
 /// <summary>
 /// Klasa bazowa dla figur
-/// Managment figur w wektorze polega na wywolaniu Drawable::metoda()
-/// Jezeli sie nie podoba to moge zrobic osobna klase ObjectManager jak Maciek proponowal : p
-/// wowczas managment bedzie polegal na mgr.metoda()
+/// Management figur w wektorze polega na wywolaniu Drawable::metoda()
+/// Jezeli sie nie podoba to moge zrobic osobna klase ObjectManager jak Maciek proponowal :p
+/// wowczas management bedzie polegal na mgr.metoda()
 /// </summary>
 class Drawable {
 public:
