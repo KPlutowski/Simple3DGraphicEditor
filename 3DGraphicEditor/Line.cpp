@@ -3,9 +3,7 @@
 #include "Drawable.h"
 #include "Line.h"
 
-Line::Line(double x1, double y1, double z1, double x2, double y2, double z2) : _start(x1, y1, z1), _end(x2, y2, z2), _color(line_color) {
-
-}
+Line::Line(double x1, double y1, double z1, double x2, double y2, double z2) : _start(x1, y1, z1), _end(x2, y2, z2), _color(line_color) {}
 
 Position Line::start() {
 	return _start;
