@@ -25,8 +25,8 @@ MyFrame1::MyFrame1( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 
-	vertical_side_panle = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	bSizer4->Add( vertical_side_panle, 1, wxEXPAND | wxALL, 5 );
+	vertical_side_panel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	bSizer4->Add( vertical_side_panel, 1, wxEXPAND | wxALL, 5 );
 
 	side_panel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	bSizer4->Add( side_panel, 1, wxEXPAND | wxALL, 5 );

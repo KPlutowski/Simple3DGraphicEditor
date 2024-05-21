@@ -31,7 +31,7 @@ class MyFrame1 : public wxFrame
 	private:
 
 	protected:
-		wxPanel* vertical_side_panle;
+		wxPanel* vertical_side_panel;
 		wxPanel* side_panel;
 		wxPanel* horizontal_side_panel;
 		wxPanel* perspective_panel;
