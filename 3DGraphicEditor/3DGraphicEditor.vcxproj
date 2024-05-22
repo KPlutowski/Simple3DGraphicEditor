@@ -134,6 +134,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CommandParser.cpp" />
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="GUIMyFrame1.cpp" />

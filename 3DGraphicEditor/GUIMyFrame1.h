@@ -28,7 +28,7 @@ class GUIMyFrame1 : public MyFrame1
 		/** Constructor */
 		GUIMyFrame1( wxWindow* parent );
 	//// end generated class members
-
+		
 
 };
 
