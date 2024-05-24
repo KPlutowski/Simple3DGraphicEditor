@@ -10,9 +10,9 @@ view Drawable::view_style = view::lines;
 double Drawable::front_distance = 1;
 double Drawable::top_distance = 1;
 double Drawable::right_distance = 1;
-Position Drawable::camera_pos = Position(1, 1, 1);
+Position Drawable::camera_pos = Position(0, 0, 500);
 Position Drawable::camera_look = Position(0, 0, 0);
-double Drawable::camera_fov = 45.0;
+double Drawable::camera_fov = 60.0;
 
 void Drawable::addObj(Drawable* fig) {
 	figures.push_back(fig);

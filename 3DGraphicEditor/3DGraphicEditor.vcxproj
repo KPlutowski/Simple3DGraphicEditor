@@ -140,6 +140,7 @@
     <ClCompile Include="GUIMyFrame1.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommandParser.h" />
@@ -147,6 +148,7 @@
     <ClInclude Include="GUI.h" />
     <ClInclude Include="GUIMyFrame1.h" />
     <ClInclude Include="Line.h" />
+    <ClInclude Include="Sphere.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

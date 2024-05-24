@@ -27,6 +27,7 @@ void Line::move(double x_shift, double y_shift, double z_shift) {
 
 void Line::rotate(double x_cord, double y_cord, double z_cord, double alpha, double beta, double gamma) {
 	move(-x_cord, -y_cord, -z_cord);
+
 	std::vector<std::vector<double>> rotationMatrix = generate_rotation_matrix(alpha,beta,gamma);
 
 	double sx = _start.x * rotationMatrix[0][0] + _start.y * rotationMatrix[0][1] + _start.z * rotationMatrix[0][2];
@@ -67,16 +68,58 @@ void Line::draw_side(wxDC& dc) {
 }
 
 void Line::draw_perspective(wxDC& dc) {
-	//TODO
+    // Compute camera direction
+    Position camera_dir = {
+        camera_look.x - camera_pos.x,
+        camera_look.y - camera_pos.y,
+        camera_look.z - camera_pos.z
+    };
 
-	dc.SetPen(wxPen(_color));
+    // Normalize camera direction
+    double length = sqrt(camera_dir.x * camera_dir.x + camera_dir.y * camera_dir.y + camera_dir.z * camera_dir.z);
+    camera_dir.x /= length;
+    camera_dir.y /= length;
+    camera_dir.z /= length;
 
-	// C Position camera_pos; /// @brief Pozycja kamery z perspektywa
-	// L Position camera_look; /// @brief Punkt na ktory patrzy kamera
-	// FOV double camera_fov; /// @brief FOV kamery z perspektywa (w stopniach)
+    // Convert field of view to radians
+    double fov_rad = camera_fov * M_PI / 180.0;
 
-	// _start, _end
+    // Compute screen dimensions
+    int screen_width = dc.GetSize().GetWidth();
+    int screen_height = dc.GetSize().GetHeight();
 
+    // Compute vertices positions in 3D
+    double x1 = _start.x;
+    double y1 = _start.y;
+    double z1 = _start.z;
+
+    double x2 = _end.x;
+    double y2 = _end.y;
+    double z2 = _end.z;
+
+    // Compute vectors from camera to vertices
+    double vec1_x = x1 - camera_pos.x;
+    double vec1_y = y1 - camera_pos.y;
+    double vec1_z = z1 - camera_pos.z;
+
+    double vec2_x = x2 - camera_pos.x;
+    double vec2_y = y2 - camera_pos.y;
+    double vec2_z = z2 - camera_pos.z;
+
+    // Compute dot products of camera direction and vectors to vertices
+    double dot_product1 = vec1_x * camera_dir.x + vec1_y * camera_dir.y + vec1_z * camera_dir.z;
+    double dot_product2 = vec2_x * camera_dir.x + vec2_y * camera_dir.y + vec2_z * camera_dir.z;
+
+    // Apply perspective projection
+    double projected_x1 = (screen_width / 2) + (vec1_x / (tan(fov_rad / 2) * dot_product1)) * (screen_width / 2);
+    double projected_y1 = (screen_height / 2) - (vec1_y / (tan(fov_rad / 2) * dot_product1)) * (screen_height / 2);
+
+    double projected_x2 = (screen_width / 2) + (vec2_x / (tan(fov_rad / 2) * dot_product2)) * (screen_width / 2);
+    double projected_y2 = (screen_height / 2) - (vec2_y / (tan(fov_rad / 2) * dot_product2)) * (screen_height / 2);
+
+    // Draw line
+    dc.SetPen(wxPen(_color));
+    dc.DrawLine(projected_x1, projected_y1, projected_x2, projected_y2);
 }
 
 void Line::draw(wxDC& dc1, wxDC& dc2, wxDC& dc3, wxDC& dc4)
@@ -86,3 +129,5 @@ void Line::draw(wxDC& dc1, wxDC& dc2, wxDC& dc3, wxDC& dc4)
 	draw_side(dc3);
 	draw_perspective(dc4);
 }
+
+

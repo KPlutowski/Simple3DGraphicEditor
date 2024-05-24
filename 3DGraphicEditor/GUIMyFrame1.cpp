@@ -1,6 +1,7 @@
 #include "GUIMyFrame1.h"
 #include "CommandParser.h"
 #include "Line.h"
+#include "Sphere.h"
 
 GUIMyFrame1::GUIMyFrame1( wxWindow* parent )
 :
@@ -61,11 +62,12 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 		if (CommandParser::command_length_check(command_prompt, 4)) {
 			try {
 				Position point = CommandParser::get_a_point(command_prompt[1]);
-			double r = std::stod(command_prompt[2]);
-			std::vector<int> sphere_lines = CommandParser::get_a_sphere_lines(command_prompt[3]);
-			int n = sphere_lines[0];
-			int m = sphere_lines[1];
+				double r = std::stod(command_prompt[2]);
+				std::vector<int> sphere_lines = CommandParser::get_a_sphere_lines(command_prompt[3]);
+				int meridians = sphere_lines[0];
+				int parallels = sphere_lines[1];
 
+				Drawable::addObj(new Sphere(point,r, meridians, parallels));
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {
