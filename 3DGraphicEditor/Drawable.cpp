@@ -139,6 +139,22 @@ void Drawable::saveToFile(const std::string& fileName)
 		std::cerr << "Error: Could not open file for writing: " << fileName << std::endl;
 		return;
 	}
+
+	// saving drawable settings
+	outFile << line_color.GetRGB() << " ";
+	outFile << fill_style << " ";
+	outFile << fill_color.GetRGB() << " ";
+	outFile << std::to_string(static_cast<int>(view_style)) << " ";
+
+	outFile << front_distance << " ";
+	outFile << top_distance << " ";
+	outFile << right_distance << " ";
+
+	outFile << camera_pos.x << " " << camera_pos.y << " " << camera_pos.z << " ";
+	outFile << camera_look.x << " " << camera_look.y << " " << camera_look.z << " ";
+
+	outFile << camera_fov << "\n";
+
 	for (Drawable* obj : figures)
 	{
 		outFile << obj->save();
@@ -159,7 +175,26 @@ void Drawable::loadFromFile(const std::string& fileName)
 	}
 	clearAll();  // Clear existing objects before loading new ones
 
+	// loading drawable settings
 	std::string line;
+
+	std::getline(inFile, line);
+	std::istringstream iss(line);
+
+	wxUint32 color; iss >> color; line_color = color;
+	iss >> fill_style;
+	iss >> color; fill_color = color;
+	int newView; iss >> newView; view_style = static_cast<view>(newView);
+	iss >> front_distance;
+	iss >> top_distance;
+	iss >> right_distance;
+
+	iss >> camera_pos.x >> camera_pos.y >> camera_pos.z;
+	iss >> camera_look.x >> camera_look.y >> camera_look.z;
+
+	iss >> camera_fov;
+
+
 	while (std::getline(inFile, line)) 
 	{
 		std::istringstream iss(line);
@@ -169,7 +204,6 @@ void Drawable::loadFromFile(const std::string& fileName)
 		if (type == "Line") 
 		{
 			double x1, y1, z1, x2, y2, z2;
-			wxUint32 color;
 			if (iss >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> color) 
 			{
 				addObj(new Line(Position(x1, y1, z1), Position(x2, y2, z2),color));
@@ -179,7 +213,6 @@ void Drawable::loadFromFile(const std::string& fileName)
 		{
 			double x, y, z, radius;
 			int meridians, parallels;
-			wxUint32 color;
 			if (iss >> x >> y >> z >> radius >> meridians >> parallels>> color) {
 				addObj(new Sphere(Position(x, y, z), radius, meridians, parallels,color));
 			}
