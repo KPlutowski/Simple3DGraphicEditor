@@ -59,3 +59,7 @@ Drawable* Drawable::getObj(int index) {
 std::vector<Drawable*> Drawable::getAllObjs() {
 	return figures;
 }
+
+void Drawable::SetLineColor(const wxColour& newColour){
+	line_color = newColour;
+}

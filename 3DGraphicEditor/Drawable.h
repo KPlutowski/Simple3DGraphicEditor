@@ -85,6 +85,8 @@ public:
 	/// @param dc4 - panel z widokiem z perspektywa
 	virtual void draw(wxDC& dc1, wxDC& dc2, wxDC& dc3, wxDC& dc4) = 0;
 
+	/// \param newColour	 
+	static void SetLineColor(const wxColour& newColour);
 
 protected:
 	// Zakladam ze kazdy rodzaj figury bedzie posiadal swoje wlasne sposoby

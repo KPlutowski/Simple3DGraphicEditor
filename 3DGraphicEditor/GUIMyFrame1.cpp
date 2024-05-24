@@ -20,7 +20,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 	if (command_prompt[0] == "set_line_color") {
 		if (CommandParser::command_length_check(command_prompt, 2)) {
 			try {
-				wxColour line_color = CommandParser::get_a_color(command_prompt[1]);
+				Drawable::SetLineColor(CommandParser::get_a_color(command_prompt[1]));
 			}
 			catch(const std::exception &e){}
 		
@@ -33,9 +33,8 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			try {
 				Position start = CommandParser::get_a_point(command_prompt[1]);
 				Position end = CommandParser::get_a_point(command_prompt[2]);
-				
+
 				Drawable::addObj(new Line(start, end));
-				
 			}
 			catch (const std::exception& e) {
 				error = true;
