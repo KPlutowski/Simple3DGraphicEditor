@@ -16,7 +16,13 @@ Position Line::end() {
 }
 
 void Line::move(double x_shift, double y_shift, double z_shift) {
-	//TODO
+	_start.x += x_shift;
+	_start.y += y_shift;
+	_start.z += z_shift;
+
+	_end.x += x_shift;
+	_end.y += y_shift;
+	_end.z += z_shift;
 }
 
 void Line::rotate(double x_cord, double y_cord, double z_cord, double alpha, double beta, double gamma) {

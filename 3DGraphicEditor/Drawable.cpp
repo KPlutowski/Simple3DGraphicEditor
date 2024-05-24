@@ -30,12 +30,12 @@ void Drawable::clearAll() {
 
 void Drawable::moveObj(int index, double x_shift, double y_shift, double z_shift) {
 	if (index >= 1 && index <= figures.size())
-		figures[index]->move(x_shift, y_shift, z_shift);
+		figures[index-1]->move(x_shift, y_shift, z_shift);
 }
 
 void Drawable::rotateObj(int index, double x_cord, double y_cord, double z_cord, double alpha, double beta, double gamma) {
 	if (index >= 1 && index <= figures.size())
-		figures[index]->rotate(x_cord, y_cord, z_cord, alpha, beta, gamma);
+		figures[index-1]->rotate(x_cord, y_cord, z_cord, alpha, beta, gamma);
 }
 
 void Drawable::touchObj(int index) {
@@ -51,7 +51,7 @@ void Drawable::DrawAll(wxDC& dc1, wxDC& dc2, wxDC& dc3, wxDC& dc4) {
 
 Drawable* Drawable::getObj(int index) {
 	if (index >= 1 && index <= figures.size())
-		return figures[index];
+		return figures[index-1];
 	return nullptr;
 }
 
