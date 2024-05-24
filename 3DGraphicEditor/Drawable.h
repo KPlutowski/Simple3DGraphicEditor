@@ -58,7 +58,7 @@ public:
 	/// @param beta - kat wokol punktu w osi Y
 	/// @param gamma - kat wokol puntku w osi Z
 	static void rotateObj(int index, double x_cord, double y_cord, double z_cord, double alpha, double beta, double gamma);
-	
+
 	/// @brief Podswietlenie figury
 	/// @param index - indeks figury
 	static void touchObj(int index);
@@ -92,7 +92,7 @@ public:
 protected:
 	// Zakladam ze kazdy rodzaj figury bedzie posiadal swoje wlasne sposoby
 	// zapisu wspolrzednych, a wiec i wlasne metody do rysowania i modyfikacji ;p
-	
+
 	virtual void move(double x_shift, double y_shift, double z_shift) = 0;
 	virtual void rotate(double x_cord, double y_cord, double z_cord, double alpha, double beta, double gamma) = 0;
 	virtual void draw_front(wxDC& dc) = 0;
@@ -111,4 +111,26 @@ protected:
 	static Position camera_pos; /// @brief Pozycja kamery z perspektywa
 	static Position camera_look; /// @brief Punkt na ktory patrzy kamera
 	static double camera_fov; /// @brief FOV kamery z perspektywa (w stopniach)
+
+	/**
+	 * @brief Generates a 3D rotation matrix.
+	 *
+	 * @param alpha The rotation angle around the X-axis (in degrees).
+	 * @param beta The rotation angle around the Y-axis (in degrees).
+	 * @param gamma The rotation angle around the Z-axis (in degrees).
+	 * @return The rotation matrix representing the combined rotation.
+	 */
+	static std::vector<std::vector<double>> generate_rotation_matrix(double alpha, double beta, double gamma);
+
+private:
+
+	/**
+	 * @brief Multiplies two 3x3 matrices.
+	 *
+	 * @param a The first matrix.
+	 * @param b The second matrix.
+	 * @return The result of matrix multiplication (a * b).
+	 */
+	static std::vector<std::vector<double>> multiplyMatrix(const std::vector<std::vector<double>>& a, const std::vector<std::vector<double>>& b);
+
 };

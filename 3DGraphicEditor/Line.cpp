@@ -26,7 +26,26 @@ void Line::move(double x_shift, double y_shift, double z_shift) {
 }
 
 void Line::rotate(double x_cord, double y_cord, double z_cord, double alpha, double beta, double gamma) {
-	//TODO
+	move(-x_cord, -y_cord, -z_cord);
+	std::vector<std::vector<double>> rotationMatrix = generate_rotation_matrix(alpha,beta,gamma);
+
+	double sx = _start.x * rotationMatrix[0][0] + _start.y * rotationMatrix[0][1] + _start.z * rotationMatrix[0][2];
+	double sy = _start.x * rotationMatrix[1][0] + _start.y * rotationMatrix[1][1] + _start.z * rotationMatrix[1][2];
+	double sz = _start.x * rotationMatrix[2][0] + _start.y * rotationMatrix[2][1] + _start.z * rotationMatrix[2][2];
+	
+	double ex = _end.x * rotationMatrix[0][0] + _end.y * rotationMatrix[0][1] + _end.z * rotationMatrix[0][2];
+	double ey = _end.x * rotationMatrix[1][0] + _end.y * rotationMatrix[1][1] + _end.z * rotationMatrix[1][2];
+	double ez = _end.x * rotationMatrix[2][0] + _end.y * rotationMatrix[2][1] + _end.z * rotationMatrix[2][2];
+
+	_start.x = sx;
+	_start.y = sy;
+	_start.z = sz;
+
+	_end.x = ex;
+	_end.y = ey;
+	_end.z = ez;
+
+	move(x_cord, y_cord, z_cord);
 }
 
 void Line::draw_front(wxDC& dc) {
