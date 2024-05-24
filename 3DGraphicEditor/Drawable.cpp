@@ -66,6 +66,18 @@ void Drawable::SetLineColor(const wxColour& newColour){
 	line_color = newColour;
 }
 
+void Drawable::SetCameraPosition(const Position& newCameraPosition){
+	camera_pos = newCameraPosition;
+}
+
+void Drawable::SetCameraLook(const Position& newCameraLook){
+	camera_look = newCameraLook;
+}
+
+void Drawable::SetCameraFov(const double newCameraFov) {
+	camera_fov = newCameraFov;
+}
+
 std::vector<std::vector<double>> Drawable::multiplyMatrix(const std::vector<std::vector<double>>& a, const std::vector<std::vector<double>>& b) {
 	int rows1 = a.size();
 	int cols1 = a[0].size();

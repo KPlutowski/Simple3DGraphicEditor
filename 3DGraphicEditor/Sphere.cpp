@@ -26,7 +26,9 @@ void Sphere::rotate(double x_cord, double y_cord, double z_cord, double alpha, d
     // Move center back to original position
     move(x_cord, y_cord, z_cord);
 }
+
 void Sphere::draw_front(wxDC& dc) {
+    dc.SetPen(wxPen(_color));
 
     double phi_step = M_PI / _parallels;
     double lambda_step = 2 * M_PI / _meridians;
@@ -52,7 +54,6 @@ void Sphere::draw_front(wxDC& dc) {
             double y4 = _center.y + _radius * sin(next_phi) * sin(lambda);
 
             // Draw quad
-            dc.SetPen(wxPen(_color));
             dc.DrawLine(x1, y1, x2, y2);
             dc.DrawLine(x2, y2, x3, y3);
             dc.DrawLine(x3, y3, x4, y4);
@@ -62,6 +63,8 @@ void Sphere::draw_front(wxDC& dc) {
 }
 
 void Sphere::draw_top(wxDC& dc) {
+    dc.SetPen(wxPen(_color));
+
     double phi_step = M_PI / _parallels;
     double lambda_step = 2 * M_PI / _meridians;
 
@@ -86,7 +89,6 @@ void Sphere::draw_top(wxDC& dc) {
             double z4 = _center.z + _radius * cos(next_phi);
 
             // Draw quad
-            dc.SetPen(wxPen(_color));
             dc.DrawLine(x1, z1, x2, z2);
             dc.DrawLine(x2, z2, x3, z3);
             dc.DrawLine(x3, z3, x4, z4);
@@ -96,6 +98,8 @@ void Sphere::draw_top(wxDC& dc) {
 }
 
 void Sphere::draw_side(wxDC& dc) {
+    dc.SetPen(wxPen(_color));
+
     double phi_step = M_PI / _parallels;
     double lambda_step = 2 * M_PI / _meridians;
 
@@ -120,7 +124,6 @@ void Sphere::draw_side(wxDC& dc) {
             double z4 = _center.z + _radius * cos(next_phi);
 
             // Draw quad
-            dc.SetPen(wxPen(_color));
             dc.DrawLine(y1, z1, y2, z2);
             dc.DrawLine(y2, z2, y3, z3);
             dc.DrawLine(y3, z3, y4, z4);
@@ -130,6 +133,8 @@ void Sphere::draw_side(wxDC& dc) {
 }
 
 void Sphere::draw_perspective(wxDC& dc) {
+    dc.SetPen(wxPen(_color));
+
     // Compute camera direction
     Position camera_dir = {
         camera_look.x - camera_pos.x,
@@ -199,20 +204,19 @@ void Sphere::draw_perspective(wxDC& dc) {
             double dot_product4 = vec4_x * camera_dir.x + vec4_y * camera_dir.y + vec4_z * camera_dir.z;
 
             // Apply perspective projection
-            double projected_x1 = (screen_width / 2) + (vec1_x / (tan(fov_rad / 2) * dot_product1)) * (screen_width / 2);
-            double projected_y1 = (screen_height / 2) - (vec1_y / (tan(fov_rad / 2) * dot_product1)) * (screen_height / 2);
+            double projected_x1 = (screen_width / 2.0) + (vec1_x / (tan(fov_rad / 2.0) * dot_product1)) * (screen_width / 2.0);
+            double projected_y1 = (screen_height / 2.0) - (vec1_y / (tan(fov_rad / 2.0) * dot_product1)) * (screen_height / 2.0);
 
-            double projected_x2 = (screen_width / 2) + (vec2_x / (tan(fov_rad / 2) * dot_product2)) * (screen_width / 2);
-            double projected_y2 = (screen_height / 2) - (vec2_y / (tan(fov_rad / 2) * dot_product2)) * (screen_height / 2);
+            double projected_x2 = (screen_width / 2.0) + (vec2_x / (tan(fov_rad / 2.0) * dot_product2)) * (screen_width / 2.0);
+            double projected_y2 = (screen_height / 2.0) - (vec2_y / (tan(fov_rad / 2.0) * dot_product2)) * (screen_height / 2.0);
 
-            double projected_x3 = (screen_width / 2) + (vec3_x / (tan(fov_rad / 2) * dot_product3)) * (screen_width / 2);
-            double projected_y3 = (screen_height / 2) - (vec3_y / (tan(fov_rad / 2) * dot_product3)) * (screen_height / 2);
+            double projected_x3 = (screen_width / 2.0) + (vec3_x / (tan(fov_rad / 2.0) * dot_product3)) * (screen_width / 2.0);
+            double projected_y3 = (screen_height / 2.0) - (vec3_y / (tan(fov_rad / 2.0) * dot_product3)) * (screen_height / 2.0);
 
-            double projected_x4 = (screen_width / 2) + (vec4_x / (tan(fov_rad / 2) * dot_product4)) * (screen_width / 2);
-            double projected_y4 = (screen_height / 2) - (vec4_y / (tan(fov_rad / 2) * dot_product4)) * (screen_height / 2);
+            double projected_x4 = (screen_width / 2.0) + (vec4_x / (tan(fov_rad / 2.0) * dot_product4)) * (screen_width / 2.0);
+            double projected_y4 = (screen_height / 2.0) - (vec4_y / (tan(fov_rad / 2.0) * dot_product4)) * (screen_height / 2.0);
 
             // Draw lines
-            dc.SetPen(wxPen(_color));
             dc.DrawLine(projected_x1, projected_y1, projected_x2, projected_y2);
             dc.DrawLine(projected_x2, projected_y2, projected_x3, projected_y3);
             dc.DrawLine(projected_x3, projected_y3, projected_x4, projected_y4);
@@ -220,7 +224,6 @@ void Sphere::draw_perspective(wxDC& dc) {
         }
     }
 }
-
 
 void Sphere::draw(wxDC& dc1, wxDC& dc2, wxDC& dc3, wxDC& dc4) {
     draw_front(dc1);

@@ -200,6 +200,43 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			}
 		}
 	}
+
+	else if (command_prompt[0] == "camera_look_at") {
+		if (CommandParser::command_length_check(command_prompt, 2)) {
+			try {
+				Position newLook = CommandParser::get_a_point(command_prompt[1]);
+				Drawable::SetCameraLook(newLook);
+			}
+			catch (const std::exception& e) {
+				error = true;
+			}
+		}
+	}
+
+	else if (command_prompt[0] == "camera_at") {
+		if (CommandParser::command_length_check(command_prompt, 2)) {
+			try {
+				Position newPosition = CommandParser::get_a_point(command_prompt[1]);
+				Drawable::SetCameraPosition(newPosition);
+			}
+			catch (const std::exception& e) {
+				error = true;
+			}
+		}
+	}
+
+	else if (command_prompt[0] == "camera_fov") {
+		if (CommandParser::command_length_check(command_prompt, 2)) {
+			try {
+				double newFov = std::stod(command_prompt[1]);
+				Drawable::SetCameraFov(newFov);
+			}
+			catch (const std::exception& e) {
+				error = true;
+			}
+		}
+	}
+
 	else if (error) {
 		
 	}

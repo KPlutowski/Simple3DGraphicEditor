@@ -88,34 +88,25 @@ void Line::draw_perspective(wxDC& dc) {
     int screen_width = dc.GetSize().GetWidth();
     int screen_height = dc.GetSize().GetHeight();
 
-    // Compute vertices positions in 3D
-    double x1 = _start.x;
-    double y1 = _start.y;
-    double z1 = _start.z;
-
-    double x2 = _end.x;
-    double y2 = _end.y;
-    double z2 = _end.z;
-
     // Compute vectors from camera to vertices
-    double vec1_x = x1 - camera_pos.x;
-    double vec1_y = y1 - camera_pos.y;
-    double vec1_z = z1 - camera_pos.z;
+    double vec1_x = _start.x - camera_pos.x;
+    double vec1_y = _start.y - camera_pos.y;
+    double vec1_z = _start.z - camera_pos.z;
 
-    double vec2_x = x2 - camera_pos.x;
-    double vec2_y = y2 - camera_pos.y;
-    double vec2_z = z2 - camera_pos.z;
+    double vec2_x = _end.x - camera_pos.x;
+    double vec2_y = _end.y - camera_pos.y;
+    double vec2_z = _end.z - camera_pos.z;
 
     // Compute dot products of camera direction and vectors to vertices
     double dot_product1 = vec1_x * camera_dir.x + vec1_y * camera_dir.y + vec1_z * camera_dir.z;
     double dot_product2 = vec2_x * camera_dir.x + vec2_y * camera_dir.y + vec2_z * camera_dir.z;
 
     // Apply perspective projection
-    double projected_x1 = (screen_width / 2) + (vec1_x / (tan(fov_rad / 2) * dot_product1)) * (screen_width / 2);
-    double projected_y1 = (screen_height / 2) - (vec1_y / (tan(fov_rad / 2) * dot_product1)) * (screen_height / 2);
+    double projected_x1 = (screen_width / 2.0) + (vec1_x / (tan(fov_rad / 2.0) * dot_product1)) * (screen_width / 2.0);
+    double projected_y1 = (screen_height / 2.0) - (vec1_y / (tan(fov_rad / 2.0) * dot_product1)) * (screen_height / 2.0);
 
-    double projected_x2 = (screen_width / 2) + (vec2_x / (tan(fov_rad / 2) * dot_product2)) * (screen_width / 2);
-    double projected_y2 = (screen_height / 2) - (vec2_y / (tan(fov_rad / 2) * dot_product2)) * (screen_height / 2);
+    double projected_x2 = (screen_width / 2.0) + (vec2_x / (tan(fov_rad / 2.0) * dot_product2)) * (screen_width / 2.0);
+    double projected_y2 = (screen_height / 2.0) - (vec2_y / (tan(fov_rad / 2.0) * dot_product2)) * (screen_height / 2.0);
 
     // Draw line
     dc.SetPen(wxPen(_color));

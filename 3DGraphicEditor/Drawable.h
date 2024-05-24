@@ -89,6 +89,15 @@ public:
 	/// \param newColour	 
 	static void SetLineColor(const wxColour& newColour);
 
+	/// \param newCamerePosition
+	static void SetCameraPosition(const Position& newCameraPosition);
+
+	/// \param newCameraLook
+	static void SetCameraLook(const Position& newCameraLook);
+
+	/// \param newCameraFov
+	static void SetCameraFov(const double newCameraFov);
+
 protected:
 	// Zakladam ze kazdy rodzaj figury bedzie posiadal swoje wlasne sposoby
 	// zapisu wspolrzednych, a wiec i wlasne metody do rysowania i modyfikacji ;p
