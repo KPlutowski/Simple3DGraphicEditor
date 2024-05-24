@@ -1,11 +1,12 @@
 // TODO: 
-// set line color 
 // set fill style 
 // set fill color
 // set view
 // set view range
 // camera look at
 // camera at
+// save
+// load
 // ~Drawable
 #pragma once
 

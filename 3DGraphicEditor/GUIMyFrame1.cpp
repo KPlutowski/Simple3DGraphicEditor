@@ -112,7 +112,8 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 	else if (command_prompt[0] == "delete") {
 		if (CommandParser::command_length_check(command_prompt, 2)) {
 			try {
-				int id = std::stoi(command_prompt[1]); 
+				int id = std::stoi(command_prompt[1]);
+				Drawable::deleteObj(id);
 			}
 
 			catch (const std::exception& e) {
@@ -124,15 +125,27 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 	}
 
 	else if (command_prompt[0] == "clear_all") {
-
+		if (CommandParser::command_length_check(command_prompt, 1)) 
+		{
+			try 
+			{
+				Drawable::clearAll();
+			}
+			catch (const std::exception& e) {
+				if (Command_panel) {
+					Command_panel->SetValue("ERROR");
+				}
+			}
+		}
 
 	}
 
 	else if (command_prompt[0] == "move") {
 		if (CommandParser::command_length_check(command_prompt, 3)) {
 			try {
-			int id = std::stoi(command_prompt[1]);
-			Position shift = CommandParser::get_a_point(command_prompt[2]);
+				int id = std::stoi(command_prompt[1]);
+				Position shift = CommandParser::get_a_point(command_prompt[2]);
+				Drawable::moveObj(id, shift.x, shift.y, shift.z);
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {
@@ -145,9 +158,11 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 	else if (command_prompt[0] == "rotate") {
 		if (CommandParser::command_length_check(command_prompt, 4)) {
 			try {
-			int id = std::stoi(command_prompt[1]);
-			Position rotate_point = CommandParser::get_a_point(command_prompt[2]);
-			Position rotate_angle = CommandParser::get_a_point(command_prompt[3]);
+				int id = std::stoi(command_prompt[1]);
+				Position rotate_point = CommandParser::get_a_point(command_prompt[2]);
+				Position rotate_angle = CommandParser::get_a_point(command_prompt[3]);
+				Drawable::rotateObj(id, rotate_point.x, rotate_point.y, rotate_point.z,
+					rotate_angle.x, rotate_angle.y, rotate_angle.z);
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {
