@@ -6,6 +6,7 @@
 // set view range
 // camera look at
 // camera at
+// ~Drawable
 #pragma once
 
 #include <vector>
@@ -76,6 +77,14 @@ public:
 	/// @brief Getter wszystkich figur
 	/// @return Wektor wskaznikow na figury
 	static std::vector<Drawable*> getAllObjs();
+
+	/// @brief Rysowanie figury
+	/// @param dc1 - panel z widokiem z przodu
+	/// @param dc2 - panel z widokiem z gory
+	/// @param dc3 - panel z widokiem z boku
+	/// @param dc4 - panel z widokiem z perspektywa
+	virtual void draw(wxDC& dc1, wxDC& dc2, wxDC& dc3, wxDC& dc4) = 0;
+
 
 protected:
 	// Zakladam ze kazdy rodzaj figury bedzie posiadal swoje wlasne sposoby

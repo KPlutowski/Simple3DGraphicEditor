@@ -1,5 +1,6 @@
 #include "GUIMyFrame1.h"
 #include "CommandParser.h"
+#include "Line.h"
 
 GUIMyFrame1::GUIMyFrame1( wxWindow* parent )
 :
@@ -30,8 +31,11 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 	else if (command_prompt[0] == "line") {
 		if (CommandParser::command_length_check(command_prompt, 3)) {
 			try {
-				Position begin = CommandParser::get_a_point(command_prompt[1]);
+				Position start = CommandParser::get_a_point(command_prompt[1]);
 				Position end = CommandParser::get_a_point(command_prompt[2]);
+				
+				Drawable::addObj(new Line(start, end));
+				
 			}
 			catch (const std::exception& e) {
 				error = true;
@@ -186,6 +190,25 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 	else {
 		Command_panel->SetValue("ERROR");
 	}
+
+	
+	wxClientDC dc1 = wxClientDC(vertical_side_panel);
+	wxBufferedDC topView(&dc1);
+	topView.Clear();
+
+	wxClientDC dc2 = wxClientDC(side_panel);
+	wxBufferedDC sideView(&dc2);
+	sideView.Clear();
+
+	wxClientDC dc3 = wxClientDC(horizontal_side_panel);
+	wxBufferedDC frontView(&dc3);
+	frontView.Clear();
+
+	wxClientDC dc4 = wxClientDC(perspective_panel);
+	wxBufferedDC perspectiveView(&dc4);
+	perspectiveView.Clear();
+
+	Drawable::DrawAll(frontView, topView, sideView, perspectiveView);
 	//Command_panel->SetValue(wxT(">>"));
 	Command_panel->SetInsertionPointEnd();
 }

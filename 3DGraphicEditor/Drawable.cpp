@@ -42,9 +42,18 @@ void Drawable::touchObj(int index) {
 	//TODO
 }
 
+void Drawable::DrawAll(wxDC& dc1, wxDC& dc2, wxDC& dc3, wxDC& dc4) {
+	//TODO
+	for (Drawable* figure : figures)
+	{
+		figure->draw(dc1,dc2,dc3,dc4);
+	}
+}
+
 Drawable* Drawable::getObj(int index) {
 	if (index >= 1 && index <= figures.size())
 		return figures[index];
+	return nullptr;
 }
 
 std::vector<Drawable*> Drawable::getAllObjs() {
