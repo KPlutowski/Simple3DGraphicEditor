@@ -3,14 +3,13 @@
 // set fill color
 // set view
 // set view range
-// camera look at
-// camera at
-// save
-// load
+
 // ~Drawable
 #pragma once
 
 #include <vector>
+#include <fstream>
+#include <sstream>
 #include "GUIMyFrame1.h"
 
 
@@ -98,6 +97,12 @@ public:
 	/// \param newCameraFov
 	static void SetCameraFov(const double newCameraFov);
 
+	/// \param fileName
+	static void saveToFile(const std::string& fileName);
+
+	/// \param fileName
+	static void loadFromFile(const std::string& fileName);
+
 protected:
 	// Zakladam ze kazdy rodzaj figury bedzie posiadal swoje wlasne sposoby
 	// zapisu wspolrzednych, a wiec i wlasne metody do rysowania i modyfikacji ;p
@@ -108,6 +113,7 @@ protected:
 	virtual void draw_top(wxDC& dc) = 0;
 	virtual void draw_side(wxDC& dc) = 0;
 	virtual void draw_perspective(wxDC& dc) = 0;
+	virtual std::string save() const = 0;
 
 	static std::vector<Drawable*> figures; /// @brief Wektor figur	
 	static wxColour line_color; /// @brief Kolor linii

@@ -1,6 +1,8 @@
 #include <vector>
 #include "GUIMyFrame1.h"
 #include "Drawable.h"
+#include "Line.h"
+#include "Sphere.h"
 
 std::vector<Drawable*> Drawable::figures;
 wxColour Drawable::line_color = wxColour(0, 0, 0);;
@@ -129,3 +131,65 @@ std::vector<std::vector<double>> Drawable::generate_rotation_matrix(double alpha
 
 	return multiplyMatrix(multiplyMatrix(alphaRotation, betaRotation), gammaRotation);
 }
+
+void Drawable::saveToFile(const std::string& fileName)
+{
+	std::ofstream outFile(fileName);
+	if (!outFile.is_open()) {
+		std::cerr << "Error: Could not open file for writing: " << fileName << std::endl;
+		return;
+	}
+	for (Drawable* obj : figures)
+	{
+		outFile << obj->save();
+	}
+
+	outFile.close();
+	if (outFile.fail()) {
+		std::cerr << "Error: Could not properly close the file: " << fileName << std::endl;
+	}
+}
+
+void Drawable::loadFromFile(const std::string& fileName)
+{
+	std::ifstream inFile(fileName);
+	if (!inFile.is_open()) {
+		std::cerr << "Error: Could not open file for reading: " << fileName << std::endl;
+		return;
+	}
+	clearAll();  // Clear existing objects before loading new ones
+
+	std::string line;
+	while (std::getline(inFile, line)) 
+	{
+		std::istringstream iss(line);
+		std::string type;
+		iss >> type;
+
+		if (type == "Line") 
+		{
+			double x1, y1, z1, x2, y2, z2;
+			wxUint32 color;
+			if (iss >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> color) 
+			{
+				addObj(new Line(Position(x1, y1, z1), Position(x2, y2, z2),color));
+			}
+		}
+		else if (type == "Sphere") 
+		{
+			double x, y, z, radius;
+			int meridians, parallels;
+			wxUint32 color;
+			if (iss >> x >> y >> z >> radius >> meridians >> parallels>> color) {
+				addObj(new Sphere(Position(x, y, z), radius, meridians, parallels,color));
+			}
+		}
+		// Add more cases for other Drawable types
+	}
+
+	inFile.close();
+	if (inFile.fail()) {
+		std::cerr << "Error: Could not properly close the file: " << fileName << std::endl;
+	}
+}
+

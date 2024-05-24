@@ -179,6 +179,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 		if (CommandParser::command_length_check(command_prompt, 2)) {
 			try {
 				std::string name = command_prompt[1];
+				Drawable::saveToFile(name);
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {
@@ -192,6 +193,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 		if (CommandParser::command_length_check(command_prompt, 2)) {
 			try {
 				std::string name = command_prompt[1];
+				Drawable::loadFromFile(name);
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {

@@ -3,8 +3,8 @@
 #include "Drawable.h"
 #include "Line.h"
 
-Line::Line(double x1, double y1, double z1, double x2, double y2, double z2) : _start(x1, y1, z1), _end(x2, y2, z2), _color(line_color) {}
-Line::Line(Position start, Position end) : Line(start.x, start.y, start.z,end.x, end.y, end.z ){}
+Line::Line(double x1, double y1, double z1, double x2, double y2, double z2, wxColour color) : _start(x1, y1, z1), _end(x2, y2, z2), _color(color) {}
+Line::Line(Position start, Position end, wxColour color) : Line(start.x, start.y, start.z,end.x, end.y, end.z, color){}
 
 
 Position Line::start() {
@@ -121,4 +121,11 @@ void Line::draw(wxDC& dc1, wxDC& dc2, wxDC& dc3, wxDC& dc4)
 	draw_perspective(dc4);
 }
 
-
+std::string Line::save() const
+{
+	std::string result = "Line "
+		+ std::to_string(_start.x) + " " + std::to_string(_start.y) + " " + std::to_string(_start.z) + " "
+		+ std::to_string(_end.x) + " " + std::to_string(_end.y) + " " + std::to_string(_end.z) + " "
+		+ std::to_string(_color.GetRGB()) +"\n";
+	return result;
+}

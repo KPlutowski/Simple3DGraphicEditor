@@ -12,9 +12,9 @@ public:
 	/// @param radius - promieñ sfery
 	/// @param meridians - liczba podzia³ów na po³udniki
 	/// @param parallels - liczba podzia³ów na równole¿niki
-	Sphere(double x, double y, double z, double radius, int meridians, int parallels);
-	Sphere(Position center, double radius, int meridians, int parallels);
-
+	/// @param color - kolor sfery
+	Sphere(double x, double y, double z, double radius, int meridians, int parallels, wxColour color = Drawable::line_color);
+	Sphere(Position center, double radius, int meridians, int parallels, wxColour color = Drawable::line_color);
 
 	/// @brief draw a sphere
 	void draw(wxDC& dc1, wxDC& dc2, wxDC& dc3, wxDC& dc4) override;
@@ -26,6 +26,8 @@ protected:
 	void draw_top(wxDC& dc) override;
 	void draw_side(wxDC& dc) override;
 	void draw_perspective(wxDC& dc) override;
+
+	std::string save() const override;
 
 private:
 	Position _center;   /// @brief Œrodek sfery

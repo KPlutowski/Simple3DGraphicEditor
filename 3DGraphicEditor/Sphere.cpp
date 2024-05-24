@@ -1,7 +1,7 @@
 #include "Sphere.h"
 
-Sphere::Sphere(double x, double y, double z, double radius, int meridians, int parallels) : _center(x, y, z), _radius(radius), _meridians(meridians), _parallels(parallels), _color(line_color) {}
-Sphere::Sphere(Position center, double radius, int meridians, int parallels) :Sphere(center.x,center.y,center.z,radius,meridians,parallels){}
+Sphere::Sphere(double x, double y, double z, double radius, int meridians, int parallels, wxColour color) : _center(x, y, z), _radius(radius), _meridians(meridians), _parallels(parallels), _color(color) {}
+Sphere::Sphere(Position center, double radius, int meridians, int parallels, wxColour color) :Sphere(center.x,center.y,center.z,radius,meridians,parallels,color){}
 
 void Sphere::move(double x_shift, double y_shift, double z_shift) {
     _center.x += x_shift;
@@ -230,4 +230,13 @@ void Sphere::draw(wxDC& dc1, wxDC& dc2, wxDC& dc3, wxDC& dc4) {
     draw_top(dc2);
     draw_side(dc3);
     draw_perspective(dc4);
+}
+
+std::string Sphere::save() const
+{
+    std::string result = "Sphere "
+        + std::to_string(_center.x) + " " + std::to_string(_center.y) + " " + std::to_string(_center.z) + " "
+        + std::to_string(_radius) + " " + std::to_string(_meridians) + " " + std::to_string(_parallels) + " "
+        + std::to_string(_color.GetRGB()) + "\n";
+    return result;
 }
