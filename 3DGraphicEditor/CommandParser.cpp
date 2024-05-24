@@ -2,7 +2,7 @@
 #include "GUIMyFrame1.h"
 
 std::vector<std::string> CommandParser::parse_to_vector(wxString command) {
-	std::string command_str = std::string(command.mb_str());
+	std::string command_str = command.ToStdString();
 	std::vector<std::string> command_prompt;
 	std::string text;
 	for (auto i : command_str) {
