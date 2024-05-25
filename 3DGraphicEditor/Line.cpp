@@ -3,16 +3,21 @@
 #include "Drawable.h"
 #include "Line.h"
 
-Line::Line(double x1, double y1, double z1, double x2, double y2, double z2, wxColour color) : _start(x1, y1, z1), _end(x2, y2, z2), _color(color) {}
-Line::Line(Position start, Position end, wxColour color) : Line(start.x, start.y, start.z,end.x, end.y, end.z, color){}
+Line::Line(double x1, double y1, double z1, double x2, double y2, double z2, wxColour color) : Line(Position(x1,y1,z1),Position(x2,y2,z2),color) {}
+Line::Line(Position start, Position end, wxColour color) : Drawable(color), _start(start), _end(end){}
 
-
-Position Line::start() {
+Position Line::getStart() const {
 	return _start;
 }
+void Line::setStart(const Position& newStart) {
+	_start = newStart;
+}
 
-Position Line::end() {
+Position Line::getEnd() const {
 	return _end;
+}
+void Line::setEnd(const Position& newEnd){
+	_end = newEnd;
 }
 
 void Line::move(double x_shift, double y_shift, double z_shift) {

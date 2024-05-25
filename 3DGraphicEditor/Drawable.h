@@ -10,8 +10,9 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include <wx/timer.h>
 #include "GUIMyFrame1.h"
-
+#include <algorithm>
 
 /// @brief Enum dla rodzajow widoku
 enum class view {
@@ -30,6 +31,8 @@ struct Position {
 /// wowczas management bedzie polegal na mgr.metoda()
 class Drawable {
 public:
+	Drawable(wxColour color = line_color) :_color(color) {};
+
 	/// @brief Dodanie figury do wektora (na zasadzie addObj(new ...))
 	/// @param fig - wskaznik na dodawana figure
 	static void addObj(Drawable* fig);
@@ -108,10 +111,11 @@ public:
 	/// @param y - Height
 	static void SetViewSize(const double x, const double y);
 
-protected:
-	// Zakladam ze kazdy rodzaj figury bedzie posiadal swoje wlasne sposoby
-	// zapisu wspolrzednych, a wiec i wlasne metody do rysowania i modyfikacji ;p
+	void setColor(const wxColour& newColor);
 
+protected:
+	wxColour _color; /// @brief kolor obiektu
+	
 	virtual void move(double x_shift, double y_shift, double z_shift) = 0;
 	virtual void rotate(double x_cord, double y_cord, double z_cord, double alpha, double beta, double gamma) = 0;
 	virtual void draw_front(wxDC& dc) = 0;
@@ -145,6 +149,10 @@ protected:
 	static std::vector<std::vector<double>> generate_rotation_matrix(double alpha, double beta, double gamma);
 
 private:
+	wxTimer* _highlightTimer = nullptr; // Timer for resetting the highlight
+	static int highlight_duration_ms; /// Duration in milliseconds for highlighting
+	static double highlight_factor; /// Highlight factor
+
 	/**
 	 * @brief Multiplies two 3x3 matrices.
 	 *
@@ -154,4 +162,6 @@ private:
 	 */
 	static std::vector<std::vector<double>> multiplyMatrix(const std::vector<std::vector<double>>& a, const std::vector<std::vector<double>>& b);
 
+	void highlightObject();
+	const wxColour& generateHighlight() const;
 };

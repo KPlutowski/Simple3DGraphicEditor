@@ -2,7 +2,7 @@
 
 
 Box::Box(double x1, double y1, double z1, double x2, double y2, double z2, const wxColour& color) :Box(Position(x1,y1,z1),Position(x2,y2,z2), color){};
-Box::Box(const Position& start, const Position& end, const wxColour& color) : _color(color)
+Box::Box(const Position& start, const Position& end, const wxColour& color) : Drawable(color)
 { 
 	_corners.push_back(start); // 1 (0, 0, 0)
 	_corners.push_back(Position(end.x, start.y, start.z)); // 2 (100, 0, 0)

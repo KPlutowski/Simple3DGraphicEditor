@@ -1,7 +1,7 @@
 #include "Sphere.h"
 
-Sphere::Sphere(double x, double y, double z, double radius, int meridians, int parallels, wxColour color) : _center(x, y, z), _radius(radius), _meridians(meridians), _parallels(parallels), _color(color) {}
-Sphere::Sphere(Position center, double radius, int meridians, int parallels, wxColour color) :Sphere(center.x,center.y,center.z,radius,meridians,parallels,color){}
+Sphere::Sphere(double x, double y, double z, double radius, int meridians, int parallels, wxColour color) : Sphere(Position(x, y, z), radius, meridians, parallels, color) {}
+Sphere::Sphere(Position center, double radius, int meridians, int parallels, wxColour color) :Drawable(color), _center(center), _radius(radius), _meridians(meridians), _parallels(parallels) {}
 
 void Sphere::move(double x_shift, double y_shift, double z_shift) {
     _center.x += x_shift;

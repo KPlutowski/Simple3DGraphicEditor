@@ -46,5 +46,4 @@ protected:
 
 private:
     std::vector<Position> _corners; ///< The positions of all eight corners of the box.
-    wxColour _color; ///< The color of the box.
 };

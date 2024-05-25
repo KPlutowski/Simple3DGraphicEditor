@@ -241,6 +241,20 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 		}
 	}
 
+	else if (command_prompt[0] == "touch") {
+		if (CommandParser::command_length_check(command_prompt, 2)) {
+			try {
+				int id = std::stoi(command_prompt[1]);
+				Drawable::touchObj(id);
+			}
+			catch (const std::exception& e) {
+				if (Command_panel) {
+					Command_panel->SetValue("ERROR");
+				}
+			}
+		}
+		}
+
 	else if (error) {
 		
 	}

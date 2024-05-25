@@ -18,6 +18,8 @@ Position Drawable::camera_look = Position(0, 0, 0);
 double Drawable::camera_fov = 60.0;
 double Drawable::panel_height = 200.0;
 double Drawable::panel_width = 200.0;
+int Drawable::highlight_duration_ms=1000;
+double Drawable::highlight_factor=0.6;
 
 void Drawable::addObj(Drawable* fig) {
 	figures.push_back(fig);
@@ -46,7 +48,11 @@ void Drawable::rotateObj(int index, double x_cord, double y_cord, double z_cord,
 }
 
 void Drawable::touchObj(int index) {
-	//TODO
+	if (index >= 1 && index <= figures.size()) 
+	{
+		// Use zero-based indexing internally, so adjust index by -1
+		figures[index - 1]->highlightObject();
+	}
 }
 
 void Drawable::DrawAll(wxDC& dc1, wxDC& dc2, wxDC& dc3, wxDC& dc4) {
@@ -86,6 +92,10 @@ void Drawable::SetCameraFov(const double newCameraFov) {
 void Drawable::SetViewSize(const double x, const double y) {
 	panel_width = x;
 	panel_height = y;
+}
+
+void Drawable::setColor(const wxColour& newColor) {
+	_color = newColor;
 }
 
 std::vector<std::vector<double>> Drawable::multiplyMatrix(const std::vector<std::vector<double>>& a, const std::vector<std::vector<double>>& b) {
@@ -245,3 +255,33 @@ void Drawable::loadFromFile(const std::string& fileName)
 		std::cerr << "Error: Could not properly close the file: " << fileName << std::endl;
 	}
 }
+
+void Drawable::highlightObject()
+{
+	if (!_highlightTimer)
+	{
+		wxColour colorBeforeHighlight = _color;
+
+		_color = generateHighlight();
+
+		_highlightTimer = new wxTimer();
+		_highlightTimer->StartOnce(Drawable::highlight_duration_ms);
+
+		// Bind the timer event
+		_highlightTimer->Bind(wxEVT_TIMER, [this, colorBeforeHighlight](wxTimerEvent& event) {
+			setColor(colorBeforeHighlight);
+			_highlightTimer->Stop();
+
+			delete _highlightTimer; // Clean up the timer object
+			_highlightTimer = nullptr;
+			}); 
+	}
+}
+
+const wxColour& Drawable::generateHighlight() const {
+	return wxColour(
+		std::min(_color.GetRed()   + highlight_factor * 255, 255.0), 
+		std::min(_color.GetGreen() + highlight_factor * 255, 255.0),
+		std::min(_color.GetBlue()  + highlight_factor * 255, 255.0)
+	);
+};

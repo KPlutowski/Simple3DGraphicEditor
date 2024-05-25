@@ -24,15 +24,16 @@ public:
 
 	/// @brief Getter poczatku linii
 	/// @return Struktura Point punktu poczatkowego linii
-	Position start();
+	Position getStart() const;
+	void setStart(const Position& newStart);
 
 	/// @brief Getter konca linii
 	/// @return Struktura Point punktu koncowego linii
-	Position end();
+	Position getEnd() const;
+	void setEnd(const Position& newEnd);
 
 	/// @brief draw a line
 	void draw(wxDC& dc1, wxDC& dc2, wxDC& dc3, wxDC& dc4) override;
-
 
 protected:
 	void move(double x_shift, double y_shift, double z_shift) override;
@@ -46,6 +47,4 @@ protected:
 private:
 	Position _start; /// @brief Poczatek linii
 	Position _end; /// @brief Koniec linii
-	wxColour _color; /// @brief Kolor linii
-	// Tu zakladam ze kazda figura bedzie miala inny kolor linii, jesli nie to mozna ta zmienna usunac
 };

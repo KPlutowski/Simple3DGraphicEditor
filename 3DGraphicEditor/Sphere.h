@@ -47,7 +47,6 @@ protected:
 	void draw_top(wxDC& dc) override;
 	void draw_side(wxDC& dc) override;
 	void draw_perspective(wxDC& dc) override;
-
 	std::string save() const override;
 
 private:
@@ -55,5 +54,4 @@ private:
 	double _radius;     ///< The radius of the sphere.
 	int _meridians;     ///< The number of meridians (longitudes).
 	int _parallels;     ///< The number of parallels (latitudes).
-	wxColour _color;    ///< The color of the sphere.
 };
