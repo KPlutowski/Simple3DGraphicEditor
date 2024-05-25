@@ -164,4 +164,5 @@ private:
 
 	void highlightObject();
 	const wxColour& generateHighlight() const;
+	void ResetHighlight(wxTimerEvent& event, wxColour prev);
 };

@@ -269,19 +269,23 @@ void Drawable::highlightObject()
 
 		// Bind the timer event
 		_highlightTimer->Bind(wxEVT_TIMER, [this, colorBeforeHighlight](wxTimerEvent& event) {
-			setColor(colorBeforeHighlight);
-			_highlightTimer->Stop();
-
-			delete _highlightTimer; // Clean up the timer object
-			_highlightTimer = nullptr;
-			}); 
+			ResetHighlight(event, colorBeforeHighlight);
+			});
 	}
 }
 
 const wxColour& Drawable::generateHighlight() const {
 	return wxColour(
-		std::min(_color.GetRed()   + highlight_factor * 255, 255.0), 
-		std::min(_color.GetGreen() + highlight_factor * 255, 255.0),
-		std::min(_color.GetBlue()  + highlight_factor * 255, 255.0)
+		std::min(_color.GetRed()   - highlight_factor * 255, 255.0), 
+		std::min(_color.GetGreen() - highlight_factor * 255, 255.0),
+		std::min(_color.GetBlue()  - highlight_factor * 255, 255.0)
 	);
 };
+
+void  Drawable::ResetHighlight(wxTimerEvent& event, wxColour prev)
+{
+	_color = prev;
+	_highlightTimer->Stop(); // Stop the timer
+	delete _highlightTimer; // Clean up the timer object
+	_highlightTimer = nullptr;
+}
