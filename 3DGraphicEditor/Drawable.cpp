@@ -3,18 +3,21 @@
 #include "Drawable.h"
 #include "Line.h"
 #include "Sphere.h"
+#include "Box.h"
 
 std::vector<Drawable*> Drawable::figures;
 wxColour Drawable::line_color = wxColour(0, 0, 0);;
 bool Drawable::fill_style = false;
 wxColour Drawable::fill_color = wxColour(255, 255, 255);
 view Drawable::view_style = view::lines;
-double Drawable::front_distance = 1;
-double Drawable::top_distance = 1;
-double Drawable::right_distance = 1;
-Position Drawable::camera_pos = Position(0, 0, 500);
+double Drawable::front_distance = 1.0;
+double Drawable::top_distance = 1.0;
+double Drawable::right_distance = 1.0;
+Position Drawable::camera_pos = Position(200, 200, 200);
 Position Drawable::camera_look = Position(0, 0, 0);
 double Drawable::camera_fov = 60.0;
+double Drawable::panel_height = 200.0;
+double Drawable::panel_width = 200.0;
 
 void Drawable::addObj(Drawable* fig) {
 	figures.push_back(fig);
@@ -80,6 +83,11 @@ void Drawable::SetCameraFov(const double newCameraFov) {
 	camera_fov = newCameraFov;
 }
 
+void Drawable::SetViewSize(const double x, const double y) {
+	panel_width = x;
+	panel_height = y;
+}
+
 std::vector<std::vector<double>> Drawable::multiplyMatrix(const std::vector<std::vector<double>>& a, const std::vector<std::vector<double>>& b) {
 	int rows1 = a.size();
 	int cols1 = a[0].size();
@@ -129,7 +137,7 @@ std::vector<std::vector<double>> Drawable::generate_rotation_matrix(double alpha
 		{0, 0, 1}
 	};
 
-	return multiplyMatrix(multiplyMatrix(alphaRotation, betaRotation), gammaRotation);
+	return multiplyMatrix(multiplyMatrix(gammaRotation, betaRotation), alphaRotation);
 }
 
 void Drawable::saveToFile(const std::string& fileName)
@@ -217,6 +225,18 @@ void Drawable::loadFromFile(const std::string& fileName)
 				addObj(new Sphere(Position(x, y, z), radius, meridians, parallels,color));
 			}
 		}
+		else if (type == "Box")
+		{
+			double x1, y1, z1, x2, y2, z2;
+			if (iss >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> color)
+			{
+				addObj(new Box(Position(x1, y1, z1), Position(x2, y2, z2), color));
+			}
+		}
+		else
+		{
+			// throw error
+		}
 		// Add more cases for other Drawable types
 	}
 
@@ -225,4 +245,3 @@ void Drawable::loadFromFile(const std::string& fileName)
 		std::cerr << "Error: Could not properly close the file: " << fileName << std::endl;
 	}
 }
-

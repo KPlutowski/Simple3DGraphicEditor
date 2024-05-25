@@ -2,21 +2,42 @@
 #include <vector>
 #include "GUIMyFrame1.h"
 #include "Drawable.h"
+
+/**
+ * @brief A class representing a sphere object that can be drawn on a 2D canvas from different perspectives.
+ */
 class Sphere : public Drawable
 {
 public:
-	/// @brief Konstruktor sfery
-	/// @param x - wspó³rzêdna X œrodka sfery
-	/// @param y - wspó³rzêdna Y œrodka sfery
-	/// @param z - wspó³rzêdna Z œrodka sfery
-	/// @param radius - promieñ sfery
-	/// @param meridians - liczba podzia³ów na po³udniki
-	/// @param parallels - liczba podzia³ów na równole¿niki
-	/// @param color - kolor sfery
+	/**
+	* @brief Constructs a sphere object.
+	* @param x - The X-coordinate of the center of the sphere.
+	* @param y - The Y-coordinate of the center of the sphere.
+	* @param z - The Z-coordinate of the center of the sphere.
+	* @param radius - The radius of the sphere.
+	* @param meridians - The number of meridians (longitudes) used to divide the sphere.
+	* @param parallels - The number of parallels (latitudes) used to divide the sphere.
+	* @param color - The color of the sphere.
+	*/
 	Sphere(double x, double y, double z, double radius, int meridians, int parallels, wxColour color = Drawable::line_color);
+
+	/**
+	 * @brief Constructs a sphere object.
+	 * @param center - The coordinates of the center of the sphere.
+	 * @param radius - The radius of the sphere.
+	 * @param meridians - The number of meridians (longitudes) used to divide the sphere.
+	 * @param parallels - The number of parallels (latitudes) used to divide the sphere.
+	 * @param color - The color of the sphere.
+	 */
 	Sphere(Position center, double radius, int meridians, int parallels, wxColour color = Drawable::line_color);
 
-	/// @brief draw a sphere
+	/**
+	 * @brief Draws the sphere on four different 2D canvases representing different perspectives.
+	 * @param dc1 - The device context for the front view.
+	 * @param dc2 - The device context for the top view.
+	 * @param dc3 - The device context for the side view.
+	 * @param dc4 - The device context for the perspective view.
+	 */
 	void draw(wxDC& dc1, wxDC& dc2, wxDC& dc3, wxDC& dc4) override;
 
 protected:
@@ -30,9 +51,9 @@ protected:
 	std::string save() const override;
 
 private:
-	Position _center;   /// @brief Œrodek sfery
-	double _radius;     /// @brief Promieñ sfery
-	int _meridians;     /// @brief Liczba podzia³ów na po³udniki
-	int _parallels;     /// @brief Liczba podzia³ów na równole¿niki
-	wxColour _color;    /// @brief Kolor sfery
+	Position _center;   ///< The center of the sphere.
+	double _radius;     ///< The radius of the sphere.
+	int _meridians;     ///< The number of meridians (longitudes).
+	int _parallels;     ///< The number of parallels (latitudes).
+	wxColour _color;    ///< The color of the sphere.
 };

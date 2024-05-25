@@ -2,6 +2,7 @@
 #include "CommandParser.h"
 #include "Line.h"
 #include "Sphere.h"
+#include "Box.h"
 
 GUIMyFrame1::GUIMyFrame1( wxWindow* parent )
 :
@@ -46,8 +47,9 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 	else if (command_prompt[0] == "box") {
 		if (CommandParser::command_length_check(command_prompt, 3)) {
 			try {
-				Position begin = CommandParser::get_a_point(command_prompt[1]);
+				Position start = CommandParser::get_a_point(command_prompt[1]);
 				Position end = CommandParser::get_a_point(command_prompt[2]);
+				Drawable::addObj(new Box(start, end));
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {
@@ -247,22 +249,26 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 	}
 
 	
-	wxClientDC dc1 = wxClientDC(vertical_side_panel);
+	wxClientDC dc1(vertical_side_panel);
 	wxBufferedDC topView(&dc1);
 	topView.Clear();
 
-	wxClientDC dc2 = wxClientDC(side_panel);
+	wxClientDC dc2(side_panel);
 	wxBufferedDC sideView(&dc2);
 	sideView.Clear();
 
-	wxClientDC dc3 = wxClientDC(horizontal_side_panel);
+	wxClientDC dc3(horizontal_side_panel);
 	wxBufferedDC frontView(&dc3);
 	frontView.Clear();
 
-	wxClientDC dc4 = wxClientDC(perspective_panel);
+	wxClientDC dc4(perspective_panel);
 	wxBufferedDC perspectiveView(&dc4);
 	perspectiveView.Clear();
 
+	// Update when changing window size // size of drawable area
+	Drawable::SetViewSize(vertical_side_panel->GetSize().x, vertical_side_panel->GetSize().y);
+	
+	
 	Drawable::DrawAll(frontView, topView, sideView, perspectiveView);
 	//Command_panel->SetValue(wxT(">>"));
 	Command_panel->SetInsertionPointEnd();

@@ -103,6 +103,11 @@ public:
 	/// \param fileName
 	static void loadFromFile(const std::string& fileName);
 
+	/// @brief SetVievSize
+	/// @param x - Width
+	/// @param y - Height
+	static void SetViewSize(const double x, const double y);
+
 protected:
 	// Zakladam ze kazdy rodzaj figury bedzie posiadal swoje wlasne sposoby
 	// zapisu wspolrzednych, a wiec i wlasne metody do rysowania i modyfikacji ;p
@@ -126,6 +131,8 @@ protected:
 	static Position camera_pos; /// @brief Pozycja kamery z perspektywa
 	static Position camera_look; /// @brief Punkt na ktory patrzy kamera
 	static double camera_fov; /// @brief FOV kamery z perspektywa (w stopniach)
+    static double panel_height;	/// Vertical panel size
+    static double panel_width;	///< Horizontal panel size
 
 	/**
 	 * @brief Generates a 3D rotation matrix.
@@ -138,7 +145,6 @@ protected:
 	static std::vector<std::vector<double>> generate_rotation_matrix(double alpha, double beta, double gamma);
 
 private:
-
 	/**
 	 * @brief Multiplies two 3x3 matrices.
 	 *
