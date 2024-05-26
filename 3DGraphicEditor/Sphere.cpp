@@ -55,10 +55,10 @@ void Sphere::draw_front(wxDC& dc) {
             double y4 = _center.y + _radius * sin(next_phi) * sin(lambda);
 
             // Draw quad
-            dc.DrawLine(x1, panel_height - y1, x2, panel_height - y2);
-            dc.DrawLine(x2, panel_height - y2, x3, panel_height - y3);
-            dc.DrawLine(x3, panel_height - y3, x4, panel_height - y4);
-            dc.DrawLine(x4, panel_height - y4, x1, panel_height - y1);
+            dc.DrawLine(x1, panelHeight - y1, x2, panelHeight - y2);
+            dc.DrawLine(x2, panelHeight - y2, x3, panelHeight - y3);
+            dc.DrawLine(x3, panelHeight - y3, x4, panelHeight - y4);
+            dc.DrawLine(x4, panelHeight - y4, x1, panelHeight - y1);
         }
     }
 }
@@ -91,10 +91,10 @@ void Sphere::draw_top(wxDC& dc) {
             double z4 = _center.z + _radius * cos(next_phi);
 
             // Draw quad
-            dc.DrawLine(x1, panel_height - z1, x2, panel_height - z2);
-            dc.DrawLine(x2, panel_height - z2, x3, panel_height - z3);
-            dc.DrawLine(x3, panel_height - z3, x4, panel_height - z4);
-            dc.DrawLine(x4, panel_height - z4, x1, panel_height - z1);
+            dc.DrawLine(x1, panelHeight - z1, x2, panelHeight - z2);
+            dc.DrawLine(x2, panelHeight - z2, x3, panelHeight - z3);
+            dc.DrawLine(x3, panelHeight - z3, x4, panelHeight - z4);
+            dc.DrawLine(x4, panelHeight - z4, x1, panelHeight - z1);
         }
     }
 }
@@ -125,10 +125,10 @@ void Sphere::draw_side(wxDC& dc) {
             double y4 = _center.y + _radius * sin(next_phi) * cos(lambda);
             double z4 = _center.z + _radius * cos(next_phi);
 
-            dc.DrawLine(z1, panel_height - y1, z2, panel_height - y2);
-            dc.DrawLine(z2, panel_height - y2, z3, panel_height - y3);
-            dc.DrawLine(z3, panel_height - y3, z4, panel_height - y4);
-            dc.DrawLine(z4, panel_height - y4, z1, panel_height - y1);
+            dc.DrawLine(z1, panelHeight - y1, z2, panelHeight - y2);
+            dc.DrawLine(z2, panelHeight - y2, z3, panelHeight - y3);
+            dc.DrawLine(z3, panelHeight - y3, z4, panelHeight - y4);
+            dc.DrawLine(z4, panelHeight - y4, z1, panelHeight - y1);
         }
     }
 }
@@ -136,63 +136,6 @@ void Sphere::draw_side(wxDC& dc) {
 void Sphere::draw_perspective(wxDC& dc) {
     dc.SetPen(wxPen(_color));
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
-
-    double aspect_ratio = panel_width / panel_height;
-
-    Position camera_dir = {
-        camera_look.x - camera_pos.x,
-        camera_look.y - camera_pos.y,
-        camera_look.z - camera_pos.z
-    };
-
-    // Normalize camera direction
-    double length = sqrt(camera_dir.x * camera_dir.x + camera_dir.y * camera_dir.y + camera_dir.z * camera_dir.z);
-    camera_dir.x /= length;
-    camera_dir.y /= length;
-    camera_dir.z /= length;
-
-    // Compute right vector
-    Position rightVec = {
-        camera_dir.y * 0 - camera_dir.z * 1,
-        camera_dir.z * 0 - camera_dir.x * 0,
-        camera_dir.x * 1 - camera_dir.y * 0
-    };
-
-    // Normalize right vector
-    length = sqrt(rightVec.x * rightVec.x + rightVec.y * rightVec.y + rightVec.z * rightVec.z);
-    rightVec.x /= length;
-    rightVec.y /= length;
-    rightVec.z /= length;
-
-    // Compute up vector
-    double up_x = rightVec.y * camera_dir.z - rightVec.z * camera_dir.y;
-    double up_y = rightVec.z * camera_dir.x - rightVec.x * camera_dir.z;
-    double up_z = rightVec.x * camera_dir.y - rightVec.y * camera_dir.x;
-
-    // Field of view and projection parameters
-    double near_plane = 1.0; // Distance to near clipping plane
-    double far_plane = 1000.0; // Distance to far clipping plane
-    double fov_rad = camera_fov * (M_PI / 180.0);
-    double tan_fov = tan(fov_rad / 2.0);
-
-    // Project a 3D point to 2D screen space
-    auto project = [&](const Position& pos) -> wxPoint {
-        // Transform the point to camera space
-        double px = pos.x - camera_pos.x;
-        double py = pos.y - camera_pos.y;
-        double pz = pos.z - camera_pos.z;
-
-        // Apply rotation (camera orientation)
-        double cam_x = px * rightVec.x + py * rightVec.y + pz * rightVec.z;
-        double cam_y = px * up_x + py * up_y + pz * up_z;
-        double cam_z = px * camera_dir.x + py * camera_dir.y + pz * camera_dir.z;
-
-        // Perspective projection
-        double screen_x = (cam_x / (cam_z * tan_fov * aspect_ratio)) * (panel_width / 2) + (panel_width / 2);
-        double screen_y = (cam_y / (cam_z * tan_fov)) * (panel_height / 2) + (panel_height / 2);
-
-        return wxPoint(screen_x, panel_height - screen_y); // Flip y-axis for drawing
-        };
 
     // Iterate over parallels
     const double phi_step = M_PI / _parallels;
@@ -208,10 +151,10 @@ void Sphere::draw_perspective(wxDC& dc) {
             double next_lambda = (j + 1) * lambda_step;
 
             // Compute vertices
-            wxPoint p1_2d = project(Position(_center.x + _radius * sin(phi) * cos(lambda), _center.y + _radius * sin(phi) * sin(lambda), _center.z + _radius * cos(phi)));
-            wxPoint p2_2d = project(Position(_center.x + _radius * sin(phi) * cos(next_lambda), _center.y + _radius * sin(phi) * sin(next_lambda), _center.z + _radius * cos(phi)));
-            wxPoint p3_2d = project(Position(_center.x + _radius * sin(next_phi) * cos(next_lambda), _center.y + _radius * sin(next_phi) * sin(next_lambda), _center.z + _radius * cos(next_phi)));
-            wxPoint p4_2d = project(Position(_center.x + _radius * sin(next_phi) * cos(lambda), _center.y + _radius * sin(next_phi) * sin(lambda), _center.z + _radius * cos(next_phi)));
+            wxPoint p1_2d = Camera::project(Position(_center.x + _radius * sin(phi) * cos(lambda), _center.y + _radius * sin(phi) * sin(lambda), _center.z + _radius * cos(phi)));
+            wxPoint p2_2d = Camera::project(Position(_center.x + _radius * sin(phi) * cos(next_lambda), _center.y + _radius * sin(phi) * sin(next_lambda), _center.z + _radius * cos(phi)));
+            wxPoint p3_2d = Camera::project(Position(_center.x + _radius * sin(next_phi) * cos(next_lambda), _center.y + _radius * sin(next_phi) * sin(next_lambda), _center.z + _radius * cos(next_phi)));
+            wxPoint p4_2d = Camera::project(Position(_center.x + _radius * sin(next_phi) * cos(lambda), _center.y + _radius * sin(next_phi) * sin(lambda), _center.z + _radius * cos(next_phi)));
 
             // Draw quad
             dc.DrawLine(p1_2d.x, p1_2d.y, p2_2d.x, p2_2d.y);

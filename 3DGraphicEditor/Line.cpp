@@ -57,7 +57,7 @@ void Line::draw_front(wxDC& dc) {
 	dc.SetPen(wxPen(_color));
 	dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
-	dc.DrawLine(_start.x, panel_height-_start.y, _end.x, panel_height-_end.y);
+	dc.DrawLine(_start.x, panelHeight-_start.y, _end.x, panelHeight-_end.y);
 }
 
 void Line::draw_top(wxDC& dc) {
@@ -65,7 +65,7 @@ void Line::draw_top(wxDC& dc) {
 	dc.SetPen(wxPen(_color));
 	dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
-	dc.DrawLine(_start.x, panel_height - _start.z-1, _end.x, panel_height - _end.z-1);
+	dc.DrawLine(_start.x, panelHeight - _start.z-1, _end.x, panelHeight - _end.z-1);
 }
 
 void Line::draw_side(wxDC& dc) {
@@ -73,73 +73,16 @@ void Line::draw_side(wxDC& dc) {
 	dc.SetPen(wxPen(_color));
 	dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
-	dc.DrawLine(_start.z, panel_height - _start.y-1, _end.z, panel_height - _end.y-1);
+	dc.DrawLine(_start.z, panelHeight - _start.y-1, _end.z, panelHeight - _end.y-1);
 }
 
 void Line::draw_perspective(wxDC& dc) {
 	dc.SetPen(wxPen(_color));
 	dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
-	double aspect_ratio = panel_width / panel_height;
-
-	Position camera_dir = {
-		camera_look.x - camera_pos.x,
-		camera_look.y - camera_pos.y,
-		camera_look.z - camera_pos.z
-	};
-
-	// Normalize camera direction
-	double length = sqrt(camera_dir.x * camera_dir.x + camera_dir.y * camera_dir.y + camera_dir.z * camera_dir.z);
-	camera_dir.x /= length;
-	camera_dir.y /= length;
-	camera_dir.z /= length;
-
-	// Compute right vector
-	Position rightVec = {
-		camera_dir.y * 0 - camera_dir.z * 1,
-		camera_dir.z * 0 - camera_dir.x * 0,
-		camera_dir.x * 1 - camera_dir.y * 0 
-	};
-
-	// Normalize right vector
-	length = sqrt(rightVec.x * rightVec.x + rightVec.y * rightVec.y + rightVec.z * rightVec.z);
-	rightVec.x /= length;
-	rightVec.y /= length;
-	rightVec.z /= length;
-
-	// Compute up vector
-	double up_x = rightVec.y * camera_dir.z - rightVec.z * camera_dir.y;
-	double up_y = rightVec.z * camera_dir.x - rightVec.x * camera_dir.z;
-	double up_z = rightVec.x * camera_dir.y - rightVec.y * camera_dir.x;
-
-	// Field of view and projection parameters
-	double near_plane = 1.0; // Distance to near clipping plane
-	double far_plane = 1000.0; // Distance to far clipping plane
-	double fov_rad = camera_fov * (M_PI / 180.0);
-	double tan_fov = tan(fov_rad / 2.0);
-
-	// Project a 3D point to 2D screen space
-	auto project = [&](const Position& pos) -> wxPoint {
-		// Transform the point to camera space
-		double px = pos.x - camera_pos.x;
-		double py = pos.y - camera_pos.y;
-		double pz = pos.z - camera_pos.z;
-
-		// Apply rotation (camera orientation)
-		double cam_x = px * rightVec.x + py * rightVec.y + pz * rightVec.z;
-		double cam_y = px * up_x + py * up_y + pz * up_z;
-		double cam_z = px * camera_dir.x + py * camera_dir.y + pz * camera_dir.z;
-
-		// Perspective projection
-		double screen_x = (cam_x / (cam_z * tan_fov * aspect_ratio)) * (panel_width / 2) + (panel_width / 2);
-		double screen_y = (cam_y / (cam_z * tan_fov)) * (panel_height / 2) + (panel_height / 2);
-
-		return wxPoint(screen_x, panel_height - screen_y); // Flip y-axis for drawing
-	};
-
 	// Project the start and end points of the line
-	wxPoint start_2d = project(_start);
-	wxPoint end_2d = project(_end);
+	wxPoint start_2d = Camera::project(_start);
+	wxPoint end_2d = Camera::project(_end);
 
 	// Draw the line in 2D
 	dc.DrawLine(start_2d.x, start_2d.y, end_2d.x, end_2d.y);

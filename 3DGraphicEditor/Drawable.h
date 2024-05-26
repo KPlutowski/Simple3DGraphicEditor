@@ -21,7 +21,7 @@ enum class view {
 
 /// @brief Pozycja w przestrzeni 3D
 struct Position {
-	Position(double a, double b, double c) { x = a, y = b, z = c; }
+	Position(double a=0, double b=0, double c=0) { x = a, y = b, z = c; }
 	double x, y, z;
 };
 
@@ -87,18 +87,9 @@ public:
 	/// @param dc3 - panel z widokiem z boku
 	/// @param dc4 - panel z widokiem z perspektywa
 	virtual void draw(wxDC& dc1, wxDC& dc2, wxDC& dc3, wxDC& dc4) = 0;
-
+	
 	/// \param newColour	 
 	static void SetLineColor(const wxColour& newColour);
-
-	/// \param newCamerePosition
-	static void SetCameraPosition(const Position& newCameraPosition);
-
-	/// \param newCameraLook
-	static void SetCameraLook(const Position& newCameraLook);
-
-	/// \param newCameraFov
-	static void SetCameraFov(const double newCameraFov);
 
 	/// \param fileName
 	static void saveToFile(const std::string& fileName);
@@ -112,6 +103,81 @@ public:
 	static void SetViewSize(const double x, const double y);
 
 	void setColor(const wxColour& newColor);
+
+	class Camera
+	{
+	public:
+		/// Projects a 3D position to a 2D screen coordinate.
+		/// \param pos The 3D position to project.
+		/// \return The projected 2D screen coordinate.
+		static wxPoint project(const Position& pos);
+
+		/// Updates the camera parameters based on current settings.
+		static void update();
+
+		/// \param front The new distance to the front plane.
+		/// \param top The new distance to the top plane.
+		/// \param right The new distance to the right plane.
+		static void setDistances(const double front, const double top, const double right)
+		{
+			frontDistance = front;
+			topDistance = top;
+			rightDistance = right;
+			Camera::update();
+		}
+
+		/// \param x The x coordinate of the new camera position.
+		/// \param y The y coordinate of the new camera position.
+		/// \param z The z coordinate of the new camera position.
+		static void setPosition(const double x, const double y, const double z)
+		{
+			cameraPosition = { x, y, z };
+			Camera::update();
+		}
+
+		/// \param x The x coordinate of the new look at position.
+		/// \param y The y coordinate of the new look at position.
+		/// \param z The z coordinate of the new look at position.
+		static void setLookAt(const double x, const double y, const double z)
+		{
+			lookAtPosition = { x, y, z };
+			Camera::update();
+		}
+
+		/// \param newFov The new field of view for the camera.
+		static void setFov(const double newFov)
+		{
+			fieldOfView = newFov;
+			Camera::update();
+		}
+
+		// Getter methods
+		static double getFrontDistance() { return frontDistance; }
+		static double getTopDistance() { return topDistance; }
+		static double getRightDistance() { return rightDistance; }
+
+		static Position getPosition() { return cameraPosition; }
+		static Position getLookAt() { return lookAtPosition; }
+		static double getFov() { return fieldOfView; }
+	private:
+		static double frontDistance; ///< Distance to the front clipping plane.
+		static double topDistance; ///< Distance to the top clipping plane.
+		static double rightDistance; ///< Distance to the right clipping plane.
+
+		static Position cameraPosition; ///< Position of the camera.
+		static Position lookAtPosition; ///< The point the camera is looking at.
+		static double fieldOfView; ///< Field of view of the camera in degrees.
+
+		static Position cameraDirection;
+		static Position rightVector;
+		static Position upVector;
+
+		static const double nearPlane; ///< Distance to the near clipping plane.
+		static const double farPlane; ///< Distance to the far clipping plane.
+		static double fovInRadians;
+		static double tanFov;
+		static double aspectRatio;
+	};
 
 protected:
 	wxColour _color; /// @brief kolor obiektu
@@ -129,14 +195,8 @@ protected:
 	static bool fill_style; /// @brief Czy wypelnienie (false jesli nie, true jesli tak)
 	static wxColour fill_color; /// @brief Kolor wypelnienia
 	static view view_style; /// @brief Rodzaj widoku (wire, lines lub solid)
-	static double front_distance; /// @brief Odleglosc kamery z przodu
-	static double top_distance; /// @brief Odleglosc kamery z gory
-	static double right_distance; /// @brief Odleglosc kamery z boku
-	static Position camera_pos; /// @brief Pozycja kamery z perspektywa
-	static Position camera_look; /// @brief Punkt na ktory patrzy kamera
-	static double camera_fov; /// @brief FOV kamery z perspektywa (w stopniach)
-    static double panel_height;	/// Vertical panel size
-    static double panel_width;	///< Horizontal panel size
+    static double panelHeight;	/// Vertical panel size
+    static double panelWidth;	///< Horizontal panel size
 
 	/**
 	 * @brief Generates a 3D rotation matrix.
@@ -163,6 +223,6 @@ private:
 	static std::vector<std::vector<double>> multiplyMatrix(const std::vector<std::vector<double>>& a, const std::vector<std::vector<double>>& b);
 
 	void highlightObject();
-	const wxColour& generateHighlight() const;
+	const wxColour generateHighlight() const;
 	void ResetHighlight(wxTimerEvent& event, wxColour prev);
 };

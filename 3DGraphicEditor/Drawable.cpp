@@ -10,16 +10,38 @@ wxColour Drawable::line_color = wxColour(0, 0, 0);;
 bool Drawable::fill_style = false;
 wxColour Drawable::fill_color = wxColour(255, 255, 255);
 view Drawable::view_style = view::lines;
-double Drawable::front_distance = 1.0;
-double Drawable::top_distance = 1.0;
-double Drawable::right_distance = 1.0;
-Position Drawable::camera_pos = Position(200, 200, 200);
-Position Drawable::camera_look = Position(0, 0, 0);
-double Drawable::camera_fov = 60.0;
-double Drawable::panel_height = 200.0;
-double Drawable::panel_width = 200.0;
+double Drawable::panelHeight = 200.0;
+double Drawable::panelWidth = 200.0;
 int Drawable::highlight_duration_ms=1000;
 double Drawable::highlight_factor=0.6;
+
+// Camera initializers
+double Drawable::Camera::frontDistance = 1.0;
+double Drawable::Camera::topDistance = 1.0;
+double Drawable::Camera::rightDistance = 1.0;
+Position Drawable::Camera::cameraPosition = Position(200, 200, 200);
+Position Drawable::Camera::lookAtPosition = Position(0, 0, 0);
+double Drawable::Camera::fieldOfView = 60.0;
+Position Drawable::Camera::cameraDirection = {
+			lookAtPosition.x - cameraPosition.x,
+			lookAtPosition.y - cameraPosition.y,
+			lookAtPosition.z - cameraPosition.z
+};
+Position Drawable::Camera::rightVector = {
+			cameraDirection.y * 0 - cameraDirection.z * 1,
+			cameraDirection.z * 0 - cameraDirection.x * 0,
+			cameraDirection.x * 1 - cameraDirection.y * 0
+};
+Position Drawable::Camera::upVector = {
+			rightVector.y * cameraDirection.z - rightVector.z * cameraDirection.y,
+			rightVector.z * cameraDirection.x - rightVector.x * cameraDirection.z,
+			rightVector.x * cameraDirection.y - rightVector.y * cameraDirection.x
+};
+const double Drawable::Camera::nearPlane =0.01; // Distance to near clipping plane
+const double Drawable::Camera::farPlane =100.0; // Distance to far clipping plane
+double Drawable::Camera::fovInRadians = fieldOfView * (M_PI / 180.0);
+double Drawable::Camera::tanFov = tan(fovInRadians / 2.0);
+double Drawable::Camera::aspectRatio = panelWidth / panelHeight;
 
 void Drawable::addObj(Drawable* fig) {
 	figures.push_back(fig);
@@ -77,21 +99,9 @@ void Drawable::SetLineColor(const wxColour& newColour){
 	line_color = newColour;
 }
 
-void Drawable::SetCameraPosition(const Position& newCameraPosition){
-	camera_pos = newCameraPosition;
-}
-
-void Drawable::SetCameraLook(const Position& newCameraLook){
-	camera_look = newCameraLook;
-}
-
-void Drawable::SetCameraFov(const double newCameraFov) {
-	camera_fov = newCameraFov;
-}
-
 void Drawable::SetViewSize(const double x, const double y) {
-	panel_width = x;
-	panel_height = y;
+	panelWidth = x;
+	panelHeight = y;
 }
 
 void Drawable::setColor(const wxColour& newColor) {
@@ -158,25 +168,29 @@ void Drawable::saveToFile(const std::string& fileName)
 		return;
 	}
 
+	std::ostringstream oss;
+
 	// saving drawable settings
-	outFile << line_color.GetRGB() << " ";
-	outFile << fill_style << " ";
-	outFile << fill_color.GetRGB() << " ";
-	outFile << std::to_string(static_cast<int>(view_style)) << " ";
+	oss << line_color.GetRGB() << " ";
+	oss << fill_style << " ";
+	oss << fill_color.GetRGB() << " ";
+	oss << std::to_string(static_cast<int>(view_style)) << " ";
 
-	outFile << front_distance << " ";
-	outFile << top_distance << " ";
-	outFile << right_distance << " ";
 
-	outFile << camera_pos.x << " " << camera_pos.y << " " << camera_pos.z << " ";
-	outFile << camera_look.x << " " << camera_look.y << " " << camera_look.z << " ";
+	oss << Camera::getFrontDistance() << " ";
+	oss << Camera::getTopDistance() << " ";
+	oss << Camera::getRightDistance() << " ";
 
-	outFile << camera_fov << "\n";
+	oss << Camera::getPosition().x << " " << Camera::getPosition().y << " " << Camera::getPosition().z << " ";
+	oss << Camera::getLookAt().x << " " << Camera::getLookAt().y << " " << Camera::getLookAt().z << " ";
+
+	oss << Camera::getFov() << "\n";
 
 	for (Drawable* obj : figures)
-	{
-		outFile << obj->save();
-	}
+		oss << obj->save();
+
+	// Output the string stream to the file
+	outFile << oss.str();
 
 	outFile.close();
 	if (outFile.fail()) {
@@ -195,24 +209,70 @@ void Drawable::loadFromFile(const std::string& fileName)
 
 	// loading drawable settings
 	std::string line;
+	if (std::getline(inFile, line)) 
+	{
+		std::istringstream iss(line);
 
-	std::getline(inFile, line);
-	std::istringstream iss(line);
+		wxUint32 penColor; 
+		if (!(iss >> penColor)) {
+			std::cerr << "Error: Failed to read pen color." << std::endl;
+			return;
+		}
+		line_color = penColor;
 
-	wxUint32 color; iss >> color; line_color = color;
-	iss >> fill_style;
-	iss >> color; fill_color = color;
-	int newView; iss >> newView; view_style = static_cast<view>(newView);
-	iss >> front_distance;
-	iss >> top_distance;
-	iss >> right_distance;
+		bool fillStyle;
+		wxUint32 fillColor;
+		if (!(iss >> fillStyle>> fillColor)) {
+			std::cerr << "Error: Failed to read fill settings." << std::endl;
+			return;
+		}
+		fill_style = fillStyle;
+		fill_color = fillColor;
 
-	iss >> camera_pos.x >> camera_pos.y >> camera_pos.z;
-	iss >> camera_look.x >> camera_look.y >> camera_look.z;
+		int newView;
+		if (!(iss >> newView)) {
+			std::cerr << "Error: Failed to read view style." << std::endl;
+			return;
+		}
+		view_style = static_cast<view>(newView);
 
-	iss >> camera_fov;
+		double fdist, tdist, rdist;
+		if (!(iss >> fdist >> tdist >> rdist)) {
+			std::cerr << "Error: Failed to read camera distances." << std::endl;
+			return;
+		}
+		Camera::setDistances(fdist, tdist, rdist);
+
+		double posX, posY, posZ;
+		if (!(iss >> posX >> posY >> posZ)) {
+			std::cerr << "Error: Failed to read camera position." << std::endl;
+			return;
+		}
+		Camera::setPosition(posX, posY, posZ);
+
+		double lookX, lookY, lookZ;
+		if (!(iss >> lookX >> lookY >> lookZ)) {
+			std::cerr << "Error: Failed to read camera look direction." << std::endl;
+			return;
+		}
+		Camera::setLookAt(lookX, lookY, lookZ);
+
+		double fov;
+		if (!(iss >> fov)) {
+			std::cerr << "Error: Failed to read camera FOV." << std::endl;
+			return;
+		}
+		Camera::setFov(fov);
+	}
+	else {
+		std::cerr << "Error: Could not read the line from the file." << std::endl;
+		return;
+	}
 
 
+
+
+	wxUint32 color;
 	while (std::getline(inFile, line)) 
 	{
 		std::istringstream iss(line);
@@ -245,7 +305,8 @@ void Drawable::loadFromFile(const std::string& fileName)
 		}
 		else
 		{
-			// throw error
+			std::cerr << "Error: Wrong object type. " << fileName << std::endl;
+			return;
 		}
 		// Add more cases for other Drawable types
 	}
@@ -274,7 +335,7 @@ void Drawable::highlightObject()
 	}
 }
 
-const wxColour& Drawable::generateHighlight() const {
+const wxColour Drawable::generateHighlight() const {
 	return wxColour(
 		std::min(_color.GetRed()   - highlight_factor * 255, 255.0), 
 		std::min(_color.GetGreen() - highlight_factor * 255, 255.0),
@@ -288,4 +349,61 @@ void  Drawable::ResetHighlight(wxTimerEvent& event, wxColour prev)
 	_highlightTimer->Stop(); // Stop the timer
 	delete _highlightTimer; // Clean up the timer object
 	_highlightTimer = nullptr;
+}
+
+void Drawable::Camera::update(){
+	fovInRadians = fieldOfView * (M_PI / 180.0);
+	tanFov = tan(fovInRadians / 2.0);
+	aspectRatio = panelWidth / panelHeight;
+
+	cameraDirection = {
+		lookAtPosition.x - cameraPosition.x,
+		lookAtPosition.y - cameraPosition.y,
+		lookAtPosition.z - cameraPosition.z
+	};
+	// Normalize camera direction
+	double length = sqrt(cameraDirection.x * cameraDirection.x + cameraDirection.y * cameraDirection.y + cameraDirection.z * cameraDirection.z);
+	cameraDirection.x /= length;
+	cameraDirection.y /= length;
+	cameraDirection.z /= length;
+
+	rightVector = {
+		cameraDirection.y * 0 - cameraDirection.z * 1,
+		cameraDirection.z * 0 - cameraDirection.x * 0,
+		cameraDirection.x * 1 - cameraDirection.y * 0
+	};
+	// Normalize right vector
+	length = sqrt(rightVector.x * rightVector.x + rightVector.y * rightVector.y + rightVector.z * rightVector.z);
+	rightVector.x /= length;
+	rightVector.y /= length;
+	rightVector.z /= length;
+
+	upVector = {
+		rightVector.y * cameraDirection.z - rightVector.z * cameraDirection.y,
+		rightVector.z * cameraDirection.x - rightVector.x * cameraDirection.z,
+		rightVector.x * cameraDirection.y - rightVector.y * cameraDirection.x
+	};
+}
+
+wxPoint Drawable::Camera::project(const Position& pos){
+	// Transform the point to camera space
+	double px = pos.x - cameraPosition.x;
+	double py = pos.y - cameraPosition.y;
+	double pz = pos.z - cameraPosition.z;
+
+	// Apply rotation (camera orientation)
+	double camX = px * rightVector.x + py * rightVector.y + pz * rightVector.z;
+	double camY = px * upVector.x + py * upVector.y + pz * upVector.z;
+	double camZ = px * cameraDirection.x + py * cameraDirection.y + pz * cameraDirection.z;
+
+	// Ensure camZ is not too close to zero to prevent division by zero
+	if (camZ < nearPlane) {
+		camZ = nearPlane;
+	}
+
+	// Perspective projection
+	double screenX = (camX / (camZ * tanFov * aspectRatio)) * (panelWidth / 2) + (panelWidth / 2);
+	double screenY = (camY / (camZ * tanFov)) * (panelHeight / 2) + (panelHeight / 2);
+
+	return wxPoint(screenX, panelHeight - screenY); // Flip y-axis for drawing
 }

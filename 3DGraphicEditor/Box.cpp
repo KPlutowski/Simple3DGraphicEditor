@@ -46,18 +46,18 @@ void Box::draw_front(wxDC& dc) {
 	dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
 	// Draw lines connecting the points to form the box
-	dc.DrawLine(_corners[0].x, panel_height - _corners[0].y, _corners[1].x, panel_height - _corners[1].y);
-	dc.DrawLine(_corners[1].x, panel_height - _corners[1].y, _corners[2].x, panel_height - _corners[2].y);
-	dc.DrawLine(_corners[2].x, panel_height - _corners[2].y, _corners[3].x, panel_height - _corners[3].y);
-	dc.DrawLine(_corners[3].x, panel_height - _corners[3].y, _corners[0].x, panel_height - _corners[0].y);
-	dc.DrawLine(_corners[4].x, panel_height - _corners[4].y, _corners[5].x, panel_height - _corners[5].y);
-	dc.DrawLine(_corners[5].x, panel_height - _corners[5].y, _corners[6].x, panel_height - _corners[6].y);
-	dc.DrawLine(_corners[6].x, panel_height - _corners[6].y, _corners[7].x, panel_height - _corners[7].y);
-	dc.DrawLine(_corners[7].x, panel_height - _corners[7].y, _corners[4].x, panel_height - _corners[4].y);
-	dc.DrawLine(_corners[0].x, panel_height - _corners[0].y, _corners[4].x, panel_height - _corners[4].y);
-	dc.DrawLine(_corners[1].x, panel_height - _corners[1].y, _corners[5].x, panel_height - _corners[5].y);
-	dc.DrawLine(_corners[2].x, panel_height - _corners[2].y, _corners[6].x, panel_height - _corners[6].y);
-	dc.DrawLine(_corners[3].x, panel_height - _corners[3].y, _corners[7].x, panel_height - _corners[7].y);
+	dc.DrawLine(_corners[0].x, panelHeight - _corners[0].y, _corners[1].x, panelHeight - _corners[1].y);
+	dc.DrawLine(_corners[1].x, panelHeight - _corners[1].y, _corners[2].x, panelHeight - _corners[2].y);
+	dc.DrawLine(_corners[2].x, panelHeight - _corners[2].y, _corners[3].x, panelHeight - _corners[3].y);
+	dc.DrawLine(_corners[3].x, panelHeight - _corners[3].y, _corners[0].x, panelHeight - _corners[0].y);
+	dc.DrawLine(_corners[4].x, panelHeight - _corners[4].y, _corners[5].x, panelHeight - _corners[5].y);
+	dc.DrawLine(_corners[5].x, panelHeight - _corners[5].y, _corners[6].x, panelHeight - _corners[6].y);
+	dc.DrawLine(_corners[6].x, panelHeight - _corners[6].y, _corners[7].x, panelHeight - _corners[7].y);
+	dc.DrawLine(_corners[7].x, panelHeight - _corners[7].y, _corners[4].x, panelHeight - _corners[4].y);
+	dc.DrawLine(_corners[0].x, panelHeight - _corners[0].y, _corners[4].x, panelHeight - _corners[4].y);
+	dc.DrawLine(_corners[1].x, panelHeight - _corners[1].y, _corners[5].x, panelHeight - _corners[5].y);
+	dc.DrawLine(_corners[2].x, panelHeight - _corners[2].y, _corners[6].x, panelHeight - _corners[6].y);
+	dc.DrawLine(_corners[3].x, panelHeight - _corners[3].y, _corners[7].x, panelHeight - _corners[7].y);
 }
 
 void Box::draw_top(wxDC& dc) {
@@ -65,18 +65,18 @@ void Box::draw_top(wxDC& dc) {
 	dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
 	// Draw lines connecting the points to form the box
-	dc.DrawLine(_corners[0].x, panel_height - _corners[0].z, _corners[1].x, panel_height - _corners[1].z);
-	dc.DrawLine(_corners[1].x, panel_height - _corners[1].z, _corners[2].x, panel_height - _corners[2].z);
-	dc.DrawLine(_corners[2].x, panel_height - _corners[2].z, _corners[3].x, panel_height - _corners[3].z);
-	dc.DrawLine(_corners[3].x, panel_height - _corners[3].z, _corners[0].x, panel_height - _corners[0].z);
-	dc.DrawLine(_corners[4].x, panel_height - _corners[4].z, _corners[5].x, panel_height - _corners[5].z);
-	dc.DrawLine(_corners[5].x, panel_height - _corners[5].z, _corners[6].x, panel_height - _corners[6].z);
-	dc.DrawLine(_corners[6].x, panel_height - _corners[6].z, _corners[7].x, panel_height - _corners[7].z);
-	dc.DrawLine(_corners[7].x, panel_height - _corners[7].z, _corners[4].x, panel_height - _corners[4].z);
-	dc.DrawLine(_corners[0].x, panel_height - _corners[0].z, _corners[4].x, panel_height - _corners[4].z);
-	dc.DrawLine(_corners[1].x, panel_height - _corners[1].z, _corners[5].x, panel_height - _corners[5].z);
-	dc.DrawLine(_corners[2].x, panel_height - _corners[2].z, _corners[6].x, panel_height - _corners[6].z);
-	dc.DrawLine(_corners[3].x, panel_height - _corners[3].z, _corners[7].x, panel_height - _corners[7].z);
+	dc.DrawLine(_corners[0].x, panelHeight - _corners[0].z, _corners[1].x, panelHeight - _corners[1].z);
+	dc.DrawLine(_corners[1].x, panelHeight - _corners[1].z, _corners[2].x, panelHeight - _corners[2].z);
+	dc.DrawLine(_corners[2].x, panelHeight - _corners[2].z, _corners[3].x, panelHeight - _corners[3].z);
+	dc.DrawLine(_corners[3].x, panelHeight - _corners[3].z, _corners[0].x, panelHeight - _corners[0].z);
+	dc.DrawLine(_corners[4].x, panelHeight - _corners[4].z, _corners[5].x, panelHeight - _corners[5].z);
+	dc.DrawLine(_corners[5].x, panelHeight - _corners[5].z, _corners[6].x, panelHeight - _corners[6].z);
+	dc.DrawLine(_corners[6].x, panelHeight - _corners[6].z, _corners[7].x, panelHeight - _corners[7].z);
+	dc.DrawLine(_corners[7].x, panelHeight - _corners[7].z, _corners[4].x, panelHeight - _corners[4].z);
+	dc.DrawLine(_corners[0].x, panelHeight - _corners[0].z, _corners[4].x, panelHeight - _corners[4].z);
+	dc.DrawLine(_corners[1].x, panelHeight - _corners[1].z, _corners[5].x, panelHeight - _corners[5].z);
+	dc.DrawLine(_corners[2].x, panelHeight - _corners[2].z, _corners[6].x, panelHeight - _corners[6].z);
+	dc.DrawLine(_corners[3].x, panelHeight - _corners[3].z, _corners[7].x, panelHeight - _corners[7].z);
 }
 
 void Box::draw_side(wxDC& dc) {
@@ -84,87 +84,28 @@ void Box::draw_side(wxDC& dc) {
 	dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
 	// Draw lines connecting the points to form the box
-	dc.DrawLine(_corners[0].z, panel_height - _corners[0].y, _corners[1].z, panel_height - _corners[1].y);
-	dc.DrawLine(_corners[1].z, panel_height - _corners[1].y, _corners[2].z, panel_height - _corners[2].y);
-	dc.DrawLine(_corners[2].z, panel_height - _corners[2].y, _corners[3].z, panel_height - _corners[3].y);
-	dc.DrawLine(_corners[3].z, panel_height - _corners[3].y, _corners[0].z, panel_height - _corners[0].y);
-	dc.DrawLine(_corners[4].z, panel_height - _corners[4].y, _corners[5].z, panel_height - _corners[5].y);
-	dc.DrawLine(_corners[5].z, panel_height - _corners[5].y, _corners[6].z, panel_height - _corners[6].y);
-	dc.DrawLine(_corners[6].z, panel_height - _corners[6].y, _corners[7].z, panel_height - _corners[7].y);
-	dc.DrawLine(_corners[7].z, panel_height - _corners[7].y, _corners[4].z, panel_height - _corners[4].y);
-	dc.DrawLine(_corners[0].z, panel_height - _corners[0].y, _corners[4].z, panel_height - _corners[4].y);
-	dc.DrawLine(_corners[1].z, panel_height - _corners[1].y, _corners[5].z, panel_height - _corners[5].y);
-	dc.DrawLine(_corners[2].z, panel_height - _corners[2].y, _corners[6].z, panel_height - _corners[6].y);
-	dc.DrawLine(_corners[3].z, panel_height - _corners[3].y, _corners[7].z, panel_height - _corners[7].y);
+	dc.DrawLine(_corners[0].z, panelHeight - _corners[0].y, _corners[1].z, panelHeight - _corners[1].y);
+	dc.DrawLine(_corners[1].z, panelHeight - _corners[1].y, _corners[2].z, panelHeight - _corners[2].y);
+	dc.DrawLine(_corners[2].z, panelHeight - _corners[2].y, _corners[3].z, panelHeight - _corners[3].y);
+	dc.DrawLine(_corners[3].z, panelHeight - _corners[3].y, _corners[0].z, panelHeight - _corners[0].y);
+	dc.DrawLine(_corners[4].z, panelHeight - _corners[4].y, _corners[5].z, panelHeight - _corners[5].y);
+	dc.DrawLine(_corners[5].z, panelHeight - _corners[5].y, _corners[6].z, panelHeight - _corners[6].y);
+	dc.DrawLine(_corners[6].z, panelHeight - _corners[6].y, _corners[7].z, panelHeight - _corners[7].y);
+	dc.DrawLine(_corners[7].z, panelHeight - _corners[7].y, _corners[4].z, panelHeight - _corners[4].y);
+	dc.DrawLine(_corners[0].z, panelHeight - _corners[0].y, _corners[4].z, panelHeight - _corners[4].y);
+	dc.DrawLine(_corners[1].z, panelHeight - _corners[1].y, _corners[5].z, panelHeight - _corners[5].y);
+	dc.DrawLine(_corners[2].z, panelHeight - _corners[2].y, _corners[6].z, panelHeight - _corners[6].y);
+	dc.DrawLine(_corners[3].z, panelHeight - _corners[3].y, _corners[7].z, panelHeight - _corners[7].y);
 }
 
 void Box::draw_perspective(wxDC& dc) {
 	dc.SetPen(wxPen(_color));
 	dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
-	double aspect_ratio = panel_width / panel_height;
-
-	Position camera_dir = {
-		camera_look.x - camera_pos.x,
-		camera_look.y - camera_pos.y,
-		camera_look.z - camera_pos.z
-	};
-
-	// Normalize camera direction
-	double length = sqrt(camera_dir.x * camera_dir.x + camera_dir.y * camera_dir.y + camera_dir.z * camera_dir.z);
-	camera_dir.x /= length;
-	camera_dir.y /= length;
-	camera_dir.z /= length;
-
-
-
-	// Compute right vector
-	Position rightVec = {
-		camera_dir.y * 0 - camera_dir.z * 1,
-		camera_dir.z * 0 - camera_dir.x * 0,
-		camera_dir.x * 1 - camera_dir.y * 0
-	};
-
-	// Normalize right vector
-	length = sqrt(rightVec.x * rightVec.x + rightVec.y * rightVec.y + rightVec.z * rightVec.z);
-	rightVec.x /= length;
-	rightVec.y /= length;
-	rightVec.z /= length;
-
-	// Compute up vector
-	double up_x = rightVec.y * camera_dir.z - rightVec.z * camera_dir.y;
-	double up_y = rightVec.z * camera_dir.x - rightVec.x * camera_dir.z;
-	double up_z = rightVec.x * camera_dir.y - rightVec.y * camera_dir.x;
-
-	// Field of view and projection parameters
-	double near_plane = 1.0; // Distance to near clipping plane
-	double far_plane = 1000.0; // Distance to far clipping plane
-	double fov_rad = camera_fov * (M_PI / 180.0);
-	double tan_fov = tan(fov_rad / 2.0);
-
-	// Project a 3D point to 2D screen space
-	auto project = [&](const Position& pos) -> wxPoint {
-		// Transform the point to camera space
-		double px = pos.x - camera_pos.x;
-		double py = pos.y - camera_pos.y;
-		double pz = pos.z - camera_pos.z;
-
-		// Apply rotation (camera orientation)
-		double cam_x = px * rightVec.x + py * rightVec.y + pz * rightVec.z;
-		double cam_y = px * up_x + py * up_y + pz * up_z;
-		double cam_z = px * camera_dir.x + py * camera_dir.y + pz * camera_dir.z;
-
-		// Perspective projection
-		double screen_x = (cam_x / (cam_z * tan_fov * aspect_ratio)) * (panel_width / 2) + (panel_width / 2);
-		double screen_y = (cam_y / (cam_z * tan_fov)) * (panel_height / 2) + (panel_height / 2);
-
-		return wxPoint(screen_x, panel_height - screen_y); // Flip y-axis for drawing
-		};
-
 	// Project and draw all corners
 	std::vector<wxPoint> projected_corners;
 	for (const auto& corner : _corners) {
-		projected_corners.push_back(project(corner));
+		projected_corners.push_back(Camera::project(corner));
 	}
 
 	// Draw lines

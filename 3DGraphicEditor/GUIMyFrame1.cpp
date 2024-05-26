@@ -8,7 +8,7 @@ GUIMyFrame1::GUIMyFrame1( wxWindow* parent )
 :
 MyFrame1( parent )
 {
-
+	Drawable::Camera::update();
 }
 
 void GUIMyFrame1::Update(wxCommandEvent& event)
@@ -209,7 +209,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 		if (CommandParser::command_length_check(command_prompt, 2)) {
 			try {
 				Position newLook = CommandParser::get_a_point(command_prompt[1]);
-				Drawable::SetCameraLook(newLook);
+				Drawable::Camera::setLookAt(newLook.x, newLook.y, newLook.z);
 			}
 			catch (const std::exception& e) {
 				error = true;
@@ -221,7 +221,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 		if (CommandParser::command_length_check(command_prompt, 2)) {
 			try {
 				Position newPosition = CommandParser::get_a_point(command_prompt[1]);
-				Drawable::SetCameraPosition(newPosition);
+				Drawable::Camera::setPosition(newPosition.x, newPosition.y, newPosition.z);
 			}
 			catch (const std::exception& e) {
 				error = true;
@@ -233,7 +233,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 		if (CommandParser::command_length_check(command_prompt, 2)) {
 			try {
 				double newFov = std::stod(command_prompt[1]);
-				Drawable::SetCameraFov(newFov);
+				Drawable::Camera::setFov(newFov);
 			}
 			catch (const std::exception& e) {
 				error = true;
