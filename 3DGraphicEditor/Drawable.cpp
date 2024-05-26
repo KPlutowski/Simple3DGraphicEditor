@@ -12,8 +12,8 @@ wxColour Drawable::fill_color = wxColour(255, 255, 255);
 view Drawable::view_style = view::lines;
 double Drawable::panelHeight = 200.0;
 double Drawable::panelWidth = 200.0;
-int Drawable::highlight_duration_ms=1000;
-double Drawable::highlight_factor=0.6;
+int Drawable::highlight_duration_ms = 1000;
+double Drawable::highlight_factor = 0.6;
 
 // Camera initializers
 double Drawable::Camera::frontDistance = 1.0;
@@ -37,8 +37,8 @@ Position Drawable::Camera::upVector = {
 			rightVector.z * cameraDirection.x - rightVector.x * cameraDirection.z,
 			rightVector.x * cameraDirection.y - rightVector.y * cameraDirection.x
 };
-const double Drawable::Camera::nearPlane =0.01; // Distance to near clipping plane
-const double Drawable::Camera::farPlane =100.0; // Distance to far clipping plane
+const double Drawable::Camera::nearPlane = 0.01; // Distance to near clipping plane
+const double Drawable::Camera::farPlane = 100.0; // Distance to far clipping plane
 double Drawable::Camera::fovInRadians = fieldOfView * (M_PI / 180.0);
 double Drawable::Camera::tanFov = tan(fovInRadians / 2.0);
 double Drawable::Camera::aspectRatio = panelWidth / panelHeight;
@@ -48,7 +48,7 @@ void Drawable::addObj(Drawable* fig) {
 }
 
 void Drawable::deleteObj(int index) {
-	if (index >= 1 && index <= figures.size()) 
+	if (index >= 1 && index <= figures.size())
 		figures.erase(figures.begin() + index - 1);
 }
 
@@ -60,17 +60,17 @@ void Drawable::clearAll() {
 void Drawable::moveObj(int index, double x_shift, double y_shift, double z_shift) {
 	if (index >= 1 && index <= figures.size())
 		// Use zero-based indexing internally, so adjust index by -1
-		figures[index-1]->move(x_shift, y_shift, z_shift);
+		figures[index - 1]->move(x_shift, y_shift, z_shift);
 }
 
 void Drawable::rotateObj(int index, double x_cord, double y_cord, double z_cord, double alpha, double beta, double gamma) {
 	if (index >= 1 && index <= figures.size())
 		// Use zero-based indexing internally, so adjust index by -1
-		figures[index-1]->rotate(x_cord, y_cord, z_cord, alpha, beta, gamma);
+		figures[index - 1]->rotate(x_cord, y_cord, z_cord, alpha, beta, gamma);
 }
 
 void Drawable::touchObj(int index) {
-	if (index >= 1 && index <= figures.size()) 
+	if (index >= 1 && index <= figures.size())
 	{
 		// Use zero-based indexing internally, so adjust index by -1
 		figures[index - 1]->highlightObject();
@@ -80,14 +80,14 @@ void Drawable::touchObj(int index) {
 void Drawable::DrawAll(wxDC& dc1, wxDC& dc2, wxDC& dc3, wxDC& dc4) {
 	for (Drawable* figure : figures)
 	{
-		figure->draw(dc1,dc2,dc3,dc4);
+		figure->draw(dc1, dc2, dc3, dc4);
 	}
 }
 
 Drawable* Drawable::getObj(int index) {
 	if (index >= 1 && index <= figures.size())
 		// Use zero-based indexing internally, so adjust index by -1
-		return figures[index-1];
+		return figures[index - 1];
 	return nullptr;
 }
 
@@ -95,7 +95,7 @@ std::vector<Drawable*> Drawable::getAllObjs() {
 	return figures;
 }
 
-void Drawable::SetLineColor(const wxColour& newColour){
+void Drawable::SetLineColor(const wxColour& newColour) {
 	line_color = newColour;
 }
 
@@ -176,7 +176,6 @@ void Drawable::saveToFile(const std::string& fileName)
 	oss << fill_color.GetRGB() << " ";
 	oss << std::to_string(static_cast<int>(view_style)) << " ";
 
-
 	oss << Camera::getFrontDistance() << " ";
 	oss << Camera::getTopDistance() << " ";
 	oss << Camera::getRightDistance() << " ";
@@ -209,11 +208,11 @@ void Drawable::loadFromFile(const std::string& fileName)
 
 	// loading drawable settings
 	std::string line;
-	if (std::getline(inFile, line)) 
+	if (std::getline(inFile, line))
 	{
 		std::istringstream iss(line);
 
-		wxUint32 penColor; 
+		wxUint32 penColor;
 		if (!(iss >> penColor)) {
 			std::cerr << "Error: Failed to read pen color." << std::endl;
 			return;
@@ -222,7 +221,7 @@ void Drawable::loadFromFile(const std::string& fileName)
 
 		bool fillStyle;
 		wxUint32 fillColor;
-		if (!(iss >> fillStyle>> fillColor)) {
+		if (!(iss >> fillStyle >> fillColor)) {
 			std::cerr << "Error: Failed to read fill settings." << std::endl;
 			return;
 		}
@@ -241,7 +240,9 @@ void Drawable::loadFromFile(const std::string& fileName)
 			std::cerr << "Error: Failed to read camera distances." << std::endl;
 			return;
 		}
-		Camera::setDistances(fdist, tdist, rdist);
+		Camera::setFrontDistance(fdist);
+		Camera::setTopDistance(tdist);
+		Camera::setRightDistance(rdist);
 
 		double posX, posY, posZ;
 		if (!(iss >> posX >> posY >> posZ)) {
@@ -269,30 +270,27 @@ void Drawable::loadFromFile(const std::string& fileName)
 		return;
 	}
 
-
-
-
 	wxUint32 color;
-	while (std::getline(inFile, line)) 
+	while (std::getline(inFile, line))
 	{
 		std::istringstream iss(line);
 		std::string type;
 		iss >> type;
 
-		if (type == "Line") 
+		if (type == "Line")
 		{
 			double x1, y1, z1, x2, y2, z2;
-			if (iss >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> color) 
+			if (iss >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> color)
 			{
-				addObj(new Line(Position(x1, y1, z1), Position(x2, y2, z2),color));
+				addObj(new Line(Position(x1, y1, z1), Position(x2, y2, z2), color));
 			}
 		}
-		else if (type == "Sphere") 
+		else if (type == "Sphere")
 		{
 			double x, y, z, radius;
 			int meridians, parallels;
-			if (iss >> x >> y >> z >> radius >> meridians >> parallels>> color) {
-				addObj(new Sphere(Position(x, y, z), radius, meridians, parallels,color));
+			if (iss >> x >> y >> z >> radius >> meridians >> parallels >> color) {
+				addObj(new Sphere(Position(x, y, z), radius, meridians, parallels, color));
 			}
 		}
 		else if (type == "Box")
@@ -337,9 +335,9 @@ void Drawable::highlightObject()
 
 const wxColour Drawable::generateHighlight() const {
 	return wxColour(
-		std::min(_color.GetRed()   - highlight_factor * 255, 255.0), 
+		std::min(_color.GetRed() - highlight_factor * 255, 255.0),
 		std::min(_color.GetGreen() - highlight_factor * 255, 255.0),
-		std::min(_color.GetBlue()  - highlight_factor * 255, 255.0)
+		std::min(_color.GetBlue() - highlight_factor * 255, 255.0)
 	);
 };
 
@@ -351,7 +349,7 @@ void  Drawable::ResetHighlight(wxTimerEvent& event, wxColour prev)
 	_highlightTimer = nullptr;
 }
 
-void Drawable::Camera::update(){
+void Drawable::Camera::update() {
 	fovInRadians = fieldOfView * (M_PI / 180.0);
 	tanFov = tan(fovInRadians / 2.0);
 	aspectRatio = panelWidth / panelHeight;
@@ -385,7 +383,7 @@ void Drawable::Camera::update(){
 	};
 }
 
-wxPoint Drawable::Camera::project(const Position& pos){
+wxPoint Drawable::Camera::projectPerspective(const Position& pos) {
 	// Transform the point to camera space
 	double px = pos.x - cameraPosition.x;
 	double py = pos.y - cameraPosition.y;

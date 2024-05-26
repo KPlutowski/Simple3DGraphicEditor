@@ -4,9 +4,9 @@
 #include "Sphere.h"
 #include "Box.h"
 
-GUIMyFrame1::GUIMyFrame1( wxWindow* parent )
-:
-MyFrame1( parent )
+GUIMyFrame1::GUIMyFrame1(wxWindow* parent)
+	:
+	MyFrame1(parent)
 {
 	Drawable::Camera::update();
 }
@@ -24,9 +24,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			try {
 				Drawable::SetLineColor(CommandParser::get_a_color(command_prompt[1]));
 			}
-			catch(const std::exception &e){}
-		
-
+			catch (const std::exception& e) {}
 		}
 	}
 
@@ -57,7 +55,6 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				}
 			}
 		}
-
 	}
 
 	else if (command_prompt[0] == "sphere") {
@@ -69,7 +66,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				int meridians = sphere_lines[0];
 				int parallels = sphere_lines[1];
 
-				Drawable::addObj(new Sphere(point,r, meridians, parallels));
+				Drawable::addObj(new Sphere(point, r, meridians, parallels));
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {
@@ -88,13 +85,12 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				double r2 = std::stod(command_prompt[4]);
 				int n = std::stoi(command_prompt[5]);
 			}
-		catch (const std::exception& e) {
-			if (Command_panel) {
-				Command_panel->SetValue("ERROR");
+			catch (const std::exception& e) {
+				if (Command_panel) {
+					Command_panel->SetValue("ERROR");
+				}
 			}
 		}
-		}
-
 	}
 
 	else if (command_prompt[0] == "cylinder") {
@@ -104,7 +100,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				Position end_base = CommandParser::get_a_point(command_prompt[2]);
 				double r = std::stod(command_prompt[3]);
 				int n = std::stoi(command_prompt[4]);
-		}
+			}
 			catch (const std::exception& e) {
 				if (Command_panel) {
 					Command_panel->SetValue("ERROR");
@@ -129,9 +125,9 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 	}
 
 	else if (command_prompt[0] == "clear_all") {
-		if (CommandParser::command_length_check(command_prompt, 1)) 
+		if (CommandParser::command_length_check(command_prompt, 1))
 		{
-			try 
+			try
 			{
 				Drawable::clearAll();
 			}
@@ -141,7 +137,6 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				}
 			}
 		}
-
 	}
 
 	else if (command_prompt[0] == "move") {
@@ -174,7 +169,6 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				}
 			}
 		}
-
 	}
 
 	else if (command_prompt[0] == "save") {
@@ -253,16 +247,41 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				}
 			}
 		}
+	}
+
+	else if (command_prompt[0] == "set_view_range") {
+		if (CommandParser::command_length_check(command_prompt, 3)) {
+			try {
+				double r = std::stod(command_prompt[2]);
+				std::string name = command_prompt[1];
+
+				if (name == "right")
+				{
+					Drawable::Camera::setRightDistance(r);
+				}
+				else if (name == "front")
+				{
+					Drawable::Camera::setFrontDistance(r);
+				}
+				else if (name == "top")
+				{
+					Drawable::Camera::setTopDistance(r);
+				}
+			}
+			catch (const std::exception& e) {
+				if (Command_panel) {
+					Command_panel->SetValue("ERROR");
+				}
+			}
 		}
+	}
 
 	else if (error) {
-		
 	}
 	else {
 		Command_panel->SetValue("ERROR");
 	}
 
-	
 	wxClientDC dc1(vertical_side_panel);
 	wxBufferedDC topView(&dc1);
 	topView.Clear();
@@ -281,8 +300,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 
 	// Update when changing window size // size of drawable area
 	Drawable::SetViewSize(vertical_side_panel->GetSize().x, vertical_side_panel->GetSize().y);
-	
-	
+
 	Drawable::DrawAll(frontView, topView, sideView, perspectiveView);
 	//Command_panel->SetValue(wxT(">>"));
 	Command_panel->SetInsertionPointEnd();
