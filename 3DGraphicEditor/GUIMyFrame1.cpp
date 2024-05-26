@@ -4,9 +4,7 @@
 #include "Sphere.h"
 #include "Box.h"
 
-GUIMyFrame1::GUIMyFrame1(wxWindow* parent)
-	:
-	MyFrame1(parent)
+GUIMyFrame1::GUIMyFrame1(wxWindow* parent) : MyFrame1(parent)
 {
 	Drawable::Camera::update();
 }
@@ -302,6 +300,14 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 	Drawable::SetViewSize(vertical_side_panel->GetSize().x, vertical_side_panel->GetSize().y);
 
 	Drawable::DrawAll(frontView, topView, sideView, perspectiveView);
+
+	// Update List
+	Elements_ListBox->Clear();
+	for (const auto& t : Drawable::getFiguresInfo())
+	{
+		Elements_ListBox->Append(t);
+	}
+
 	//Command_panel->SetValue(wxT(">>"));
 	Command_panel->SetInsertionPointEnd();
 }

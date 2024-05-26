@@ -35,6 +35,10 @@ public:
 	/// @brief draw a line
 	void draw(wxDC& dc1, wxDC& dc2, wxDC& dc3, wxDC& dc4) override;
 
+	std::string getInfo() const override
+	{ 
+		return "Line "+_start.toString()+" "+_end.toString();
+	}
 protected:
 	void move(double x_shift, double y_shift, double z_shift) override;
 	void rotate(double x_cord, double y_cord, double z_cord, double alpha, double beta, double gamma) override;

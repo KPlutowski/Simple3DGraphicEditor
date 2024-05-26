@@ -23,6 +23,10 @@ enum class view {
 struct Position {
 	Position(double a = 0, double b = 0, double c = 0) { x = a, y = b, z = c; }
 	double x, y, z;
+	std::string toString() const
+	{
+		return "(" + std::to_string((int)x)+", " + std::to_string((int)y) + ", " + std::to_string((int)z) + ")";
+	}
 };
 
 /// @brief Klasa bazowa dla figur
@@ -103,6 +107,18 @@ public:
 	static void SetViewSize(const double x, const double y);
 
 	void setColor(const wxColour& newColor);
+
+	static std::vector<std::string> getFiguresInfo()
+	{
+		std::vector<std::string> result;
+		int i=0;
+		for (const auto figure : figures)
+		{
+			i++;
+			result.push_back(std::to_string(i)+" " + figure->getInfo());
+		}
+		return result;
+	}
 
 	class Camera
 	{
@@ -212,6 +228,7 @@ protected:
 	virtual void draw_side(wxDC& dc) = 0;
 	virtual void draw_perspective(wxDC& dc) = 0;
 	virtual std::string save() const = 0;
+	virtual std::string getInfo() const = 0;
 
 	static std::vector<Drawable*> figures; /// @brief Wektor figur
 	static wxColour line_color; /// @brief Kolor linii
