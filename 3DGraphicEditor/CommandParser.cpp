@@ -40,9 +40,9 @@ Position CommandParser::get_a_point(std::string command) {
 			text += i;
 		}
 	}
-	
-		Position p(pos[0], pos[1], pos[2]);
-		return p;
+
+	Position p(pos[0], pos[1], pos[2]);
+	return p;
 }
 
 wxColour CommandParser::get_a_color(std::string command) {
@@ -58,14 +58,11 @@ wxColour CommandParser::get_a_color(std::string command) {
 		}
 
 		else {
-
 			text += i;
 		}
 	}
 	wxColour color(color_val[0], color_val[1], color_val[2]);
 	return color;
-	
-
 }
 
 std::vector<int> CommandParser::get_a_sphere_lines(std::string command) {
@@ -84,7 +81,7 @@ std::vector<int> CommandParser::get_a_sphere_lines(std::string command) {
 			text += i;
 		}
 	}
-	
+
 	return sphere_lines;
 }
 

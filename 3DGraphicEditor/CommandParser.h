@@ -12,8 +12,3 @@ public:
 	static std::vector<int> get_a_sphere_lines(std::string command);
 	static bool command_length_check(std::vector<std::string> command, int length);
 };
-
-
-
-
- 

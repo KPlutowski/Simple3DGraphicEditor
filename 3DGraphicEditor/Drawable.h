@@ -25,7 +25,19 @@ struct Position {
 	double x, y, z;
 	std::string toString() const
 	{
-		return "(" + std::to_string((int)x)+", " + std::to_string((int)y) + ", " + std::to_string((int)z) + ")";
+		return "(" + std::to_string((int)x) + ", " + std::to_string((int)y) + ", " + std::to_string((int)z) + ")";
+	}
+	Position operator-(const Position& other) const {
+		return Position(x - other.x, y - other.y, z - other.z);
+	}
+	Position operator+(const Position& other) const {
+		return Position(x + other.x, y + other.y, z + other.z);
+	}
+	void shift(double x_shift, double y_shift, double z_shift)
+	{
+		x += x_shift;
+		y += y_shift;
+		z += z_shift;
 	}
 };
 
@@ -35,7 +47,7 @@ struct Position {
 /// wowczas management bedzie polegal na mgr.metoda()
 class Drawable {
 public:
-	Drawable(wxColour color = line_color) :_color(color) {};
+	Drawable(wxColour color = penColor) :_color(color) {};
 
 	/// @brief Dodanie figury do wektora (na zasadzie addObj(new ...))
 	/// @param fig - wskaznik na dodawana figure
@@ -70,11 +82,11 @@ public:
 	static void touchObj(int index);
 
 	/// @brief Rysowanie wszystkich figur
-	/// @param dc1 - panel z widokiem z przodu
-	/// @param dc2 - panel z widokiem z gory
-	/// @param dc3 - panel z widokiem z boku
-	/// @param dc4 - panel z widokiem z perspektywa
-	static void DrawAll(wxDC& dc1, wxDC& dc2, wxDC& dc3, wxDC& dc4);
+	/// @param dcFront - panel z widokiem z przodu
+	/// @param dcTop - panel z widokiem z gory
+	/// @param dcSide - panel z widokiem z boku
+	/// @param dcPerspective - panel z widokiem z perspektywa
+	static void DrawAll(wxDC& dcFront, wxDC& dcTop, wxDC& dcSide, wxDC& dcPerspective);
 
 	/// @brief Getter jednej figury z wektora
 	/// @param index - indeks figury
@@ -86,10 +98,10 @@ public:
 	static std::vector<Drawable*> getAllObjs();
 
 	/// @brief Rysowanie figury
-	/// @param dc1 - panel z widokiem z przodu
-	/// @param dc2 - panel z widokiem z gory
-	/// @param dc3 - panel z widokiem z boku
-	/// @param dc4 - panel z widokiem z perspektywa
+	/// @param dcFront - panel z widokiem z przodu
+	/// @param dcTop - panel z widokiem z gory
+	/// @param dcSide - panel z widokiem z boku
+	/// @param dcPerspective - panel z widokiem z perspektywa
 	virtual void draw(wxDC& dc1, wxDC& dc2, wxDC& dc3, wxDC& dc4) = 0;
 
 	/// \param newColour
@@ -111,11 +123,11 @@ public:
 	static std::vector<std::string> getFiguresInfo()
 	{
 		std::vector<std::string> result;
-		int i=0;
+		int i = 0;
 		for (const auto figure : figures)
 		{
 			i++;
-			result.push_back(std::to_string(i)+" " + figure->getInfo());
+			result.push_back(std::to_string(i) + " " + figure->getInfo());
 		}
 		return result;
 	}
@@ -126,7 +138,28 @@ public:
 		/// Projects a 3D position to a 2D screen coordinate.
 		/// \param pos The 3D position to project.
 		/// \return The projected 2D screen coordinate.
-		static wxPoint projectPerspective(const Position& pos);
+		static wxPoint projectPerspective(const Position& point) {
+			// Transform the point to camera space
+			double px = point.x - cameraPosition.x;
+			double py = point.y - cameraPosition.y;
+			double pz = point.z - cameraPosition.z;
+
+			// Apply rotation (camera orientation)
+			double camX = px * rightVector.x + py * rightVector.y + pz * rightVector.z;
+			double camY = px * upVector.x + py * upVector.y + pz * upVector.z;
+			double camZ = px * cameraDirection.x + py * cameraDirection.y + pz * cameraDirection.z;
+
+			// Ensure camZ is not too close to zero to prevent division by zero
+			if (camZ < nearPlane) {
+				camZ = nearPlane;
+			}
+
+			// Perspective projection
+			double screenX = (camX / (camZ * tanFov * aspectRatio)) * (panelWidth / 2) + (panelWidth / 2);
+			double screenY = (camY / (camZ * tanFov)) * (panelHeight / 2) + (panelHeight / 2);
+
+			return wxPoint(screenX, panelHeight - screenY); // Flip y-axis for drawing
+		}
 
 		/// Projects a 3D position to a 2D screen coordinate for front view.
 		/// \param pos The 3D position to project.
@@ -142,7 +175,7 @@ public:
 		/// Projects a 3D position to a 2D screen coordinate for top view.
 		/// \param pos The 3D position to project.
 		/// \return The projected 2D screen coordinate.
-		static wxPoint projectTop(const Position& pos) 
+		static wxPoint projectTop(const Position& pos)
 		{
 			// Project X and Z coordinates for top view, ignoring Y
 			double screenX = (pos.x / topDistance) * (panelWidth / 2) + (panelWidth / 2);
@@ -211,8 +244,8 @@ public:
 		static Position rightVector;
 		static Position upVector;
 
-		static const double nearPlane; ///< Distance to the near clipping plane.
-		static const double farPlane; ///< Distance to the far clipping plane.
+		static constexpr double nearPlane = 0.01; ///< Distance to the near clipping plane.
+		static constexpr double farPlane = 1000.0; ///< Distance to the far clipping plane.
 		static double fovInRadians;
 		static double tanFov;
 		static double aspectRatio;
@@ -223,15 +256,12 @@ protected:
 
 	virtual void move(double x_shift, double y_shift, double z_shift) = 0;
 	virtual void rotate(double x_cord, double y_cord, double z_cord, double alpha, double beta, double gamma) = 0;
-	virtual void draw_front(wxDC& dc) = 0;
-	virtual void draw_top(wxDC& dc) = 0;
-	virtual void draw_side(wxDC& dc) = 0;
-	virtual void draw_perspective(wxDC& dc) = 0;
+
 	virtual std::string save() const = 0;
 	virtual std::string getInfo() const = 0;
 
 	static std::vector<Drawable*> figures; /// @brief Wektor figur
-	static wxColour line_color; /// @brief Kolor linii
+	static wxColour penColor; /// @brief Kolor do rysowania
 	static bool fill_style; /// @brief Czy wypelnienie (false jesli nie, true jesli tak)
 	static wxColour fill_color; /// @brief Kolor wypelnienia
 	static view view_style; /// @brief Rodzaj widoku (wire, lines lub solid)
@@ -246,10 +276,11 @@ protected:
 	 * @param gamma The rotation angle around the Z-axis (in degrees).
 	 * @return The rotation matrix representing the combined rotation.
 	 */
-	static std::vector<std::vector<double>> generate_rotation_matrix(double alpha, double beta, double gamma);
+	static std::vector<std::vector<double>> generateRotationMatrix(double alpha, double beta, double gamma);
 
 private:
-	wxTimer* _highlightTimer = nullptr; // Timer for resetting the highlight
+	static constexpr int penWidth = 1;
+	wxTimer* _highlightTimer = nullptr; /// Timer for resetting the highlight
 	static int highlight_duration_ms; /// Duration in milliseconds for highlighting
 	static double highlight_factor; /// Highlight factor
 

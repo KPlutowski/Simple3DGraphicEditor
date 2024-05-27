@@ -3,6 +3,7 @@
 #include "Line.h"
 #include "Sphere.h"
 #include "Box.h"
+#include "Cone.h"
 
 GUIMyFrame1::GUIMyFrame1(wxWindow* parent) : MyFrame1(parent)
 {
@@ -82,6 +83,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				Position end_base = CommandParser::get_a_point(command_prompt[3]);
 				double r2 = std::stod(command_prompt[4]);
 				int n = std::stoi(command_prompt[5]);
+				Drawable::addObj(new Cone(begin_base, r1, end_base, r2, n));
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {

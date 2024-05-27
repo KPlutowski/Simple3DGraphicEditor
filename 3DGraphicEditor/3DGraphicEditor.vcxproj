@@ -136,6 +136,7 @@
   <ItemGroup>
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="CommandParser.cpp" />
+    <ClCompile Include="Cone.cpp" />
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="GUIMyFrame1.cpp" />
@@ -146,6 +147,7 @@
   <ItemGroup>
     <ClInclude Include="Box.h" />
     <ClInclude Include="CommandParser.h" />
+    <ClInclude Include="Cone.h" />
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="GUIMyFrame1.h" />

@@ -4,51 +4,79 @@
 #include "GUIMyFrame1.h"
 #include "Drawable.h"
 
+/**
+ * @brief A class representing a line object that can be drawn on a 2D canvas from different perspectives.
+ */
 class Line : public Drawable {
 public:
-	/// @brief Konstruktor linii
-	/// @param x1 - wspolrzedna X poczatku
-	/// @param y1 - wspolrzedna Y poczatku
-	/// @param z1 - wspolrzedna Z poczatku
-	/// @param x2 - wspolrzedna X konca
-	/// @param y2 - wspolrzedna Y konca
-	/// @param z2 - wspolrzedna Z konca
-	/// @param color - kolor linii
-	Line(double x1, double y1, double z1, double x2, double y2, double z2, wxColour color = Drawable::line_color);
+	/**
+	 * @brief Constructs a line object with specified coordinates for its start and end points.
+	 * @param x1 - The X-coordinate of the start point.
+	 * @param y1 - The Y-coordinate of the start point.
+	 * @param z1 - The Z-coordinate of the start point.
+	 * @param x2 - The X-coordinate of the end point.
+	 * @param y2 - The Y-coordinate of the end point.
+	 * @param z2 - The Z-coordinate of the end point.
+	 * @param color - The color of the line.
+	 */
+	Line(double x1, double y1, double z1, double x2, double y2, double z2, wxColour color = Drawable::penColor);
 
-	/// @brief Konstruktor linii
-	/// @param start - Poczatek linii
-	/// @param end - Kolor linii
-	Line(Position start, Position end, wxColour color = Drawable::line_color);
+	/**
+	 * @brief Constructs a line object with specified start and end positions.
+	 * @param start - The start position of the line.
+	 * @param end - The end position of the line.
+	 * @param color - The color of the line.
+	 */
+	Line(Position start, Position end, wxColour color = Drawable::penColor);
 
-
-	/// @brief Getter poczatku linii
-	/// @return Struktura Point punktu poczatkowego linii
+	/**
+	 * @brief Gets the start position of the line.
+	 * @return The start position of the line.
+	 */
 	Position getStart() const;
+
+	/**
+	 * @brief Sets the start position of the line.
+	 * @param newStart - The new start position of the line.
+	 */
 	void setStart(const Position& newStart);
 
-	/// @brief Getter konca linii
-	/// @return Struktura Point punktu koncowego linii
+	/**
+	 * @brief Gets the end position of the line.
+	 * @return The end position of the line.
+	 */
 	Position getEnd() const;
+
+	/**
+	 * @brief Sets the end position of the line.
+	 * @param newEnd - The new end position of the line.
+	 */
 	void setEnd(const Position& newEnd);
 
-	/// @brief draw a line
-	void draw(wxDC& dc1, wxDC& dc2, wxDC& dc3, wxDC& dc4) override;
+	/**
+	 * @brief Draws the line on four different 2D canvases representing different perspectives.
+	 * @param dcFront - The device context for the front view.
+	 * @param dcTop - The device context for the top view.
+	 * @param dcSide - The device context for the side view.
+	 * @param dcPerspective - The device context for the perspective view.
+	 */
+	void draw(wxDC& dcFront, wxDC& dcTop, wxDC& dcSide, wxDC& dcPerspective) override;
 
-	std::string getInfo() const override
-	{ 
-		return "Line "+_start.toString()+" "+_end.toString();
-	}
+	std::string getInfo() const override;
+
 protected:
-	void move(double x_shift, double y_shift, double z_shift) override;
-	void rotate(double x_cord, double y_cord, double z_cord, double alpha, double beta, double gamma) override;
-	void draw_front(wxDC& dc) override;
-	void draw_top(wxDC& dc) override;
-	void draw_side(wxDC& dc) override;
-	void draw_perspective(wxDC& dc) override;
+	void move(double xShift, double yShift, double zShift) override;
+	void rotate(double xPivot, double yPivot, double zPivot, double alpha, double beta, double gamma) override;
 	std::string save() const override;
 
 private:
-	Position _start; /// @brief Poczatek linii
-	Position _end; /// @brief Koniec linii
+	Position _start; ///< The start position of the line.
+	Position _end; ///< The end position of the line.
+
+	/**
+	 * @brief Draws the line on a 2D canvas using the provided projection function.
+	 * @param dc - The device context for drawing.
+	 * @param projectionFunc - The function to project 3D points to 2D points.
+	 */
+	void renderLine(wxDC& dc, wxPoint(*projectionFunc)(const Position&)) const;
 };

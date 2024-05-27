@@ -6,7 +6,7 @@
 #include "Box.h"
 
 std::vector<Drawable*> Drawable::figures;
-wxColour Drawable::line_color = wxColour(0, 0, 0);;
+wxColour Drawable::penColor = wxColour(0, 0, 0);;
 bool Drawable::fill_style = false;
 wxColour Drawable::fill_color = wxColour(255, 255, 255);
 view Drawable::view_style = view::lines;
@@ -16,9 +16,9 @@ int Drawable::highlight_duration_ms = 1000;
 double Drawable::highlight_factor = 0.6;
 
 // Camera initializers
-double Drawable::Camera::frontDistance = 1.0;
-double Drawable::Camera::topDistance = 1.0;
-double Drawable::Camera::rightDistance = 1.0;
+double Drawable::Camera::frontDistance = 200.0;
+double Drawable::Camera::topDistance = 200.0;
+double Drawable::Camera::rightDistance = 200.0;
 Position Drawable::Camera::cameraPosition = Position(200, 200, 200);
 Position Drawable::Camera::lookAtPosition = Position(0, 0, 0);
 double Drawable::Camera::fieldOfView = 60.0;
@@ -37,8 +37,7 @@ Position Drawable::Camera::upVector = {
 			rightVector.z * cameraDirection.x - rightVector.x * cameraDirection.z,
 			rightVector.x * cameraDirection.y - rightVector.y * cameraDirection.x
 };
-const double Drawable::Camera::nearPlane = 0.01; // Distance to near clipping plane
-const double Drawable::Camera::farPlane = 100.0; // Distance to far clipping plane
+
 double Drawable::Camera::fovInRadians = fieldOfView * (M_PI / 180.0);
 double Drawable::Camera::tanFov = tan(fovInRadians / 2.0);
 double Drawable::Camera::aspectRatio = panelWidth / panelHeight;
@@ -77,10 +76,20 @@ void Drawable::touchObj(int index) {
 	}
 }
 
-void Drawable::DrawAll(wxDC& dc1, wxDC& dc2, wxDC& dc3, wxDC& dc4) {
+void Drawable::DrawAll(wxDC& dcFront, wxDC& dcTop, wxDC& dcSide, wxDC& dcPerspective) {
 	for (Drawable* figure : figures)
 	{
-		figure->draw(dc1, dc2, dc3, dc4);
+		wxPen pen(figure->_color, penWidth);
+		dcFront.SetPen(pen);
+		dcFront.SetBrush(*wxTRANSPARENT_BRUSH);
+		dcTop.SetPen(pen);
+		dcTop.SetBrush(*wxTRANSPARENT_BRUSH);
+		dcSide.SetPen(pen);
+		dcSide.SetBrush(*wxTRANSPARENT_BRUSH);
+		dcPerspective.SetPen(pen);
+		dcPerspective.SetBrush(*wxTRANSPARENT_BRUSH);
+
+		figure->draw(dcFront, dcTop, dcSide, dcPerspective);
 	}
 }
 
@@ -96,7 +105,7 @@ std::vector<Drawable*> Drawable::getAllObjs() {
 }
 
 void Drawable::SetLineColor(const wxColour& newColour) {
-	line_color = newColour;
+	penColor = newColour;
 }
 
 void Drawable::SetViewSize(const double x, const double y) {
@@ -125,7 +134,7 @@ std::vector<std::vector<double>> Drawable::multiplyMatrix(const std::vector<std:
 	return result;
 }
 
-std::vector<std::vector<double>> Drawable::generate_rotation_matrix(double alpha, double beta, double gamma)
+std::vector<std::vector<double>> Drawable::generateRotationMatrix(double alpha, double beta, double gamma)
 {
 	// Convert angles to radians
 	double alphaRadian = alpha * M_PI / 180.0;
@@ -171,7 +180,7 @@ void Drawable::saveToFile(const std::string& fileName)
 	std::ostringstream oss;
 
 	// saving drawable settings
-	oss << line_color.GetRGB() << " ";
+	oss << penColor.GetRGB() << " ";
 	oss << fill_style << " ";
 	oss << fill_color.GetRGB() << " ";
 	oss << std::to_string(static_cast<int>(view_style)) << " ";
@@ -217,7 +226,7 @@ void Drawable::loadFromFile(const std::string& fileName)
 			std::cerr << "Error: Failed to read pen color." << std::endl;
 			return;
 		}
-		line_color = penColor;
+		penColor = penColor;
 
 		bool fillStyle;
 		wxUint32 fillColor;
@@ -381,27 +390,4 @@ void Drawable::Camera::update() {
 		rightVector.z * cameraDirection.x - rightVector.x * cameraDirection.z,
 		rightVector.x * cameraDirection.y - rightVector.y * cameraDirection.x
 	};
-}
-
-wxPoint Drawable::Camera::projectPerspective(const Position& pos) {
-	// Transform the point to camera space
-	double px = pos.x - cameraPosition.x;
-	double py = pos.y - cameraPosition.y;
-	double pz = pos.z - cameraPosition.z;
-
-	// Apply rotation (camera orientation)
-	double camX = px * rightVector.x + py * rightVector.y + pz * rightVector.z;
-	double camY = px * upVector.x + py * upVector.y + pz * upVector.z;
-	double camZ = px * cameraDirection.x + py * cameraDirection.y + pz * cameraDirection.z;
-
-	// Ensure camZ is not too close to zero to prevent division by zero
-	if (camZ < nearPlane) {
-		camZ = nearPlane;
-	}
-
-	// Perspective projection
-	double screenX = (camX / (camZ * tanFov * aspectRatio)) * (panelWidth / 2) + (panelWidth / 2);
-	double screenY = (camY / (camZ * tanFov)) * (panelHeight / 2) + (panelHeight / 2);
-
-	return wxPoint(screenX, panelHeight - screenY); // Flip y-axis for drawing
 }
