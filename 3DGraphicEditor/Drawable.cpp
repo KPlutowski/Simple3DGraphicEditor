@@ -5,6 +5,7 @@
 #include "Sphere.h"
 #include "Box.h"
 #include "Cone.h"
+#include "Cylinder.h"
 
 std::vector<Drawable*> Drawable::figures;
 wxColour Drawable::penColor = wxColour(0, 0, 0);;
@@ -286,6 +287,16 @@ void Drawable::loadFromFile(const std::string& fileName)
 			if (iss >> base1 >> r1 >> base2 >> r2 >> sides)
 			{
 				addObj(new Cone(Position::fromString(base1), r1, Position::fromString(base2), r2, sides, color, vertices));
+			}
+		}
+		else if (type == "Cylinder")
+		{
+			std::string base1, base2;
+
+			double r1, r2, sides;
+			if (iss >> base1 >> r1 >> base2 >> r2 >> sides)
+			{
+				addObj(new Cylinder(Position::fromString(base1), r1, Position::fromString(base2), r2, sides, color, vertices));
 			}
 		}
 		else

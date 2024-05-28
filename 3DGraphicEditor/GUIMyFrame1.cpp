@@ -4,6 +4,7 @@
 #include "Sphere.h"
 #include "Box.h"
 #include "Cone.h"
+#include "Cylinder.h"
 
 GUIMyFrame1::GUIMyFrame1(wxWindow* parent) : MyFrame1(parent)
 {
@@ -100,6 +101,9 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				Position end_base = CommandParser::get_a_point(command_prompt[2]);
 				double r = std::stod(command_prompt[3]);
 				int n = std::stoi(command_prompt[4]);
+				Drawable::addObj(new Cylinder(begin_base, r, end_base, r, n));
+
+
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {
