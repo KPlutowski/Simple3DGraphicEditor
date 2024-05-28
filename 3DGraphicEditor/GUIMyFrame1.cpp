@@ -9,6 +9,7 @@
 GUIMyFrame1::GUIMyFrame1(wxWindow* parent) : MyFrame1(parent)
 {
 	Drawable::Camera::update();
+	wxInitAllImageHandlers();
 }
 
 void GUIMyFrame1::Update(wxCommandEvent& event)
@@ -102,8 +103,6 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				double r = std::stod(command_prompt[3]);
 				int n = std::stoi(command_prompt[4]);
 				Drawable::addObj(new Cylinder(begin_base, r, end_base, r, n));
-
-
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {
@@ -271,6 +270,24 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				{
 					Drawable::Camera::setTopDistance(r);
 				}
+			}
+			catch (const std::exception& e) {
+				if (Command_panel) {
+					Command_panel->SetValue("ERROR");
+				}
+			}
+		}
+	}
+
+	else if (command_prompt[0] == "render_to_file") {
+		if (CommandParser::command_length_check(command_prompt, 4)) {
+			try {
+				double w = std::stoi(command_prompt[1]);
+				double h = std::stoi(command_prompt[2]);
+
+				std::string name = command_prompt[3];
+
+				Drawable::render_panel_to_bitmap(name, w, h, perspective_panel);
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {

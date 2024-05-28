@@ -1,10 +1,3 @@
-// TODO:
-// set fill style
-// set fill color
-// set view
-// set view range
-
-// ~Drawable
 #pragma once
 
 #include <vector>
@@ -13,6 +6,8 @@
 #include <wx/timer.h>
 #include "GUIMyFrame1.h"
 #include <algorithm>
+#include <wx/dcbuffer.h>
+#include <wx/init.h>
 
 /// @brief Enum dla rodzajow widoku
 enum class view {
@@ -281,6 +276,31 @@ public:
 		static double tanFov;
 		static double aspectRatio;
 	};
+
+	static void render_panel_to_bitmap(const std::string& filename, int width, int height, wxPanel* panel)
+	{
+		wxMemoryDC memDC;
+
+		wxBitmap bitmap(width, height);
+		memDC.SelectObject(bitmap);
+
+		memDC.SetBackground(*wxWHITE_BRUSH);
+		memDC.Clear();
+
+		panel->Refresh();
+		panel->Update();
+		panel->GetUpdateRegion().Clear();
+
+		for (Drawable* figure : figures)
+		{
+			memDC.SetPen(wxPen(figure->_color));
+			memDC.SetBrush(*wxTRANSPARENT_BRUSH);
+			figure->render(memDC, Camera::projectPerspective);
+		}
+
+		wxImage image = bitmap.ConvertToImage();
+		image.SaveFile(filename, wxBITMAP_TYPE_PNG);
+	}
 
 protected:
 	std::string _type;

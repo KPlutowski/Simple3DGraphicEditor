@@ -5,7 +5,7 @@ class Cylinder : public Cone
 {
 public:
 	/**
-	 * @brief Constructs a cone object with specified parameters.
+	 * @brief Constructs a Cylinder object with specified parameters.
 	 * @param base1 The position of the first base.
 	 * @param radius1 The radius of the first base.
 	 * @param base2 The position of the second base.
@@ -16,7 +16,7 @@ public:
 	Cylinder(const Position& base1, double radius1, const Position& base2, double radius2, int sides, const wxColour& color = Drawable::penColor, const std::vector<Position>& vertices = {});
 
 	/**
-	 * @brief Constructs a cone object with specified parameters.
+	 * @brief Constructs a Cylinder object with specified parameters.
 	 * @param x1 The X-coordinate of the first base.
 	 * @param y1 The Y-coordinate of the first base.
 	 * @param z1 The Z-coordinate of the first base.
@@ -31,7 +31,7 @@ public:
 	Cylinder(double x1, double y1, double z1, double radius1, double x2, double y2, double z2, double radius2, int sides, wxColour color = Drawable::penColor, const std::vector<Position>& vertices = {});
 
 	/**
-	 * @brief Returns information about the cone.
+	 * @brief Returns information about the Cylinder.
 	 * @return A string containing the type of the object.
 	 */
 	std::string getInfo() const override;
@@ -41,6 +41,4 @@ public:
 	 * @return A string representation of the cylinder's data.
 	 */
 	std::string save() const override;
-
-
 };

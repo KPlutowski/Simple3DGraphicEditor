@@ -66,7 +66,7 @@ protected:
 	 * @param gamma The rotation angle around the Z-axis, in degrees.
 	 */
 	void rotate(double xPivot, double yPivot, double zPivot, double alpha, double beta, double gamma) override;
-	
+
 	Position _base1;        ///< The position of the first base.
 	double _baseRadius1;    ///< The radius of the first base.
 	Position _base2;        ///< The position of the second base.
@@ -77,5 +77,4 @@ protected:
 	 * @brief Computes the vertices of the cone.
 	 */
 	void computeVertices() override;
-
 };

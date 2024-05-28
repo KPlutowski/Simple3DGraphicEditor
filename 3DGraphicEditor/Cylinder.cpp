@@ -9,7 +9,6 @@ Cylinder::Cylinder(const Position& base1, double radius1, const Position& base2,
 Cylinder::Cylinder(double x1, double y1, double z1, double radius1, double x2, double y2, double z2, double radius2, int sides, wxColour color, const std::vector<Position>& vertices)
 	: Cylinder(Position(x1, y1, z1), radius1, Position(x2, y2, z2), radius2, sides, color, vertices) {}
 
-
 std::string Cylinder::getInfo() const
 {
 	return "Cylinder";
