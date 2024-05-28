@@ -4,6 +4,7 @@
 #include "Line.h"
 #include "Sphere.h"
 #include "Box.h"
+#include "Cone.h"
 
 std::vector<Drawable*> Drawable::figures;
 wxColour Drawable::penColor = wxColour(0, 0, 0);;
@@ -117,58 +118,6 @@ void Drawable::setColor(const wxColour& newColor) {
 	_color = newColor;
 }
 
-std::vector<std::vector<double>> Drawable::multiplyMatrix(const std::vector<std::vector<double>>& a, const std::vector<std::vector<double>>& b) {
-	int rows1 = a.size();
-	int cols1 = a[0].size();
-	int cols2 = b[0].size();
-
-	std::vector<std::vector<double>> result(rows1, std::vector<double>(cols2, 0));
-
-	for (int i = 0; i < rows1; ++i) {
-		for (int j = 0; j < cols2; ++j) {
-			for (int k = 0; k < cols1; ++k) {
-				result[i][j] += a[i][k] * b[k][j];
-			}
-		}
-	}
-	return result;
-}
-
-std::vector<std::vector<double>> Drawable::generateRotationMatrix(double alpha, double beta, double gamma)
-{
-	// Convert angles to radians
-	double alphaRadian = alpha * M_PI / 180.0;
-	double betaRadian = beta * M_PI / 180.0;
-	double gammaRadian = gamma * M_PI / 180.0;
-
-	// Precalculate trigonometric values
-	double cosAlpha = cos(alphaRadian);
-	double sinAlpha = sin(alphaRadian);
-	double cosBeta = cos(betaRadian);
-	double sinBeta = sin(betaRadian);
-	double cosGamma = cos(gammaRadian);
-	double sinGamma = sin(gammaRadian);
-
-	// Create rotation matrices
-	std::vector<std::vector<double>> alphaRotation = {
-		{1, 0, 0},
-		{0, cosAlpha, -sinAlpha},
-		{0, sinAlpha, cosAlpha}
-	};
-	std::vector<std::vector<double>> betaRotation = {
-		{cosBeta, 0, sinBeta},
-		{0, 1, 0},
-		{-sinBeta, 0, cosBeta}
-	};
-	std::vector<std::vector<double>> gammaRotation = {
-		{cosGamma, -sinGamma, 0},
-		{sinGamma, cosGamma, 0},
-		{0, 0, 1}
-	};
-
-	return multiplyMatrix(multiplyMatrix(gammaRotation, betaRotation), alphaRotation);
-}
-
 void Drawable::saveToFile(const std::string& fileName)
 {
 	std::ofstream outFile(fileName);
@@ -189,16 +138,19 @@ void Drawable::saveToFile(const std::string& fileName)
 	oss << Camera::getTopDistance() << " ";
 	oss << Camera::getRightDistance() << " ";
 
-	oss << Camera::getPosition().x << " " << Camera::getPosition().y << " " << Camera::getPosition().z << " ";
-	oss << Camera::getLookAt().x << " " << Camera::getLookAt().y << " " << Camera::getLookAt().z << " ";
+	oss << Camera::getPosition().toString() << " ";
+	oss << Camera::getLookAt().toString() << " ";
 
 	oss << Camera::getFov() << "\n";
 
-	for (Drawable* obj : figures)
-		oss << obj->save();
-
-	// Output the string stream to the file
 	outFile << oss.str();
+
+	// saving objects setting
+	// type _vertices.size() _color _vertices (optional figure info)
+	for (const Drawable* obj : figures)
+	{
+		outFile << obj->save();
+	}
 
 	outFile.close();
 	if (outFile.fail()) {
@@ -215,7 +167,6 @@ void Drawable::loadFromFile(const std::string& fileName)
 	}
 	clearAll();  // Clear existing objects before loading new ones
 
-	// loading drawable settings
 	std::string line;
 	if (std::getline(inFile, line))
 	{
@@ -253,19 +204,21 @@ void Drawable::loadFromFile(const std::string& fileName)
 		Camera::setTopDistance(tdist);
 		Camera::setRightDistance(rdist);
 
-		double posX, posY, posZ;
-		if (!(iss >> posX >> posY >> posZ)) {
+		std::string strCamera;
+		Position tmpPoint;
+		if (!(iss >> strCamera)) {
 			std::cerr << "Error: Failed to read camera position." << std::endl;
 			return;
 		}
-		Camera::setPosition(posX, posY, posZ);
+		tmpPoint = Position::fromString(strCamera);
+		Camera::setPosition(tmpPoint.x, tmpPoint.y, tmpPoint.z);
 
-		double lookX, lookY, lookZ;
-		if (!(iss >> lookX >> lookY >> lookZ)) {
+		if (!(iss >> strCamera)) {
 			std::cerr << "Error: Failed to read camera look direction." << std::endl;
 			return;
 		}
-		Camera::setLookAt(lookX, lookY, lookZ);
+		tmpPoint = Position::fromString(strCamera);
+		Camera::setLookAt(tmpPoint.x, tmpPoint.y, tmpPoint.z);
 
 		double fov;
 		if (!(iss >> fov)) {
@@ -279,40 +232,65 @@ void Drawable::loadFromFile(const std::string& fileName)
 		return;
 	}
 
-	wxUint32 color;
+	// object loading
 	while (std::getline(inFile, line))
 	{
 		std::istringstream iss(line);
 		std::string type;
-		iss >> type;
+		size_t verticesSize;
+		wxUint32 color;
 
+		iss >> type >> verticesSize >> color;
+
+		std::string strPoint;
+		Position Point;
+		std::vector<Position> vertices;
+		for (size_t i = 0; i < verticesSize; i++)
+		{
+			iss >> strPoint;
+			Point = Position::fromString(strPoint);
+			vertices.push_back(Point);
+		}
+
+		// aditional info and add objects
 		if (type == "Line")
 		{
-			double x1, y1, z1, x2, y2, z2;
-			if (iss >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> color)
+			std::string start, end;
+			if (iss >> start >> end)
 			{
-				addObj(new Line(Position(x1, y1, z1), Position(x2, y2, z2), color));
+				addObj(new Line(Position::fromString(start), Position::fromString(end), color, vertices));
 			}
 		}
 		else if (type == "Sphere")
 		{
-			double x, y, z, radius;
+			std::string center;
+			double radius;
 			int meridians, parallels;
-			if (iss >> x >> y >> z >> radius >> meridians >> parallels >> color) {
-				addObj(new Sphere(Position(x, y, z), radius, meridians, parallels, color));
+			if (iss >> center >> radius >> meridians >> parallels) {
+				addObj(new Sphere(Position::fromString(center), radius, meridians, parallels, color, vertices));
 			}
 		}
 		else if (type == "Box")
 		{
-			double x1, y1, z1, x2, y2, z2;
-			if (iss >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> color)
+			std::string start, end;
+			if (iss >> start >> end)
 			{
-				addObj(new Box(Position(x1, y1, z1), Position(x2, y2, z2), color));
+				addObj(new Box(Position::fromString(start), Position::fromString(end), color, vertices));
+			}
+		}
+		else if (type == "Cone")
+		{
+			std::string base1, base2;
+
+			double r1, r2, sides;
+			if (iss >> base1 >> r1 >> base2 >> r2 >> sides)
+			{
+				addObj(new Cone(Position::fromString(base1), r1, Position::fromString(base2), r2, sides, color, vertices));
 			}
 		}
 		else
 		{
-			std::cerr << "Error: Wrong object type. " << fileName << std::endl;
+			std::cerr << "Error: Wrong object type. " << std::endl;
 			return;
 		}
 		// Add more cases for other Drawable types

@@ -17,66 +17,43 @@ public:
 	 * @param x2 - The X-coordinate of the end point.
 	 * @param y2 - The Y-coordinate of the end point.
 	 * @param z2 - The Z-coordinate of the end point.
-	 * @param color - The color of the line.
+	 * @param color - The color of the line. Defaults to Drawable::penColor.
 	 */
-	Line(double x1, double y1, double z1, double x2, double y2, double z2, wxColour color = Drawable::penColor);
+	Line(double x1, double y1, double z1, double x2, double y2, double z2, wxColour color = Drawable::penColor, const std::vector<Position>& vertices = {});
 
 	/**
 	 * @brief Constructs a line object with specified start and end positions.
 	 * @param start - The start position of the line.
 	 * @param end - The end position of the line.
-	 * @param color - The color of the line.
+	 * @param color - The color of the line. Defaults to Drawable::penColor.
 	 */
-	Line(Position start, Position end, wxColour color = Drawable::penColor);
+	Line(Position start, Position end, wxColour color = Drawable::penColor, const std::vector<Position>& vertices = {});
 
 	/**
-	 * @brief Gets the start position of the line.
-	 * @return The start position of the line.
+	 * @brief Provides information about the line object.
+	 * @return A string containing the line's start and end positions.
 	 */
-	Position getStart() const;
-
-	/**
-	 * @brief Sets the start position of the line.
-	 * @param newStart - The new start position of the line.
-	 */
-	void setStart(const Position& newStart);
-
-	/**
-	 * @brief Gets the end position of the line.
-	 * @return The end position of the line.
-	 */
-	Position getEnd() const;
-
-	/**
-	 * @brief Sets the end position of the line.
-	 * @param newEnd - The new end position of the line.
-	 */
-	void setEnd(const Position& newEnd);
-
-	/**
-	 * @brief Draws the line on four different 2D canvases representing different perspectives.
-	 * @param dcFront - The device context for the front view.
-	 * @param dcTop - The device context for the top view.
-	 * @param dcSide - The device context for the side view.
-	 * @param dcPerspective - The device context for the perspective view.
-	 */
-	void draw(wxDC& dcFront, wxDC& dcTop, wxDC& dcSide, wxDC& dcPerspective) override;
-
 	std::string getInfo() const override;
 
-protected:
-	void move(double xShift, double yShift, double zShift) override;
-	void rotate(double xPivot, double yPivot, double zPivot, double alpha, double beta, double gamma) override;
+	/**
+	 * @brief Saves the line's data to a string.
+	 * @return A string representation of the line's data.
+	 */
 	std::string save() const override;
+protected:
+	/**
+	 * @brief Renders the line on a given device context using a projection function.
+	 * @param dc - The device context to draw on.
+	 * @param projectionFunc - The function to project 3D coordinates to 2D points.
+	 */
+	void render(wxDC& dc, wxPoint(*projectionFunc)(const Position&)) const override;
 
 private:
 	Position _start; ///< The start position of the line.
 	Position _end; ///< The end position of the line.
 
 	/**
-	 * @brief Draws the line on a 2D canvas using the provided projection function.
-	 * @param dc - The device context for drawing.
-	 * @param projectionFunc - The function to project 3D points to 2D points.
+	 * @brief Computes the vertices of the line.
 	 */
-	void renderLine(wxDC& dc, wxPoint(*projectionFunc)(const Position&)) const;
+	void computeVertices() override;
 };

@@ -1,6 +1,8 @@
 #pragma once
+
 #include "Drawable.h"
 #include <vector>
+#include <string>
 
 /**
  * @brief A class representing a box object that can be drawn on a 2D canvas from different perspectives.
@@ -17,7 +19,7 @@ public:
 	 * @param z2 - The Z-coordinate of the second corner.
 	 * @param color - The color of the box.
 	 */
-	Box(double x1, double y1, double z1, double x2, double y2, double z2, const wxColour& color = Drawable::penColor);
+	Box(double x1, double y1, double z1, double x2, double y2, double z2, const wxColour& color = Drawable::penColor, const std::vector<Position>& vertices = {});
 
 	/**
 	 * @brief Constructs a box object with specified coordinates for two opposite corners.
@@ -25,33 +27,34 @@ public:
 	 * @param end - The position of the second corner.
 	 * @param color - The color of the box.
 	 */
-	Box(const Position& start, const Position& end, const wxColour& color = Drawable::penColor);
+	Box(const Position& start, const Position& end, const wxColour& color = Drawable::penColor, const std::vector<Position>& vertices = {});
 
 	/**
-	 * @brief Draws the box on four different 2D canvases representing different perspectives.
-	 * @param dcFront - The device context for the front view.
-	 * @param dcTop - The device context for the top view.
-	 * @param dcSide - The device context for the side view.
-	 * @param dcPerspective - The device context for the perspective view.
+	 * @brief Returns information about the box.
+	 * @return A string containing the type of the object.
 	 */
-	void draw(wxDC& dcFront, wxDC& dcTop, wxDC& dcSide, wxDC& dcPerspective) override;
+	std::string getInfo() const override;
 
-	std::string getInfo() const override {
-		return "Box ";
-	}
-
-protected:
-	void move(double xShift, double yShift, double zShift) override;
-	void rotate(double xPivot, double yPivot, double zPivot, double alpha, double beta, double gamma) override;
+	/**
+	 * @brief Saves the box's data to a string.
+	 * @return A string representation of the box's data.
+	 */
 	std::string save() const override;
 
-private:
-	std::vector<Position> _corners; ///< The positions of all eight corners of the box.
-
+protected:
 	/**
-	 * @brief Draws the box corners on a 2D canvas using the provided projection function.
+	 * @brief Draws the box on a 2D canvas using the provided projection function.
 	 * @param dc - The device context for drawing.
 	 * @param projectionFunc - The function to project 3D points to 2D points.
 	 */
-	void renderBox(wxDC& dc, wxPoint(*projectionFunc)(const Position&)) const;
+	void render(wxDC& dc, wxPoint(*projectionFunc)(const Position&)) const override;
+
+private:
+	Position _start; ///< The start position of the box (one corner).
+	Position _end;   ///< The end position of the box (opposite corner).
+
+	/**
+	 * @brief Computes the vertices of the box.
+	 */
+	void computeVertices() override;
 };

@@ -25,7 +25,7 @@ struct Position {
 	double x, y, z;
 	std::string toString() const
 	{
-		return "(" + std::to_string((int)x) + ", " + std::to_string((int)y) + ", " + std::to_string((int)z) + ")";
+		return "(" + std::to_string((int)x) + "," + std::to_string((int)y) + "," + std::to_string((int)z) + ")";
 	}
 	Position operator-(const Position& other) const {
 		return Position(x - other.x, y - other.y, z - other.z);
@@ -33,11 +33,49 @@ struct Position {
 	Position operator+(const Position& other) const {
 		return Position(x + other.x, y + other.y, z + other.z);
 	}
+	static Position fromString(const std::string& str) {
+		std::vector<double> pos_value;
+		std::string text;
+		for (auto i : str) {
+			if (i == '(' || i == ' ') {
+				continue;
+			}
+			else if (i == ',' || i == ')') {
+				pos_value.push_back(std::stod(text));
+				text.clear();
+			}
+
+			else {
+				text += i;
+			}
+		}
+		return Position(pos_value[0], pos_value[1], pos_value[2]);
+	}
 	void shift(double x_shift, double y_shift, double z_shift)
 	{
 		x += x_shift;
 		y += y_shift;
 		z += z_shift;
+	}
+	void rotate(const Position& center, double alpha, double beta, double gamma)
+	{
+		const double cosAlpha = cos(alpha * M_PI / 180.0);
+		const double sinAlpha = sin(alpha * M_PI / 180.0);
+		const double cosBeta = cos(beta * M_PI / 180.0);
+		const double sinBeta = sin(beta * M_PI / 180.0);
+		const double cosGamma = cos(gamma * M_PI / 180.0);
+		const double sinGamma = sin(gamma * M_PI / 180.0);
+
+		shift(-center.x, -center.y, -center.z);
+
+		const double xNew = cosBeta * cosGamma * x + (cosAlpha * sinGamma + sinAlpha * sinBeta * cosGamma) * y + (sinAlpha * sinGamma - cosAlpha * sinBeta * cosGamma) * z;
+		const double yNew = -cosBeta * sinGamma * x + (cosAlpha * cosGamma - sinAlpha * sinBeta * sinGamma) * y + (sinAlpha * cosGamma + cosAlpha * sinBeta * sinGamma) * z;
+		const double zNew = sinBeta * x - sinAlpha * cosBeta * y + cosAlpha * cosBeta * z;
+		x = xNew;
+		y = yNew;
+		z = zNew;
+
+		shift(center.x, center.y, center.z);
 	}
 };
 
@@ -47,7 +85,7 @@ struct Position {
 /// wowczas management bedzie polegal na mgr.metoda()
 class Drawable {
 public:
-	Drawable(wxColour color = penColor) :_color(color) {};
+	Drawable(wxColour color = penColor, const std::string& type = "Drawable") :_color(color), _type(type) {};
 
 	/// @brief Dodanie figury do wektora (na zasadzie addObj(new ...))
 	/// @param fig - wskaznik na dodawana figure
@@ -96,13 +134,6 @@ public:
 	/// @brief Getter wszystkich figur
 	/// @return Wektor wskaznikow na figury
 	static std::vector<Drawable*> getAllObjs();
-
-	/// @brief Rysowanie figury
-	/// @param dcFront - panel z widokiem z przodu
-	/// @param dcTop - panel z widokiem z gory
-	/// @param dcSide - panel z widokiem z boku
-	/// @param dcPerspective - panel z widokiem z perspektywa
-	virtual void draw(wxDC& dc1, wxDC& dc2, wxDC& dc3, wxDC& dc4) = 0;
 
 	/// \param newColour
 	static void SetLineColor(const wxColour& newColour);
@@ -252,13 +283,58 @@ public:
 	};
 
 protected:
+	std::string _type;
 	wxColour _color; /// @brief kolor obiektu
+	std::vector<Position> _vertices;
 
-	virtual void move(double x_shift, double y_shift, double z_shift) = 0;
-	virtual void rotate(double x_cord, double y_cord, double z_cord, double alpha, double beta, double gamma) = 0;
+	/// @brief Rysowanie figury
+	/// @param dcFront - panel z widokiem z przodu
+	/// @param dcTop - panel z widokiem z gory
+	/// @param dcSide - panel z widokiem z boku
+	/// @param dcPerspective - panel z widokiem z perspektywa
+	virtual void draw(wxDC& dcFront, wxDC& dcTop, wxDC& dcSide, wxDC& dcPerspective) const
+	{
+		render(dcFront, Camera::projectFront);
+		render(dcTop, Camera::projectTop);
+		render(dcSide, Camera::projectSide);
+		render(dcPerspective, Camera::projectPerspective);
+	}
+	virtual void move(double xShift, double yShift, double zShift) {
+		for (auto& vertex : _vertices)
+		{
+			vertex.shift(xShift, yShift, zShift);
+		}
+	}
+	virtual void rotate(double xPivot, double yPivot, double zPivot, double alpha, double beta, double gamma) {
+		for (auto& vertex : _vertices)
+		{
+			vertex.rotate(Position(xPivot, yPivot, zPivot), alpha, beta, gamma);
+		}
+	}
 
-	virtual std::string save() const = 0;
-	virtual std::string getInfo() const = 0;
+	virtual void render(wxDC& dc, wxPoint(*projectionFunc)(const Position&)) const = 0;
+	virtual void computeVertices() = 0;
+
+	virtual std::string save() const
+	{
+		std::string tmp;
+
+		tmp += _type + " ";
+		tmp += std::to_string(_vertices.size()) + " ";
+		tmp += std::to_string(_color.GetRGB()) += " ";
+
+		for (const auto& vertex : _vertices)
+		{
+			tmp += vertex.toString() + " ";
+		}
+
+		return tmp;
+	}
+
+	virtual std::string getInfo() const
+	{
+		return "Drawable";
+	}
 
 	static std::vector<Drawable*> figures; /// @brief Wektor figur
 	static wxColour penColor; /// @brief Kolor do rysowania
@@ -268,30 +344,11 @@ protected:
 	static double panelHeight;	/// Vertical panel size
 	static double panelWidth;	///< Horizontal panel size
 
-	/**
-	 * @brief Generates a 3D rotation matrix.
-	 *
-	 * @param alpha The rotation angle around the X-axis (in degrees).
-	 * @param beta The rotation angle around the Y-axis (in degrees).
-	 * @param gamma The rotation angle around the Z-axis (in degrees).
-	 * @return The rotation matrix representing the combined rotation.
-	 */
-	static std::vector<std::vector<double>> generateRotationMatrix(double alpha, double beta, double gamma);
-
 private:
 	static constexpr int penWidth = 1;
 	wxTimer* _highlightTimer = nullptr; /// Timer for resetting the highlight
 	static int highlight_duration_ms; /// Duration in milliseconds for highlighting
 	static double highlight_factor; /// Highlight factor
-
-	/**
-	 * @brief Multiplies two 3x3 matrices.
-	 *
-	 * @param a The first matrix.
-	 * @param b The second matrix.
-	 * @return The result of matrix multiplication (a * b).
-	 */
-	static std::vector<std::vector<double>> multiplyMatrix(const std::vector<std::vector<double>>& a, const std::vector<std::vector<double>>& b);
 
 	void highlightObject();
 	const wxColour generateHighlight() const;
