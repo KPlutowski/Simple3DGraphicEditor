@@ -14,8 +14,13 @@ std::vector<std::string> CommandParser::parse_to_vector(wxString command) {
 			text += i;
 		}
 		else {
-			command_prompt.push_back(text);
-			text.clear();
+			try {
+				command_prompt.push_back(text);
+				text.clear();
+			}
+			catch (std::exception& e) {
+
+			}
 		}
 	}
 	if (!text.empty()) {
@@ -32,8 +37,14 @@ Position CommandParser::get_a_point(std::string command) {
 			continue;
 		}
 		else if (i == ',' || i == ')') {
-			pos.push_back(std::stod(text));
-			text.clear();
+			try {
+				pos.push_back(std::stod(text));
+				text.clear();
+			}
+			catch (std::exception& e) {
+				
+			}
+			
 		}
 
 		else {

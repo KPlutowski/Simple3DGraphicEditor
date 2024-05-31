@@ -6,26 +6,43 @@
 #include "Cone.h"
 #include "Cylinder.h"
 
-GUIMyFrame1::GUIMyFrame1(wxWindow* parent) : MyFrame1(parent)
+GUIMyFrame1::GUIMyFrame1( wxWindow* parent )
+:
+MyFrame1( parent )
 {
 	Drawable::Camera::update();
 	wxInitAllImageHandlers();
 }
 
-void GUIMyFrame1::Update(wxCommandEvent& event)
+void GUIMyFrame1::Update( wxCommandEvent& event )
 {
+// TODO: Implement Update
+
+
 	std::vector<std::string> command_prompt;
 
 	command_prompt = CommandParser::parse_to_vector(Command_panel->GetValue());
 
 	bool error = false;
-	//Wybór odpowiedniej komendy
-	if (command_prompt[0] == "set_line_color") {
+	//WybÃ³r odpowiedniej komendy
+	if(CommandParser::command_length_check(command_prompt,0)){
+		m_error_message_box->SetLabelText("Error: you give an empty command!");
+	}
+	else if (command_prompt[0] == "set_line_color") {
 		if (CommandParser::command_length_check(command_prompt, 2)) {
 			try {
 				Drawable::SetLineColor(CommandParser::get_a_color(command_prompt[1]));
+				m_error_message_box->SetLabelText("");
 			}
-			catch (const std::exception& e) {}
+			catch (const std::exception& e) {
+				
+				if (m_error_message_box) {
+					m_error_message_box->SetLabelText("Error: Invalid command");
+				}
+			}
+		}
+		else {
+			m_error_message_box->SetLabelText("Error: Too little arguments for command");
 		}
 	}
 
@@ -36,10 +53,14 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				Position end = CommandParser::get_a_point(command_prompt[2]);
 
 				Drawable::addObj(new Line(start, end));
+				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
 				error = true;
 			}
+		}
+		else {
+			m_error_message_box->SetLabelText("Error: Too little arguments for command");
 		}
 	}
 
@@ -49,12 +70,16 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				Position start = CommandParser::get_a_point(command_prompt[1]);
 				Position end = CommandParser::get_a_point(command_prompt[2]);
 				Drawable::addObj(new Box(start, end));
+				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {
 					Command_panel->SetValue("ERROR");
 				}
 			}
+		}
+		else {
+			m_error_message_box->SetLabelText("Error: Too little arguments for command");
 		}
 	}
 
@@ -68,12 +93,16 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				int parallels = sphere_lines[1];
 
 				Drawable::addObj(new Sphere(point, r, meridians, parallels));
+				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {
 					Command_panel->SetValue("ERROR");
 				}
 			}
+		}
+		else {
+			m_error_message_box->SetLabelText("Error: Too little arguments for command");
 		}
 	}
 
@@ -86,12 +115,16 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				double r2 = std::stod(command_prompt[4]);
 				int n = std::stoi(command_prompt[5]);
 				Drawable::addObj(new Cone(begin_base, r1, end_base, r2, n));
+				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {
 					Command_panel->SetValue("ERROR");
 				}
 			}
+		}
+		else {
+			m_error_message_box->SetLabelText("Error: Too little arguments for command");
 		}
 	}
 
@@ -103,12 +136,16 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				double r = std::stod(command_prompt[3]);
 				int n = std::stoi(command_prompt[4]);
 				Drawable::addObj(new Cylinder(begin_base, r, end_base, r, n));
+				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {
 					Command_panel->SetValue("ERROR");
 				}
 			}
+		}
+		else {
+			m_error_message_box->SetLabelText("Error: Too little arguments for command");
 		}
 	}
 
@@ -117,6 +154,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			try {
 				int id = std::stoi(command_prompt[1]);
 				Drawable::deleteObj(id);
+				m_error_message_box->SetLabelText("");
 			}
 
 			catch (const std::exception& e) {
@@ -124,6 +162,9 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 					Command_panel->SetValue("ERROR");
 				}
 			}
+		}
+		else {
+			m_error_message_box->SetLabelText("Error: Too little arguments for command");
 		}
 	}
 
@@ -133,12 +174,16 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			try
 			{
 				Drawable::clearAll();
+				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {
 					Command_panel->SetValue("ERROR");
 				}
 			}
+		}
+		else {
+			m_error_message_box->SetLabelText("Error: Too little arguments for command");
 		}
 	}
 
@@ -148,6 +193,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				int id = std::stoi(command_prompt[1]);
 				Position shift = CommandParser::get_a_point(command_prompt[2]);
 				Drawable::moveObj(id, shift.x, shift.y, shift.z);
+				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {
@@ -164,7 +210,8 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				Position rotate_point = CommandParser::get_a_point(command_prompt[2]);
 				Position rotate_angle = CommandParser::get_a_point(command_prompt[3]);
 				Drawable::rotateObj(id, rotate_point.x, rotate_point.y, rotate_point.z,
-					rotate_angle.x, rotate_angle.y, rotate_angle.z);
+				rotate_angle.x, rotate_angle.y, rotate_angle.z);
+				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {
@@ -179,6 +226,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			try {
 				std::string name = command_prompt[1];
 				Drawable::saveToFile(name);
+				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {
@@ -193,6 +241,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			try {
 				std::string name = command_prompt[1];
 				Drawable::loadFromFile(name);
+				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {
@@ -207,6 +256,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			try {
 				Position newLook = CommandParser::get_a_point(command_prompt[1]);
 				Drawable::Camera::setLookAt(newLook.x, newLook.y, newLook.z);
+				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
 				error = true;
@@ -219,6 +269,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			try {
 				Position newPosition = CommandParser::get_a_point(command_prompt[1]);
 				Drawable::Camera::setPosition(newPosition.x, newPosition.y, newPosition.z);
+				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
 				error = true;
@@ -231,6 +282,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			try {
 				double newFov = std::stod(command_prompt[1]);
 				Drawable::Camera::setFov(newFov);
+				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
 				error = true;
@@ -243,6 +295,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			try {
 				int id = std::stoi(command_prompt[1]);
 				Drawable::touchObj(id);
+				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {
@@ -270,6 +323,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				{
 					Drawable::Camera::setTopDistance(r);
 				}
+				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {
@@ -288,6 +342,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				std::string name = command_prompt[3];
 
 				Drawable::render_panel_to_bitmap(name, w, h, perspective_panel);
+				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {
@@ -297,10 +352,9 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 		}
 	}
 
-	else if (error) {
-	}
+
 	else {
-		Command_panel->SetValue("ERROR");
+		m_error_message_box->SetLabelText("Error: Not recognise command");
 	}
 
 	wxClientDC dc1(vertical_side_panel);
@@ -331,6 +385,6 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 		Elements_ListBox->Append(t);
 	}
 
-	//Command_panel->SetValue(wxT(">>"));
+	Command_panel->SetValue(wxT(">>"));
 	Command_panel->SetInsertionPointEnd();
 }
