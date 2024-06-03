@@ -19,6 +19,8 @@ double Drawable::highlight_factor = 0.6;
 
 // Camera initializers moved to Camera.cpp
 
+Drawable::Drawable(wxColour color, const std::string& type) : _color(color), _type(type) {};
+
 void Drawable::addObj(Drawable* fig) {
 	figures.push_back(fig);
 }

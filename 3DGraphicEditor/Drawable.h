@@ -16,12 +16,9 @@ enum class view {
 };
 
 /// @brief Klasa bazowa dla figur
-/// - management figur w wektorze polega na wywolaniu Drawable::metoda().
-/// Jezeli sie nie podoba to moge zrobic osobna klase ObjectManager jak Maciek proponowal :p
-/// wowczas management bedzie polegal na mgr.metoda()
 class Drawable {
 public:
-	Drawable(wxColour color = penColor, const std::string& type = "Drawable") :_color(color), _type(type) {};
+	Drawable(wxColour color = penColor, const std::string& type = "Drawable");
 
 	/// @brief Dodanie figury do wektora (na zasadzie addObj(new ...))
 	/// @param fig - wskaznik na dodawana figure
