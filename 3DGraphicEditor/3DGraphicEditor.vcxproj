@@ -135,6 +135,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Box.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CommandParser.cpp" />
     <ClCompile Include="Cone.cpp" />
     <ClCompile Include="Cylinder.cpp" />
@@ -143,6 +144,7 @@
     <ClCompile Include="GUIMyFrame1.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Position.cpp" />
     <ClCompile Include="Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +156,7 @@
     <ClInclude Include="GUI.h" />
     <ClInclude Include="GUIMyFrame1.h" />
     <ClInclude Include="Line.h" />
+    <ClInclude Include="Position.h" />
     <ClInclude Include="Sphere.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

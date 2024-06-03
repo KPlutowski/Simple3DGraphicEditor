@@ -17,40 +17,17 @@ double Drawable::panelWidth = 200.0;
 int Drawable::highlight_duration_ms = 1000;
 double Drawable::highlight_factor = 0.6;
 
-// Camera initializers
-double Drawable::Camera::frontDistance = 200.0;
-double Drawable::Camera::topDistance = 200.0;
-double Drawable::Camera::rightDistance = 200.0;
-Position Drawable::Camera::cameraPosition = Position(200, 200, 200);
-Position Drawable::Camera::lookAtPosition = Position(0, 0, 0);
-double Drawable::Camera::fieldOfView = 60.0;
-Position Drawable::Camera::cameraDirection = {
-			lookAtPosition.x - cameraPosition.x,
-			lookAtPosition.y - cameraPosition.y,
-			lookAtPosition.z - cameraPosition.z
-};
-Position Drawable::Camera::rightVector = {
-			cameraDirection.y * 0 - cameraDirection.z * 1,
-			cameraDirection.z * 0 - cameraDirection.x * 0,
-			cameraDirection.x * 1 - cameraDirection.y * 0
-};
-Position Drawable::Camera::upVector = {
-			rightVector.y * cameraDirection.z - rightVector.z * cameraDirection.y,
-			rightVector.z * cameraDirection.x - rightVector.x * cameraDirection.z,
-			rightVector.x * cameraDirection.y - rightVector.y * cameraDirection.x
-};
-
-double Drawable::Camera::fovInRadians = fieldOfView * (M_PI / 180.0);
-double Drawable::Camera::tanFov = tan(fovInRadians / 2.0);
-double Drawable::Camera::aspectRatio = panelWidth / panelHeight;
+// Camera initializers moved to Camera.cpp
 
 void Drawable::addObj(Drawable* fig) {
 	figures.push_back(fig);
 }
 
 void Drawable::deleteObj(int index) {
-	if (index >= 1 && index <= figures.size())
+	if (index >= 1 && index <= figures.size()) {
+		delete figures[index - 1];
 		figures.erase(figures.begin() + index - 1);
+	}
 }
 
 void Drawable::clearAll() {
@@ -117,6 +94,18 @@ void Drawable::SetViewSize(const double x, const double y) {
 
 void Drawable::setColor(const wxColour& newColor) {
 	_color = newColor;
+}
+
+std::vector<std::string> Drawable::getFiguresInfo()
+{
+	std::vector<std::string> result;
+	int i = 0;
+	for (const auto figure : figures)
+	{
+		i++;
+		result.push_back(std::to_string(i) + " " + figure->getInfo());
+	}
+	return result;
 }
 
 void Drawable::saveToFile(const std::string& fileName)
@@ -347,36 +336,68 @@ void  Drawable::ResetHighlight(wxTimerEvent& event, wxColour prev)
 	_highlightTimer = nullptr;
 }
 
-void Drawable::Camera::update() {
-	fovInRadians = fieldOfView * (M_PI / 180.0);
-	tanFov = tan(fovInRadians / 2.0);
-	aspectRatio = panelWidth / panelHeight;
+void Drawable::draw(wxDC& dcFront, wxDC& dcTop, wxDC& dcSide, wxDC& dcPerspective) const
+{
+	render(dcFront, Camera::projectFront);
+	render(dcTop, Camera::projectTop);
+	render(dcSide, Camera::projectSide);
+	render(dcPerspective, Camera::projectPerspective);
+}
 
-	cameraDirection = {
-		lookAtPosition.x - cameraPosition.x,
-		lookAtPosition.y - cameraPosition.y,
-		lookAtPosition.z - cameraPosition.z
-	};
-	// Normalize camera direction
-	double length = sqrt(cameraDirection.x * cameraDirection.x + cameraDirection.y * cameraDirection.y + cameraDirection.z * cameraDirection.z);
-	cameraDirection.x /= length;
-	cameraDirection.y /= length;
-	cameraDirection.z /= length;
+void Drawable::move(double xShift, double yShift, double zShift) {
+	for (auto& vertex : _vertices)
+	{
+		vertex.shift(xShift, yShift, zShift);
+	}
+}
 
-	rightVector = {
-		cameraDirection.y * 0 - cameraDirection.z * 1,
-		cameraDirection.z * 0 - cameraDirection.x * 0,
-		cameraDirection.x * 1 - cameraDirection.y * 0
-	};
-	// Normalize right vector
-	length = sqrt(rightVector.x * rightVector.x + rightVector.y * rightVector.y + rightVector.z * rightVector.z);
-	rightVector.x /= length;
-	rightVector.y /= length;
-	rightVector.z /= length;
+void Drawable::rotate(double xPivot, double yPivot, double zPivot, double alpha, double beta, double gamma) {
+	for (auto& vertex : _vertices)
+	{
+		vertex.rotate(Position(xPivot, yPivot, zPivot), alpha, beta, gamma);
+	}
+}
 
-	upVector = {
-		rightVector.y * cameraDirection.z - rightVector.z * cameraDirection.y,
-		rightVector.z * cameraDirection.x - rightVector.x * cameraDirection.z,
-		rightVector.x * cameraDirection.y - rightVector.y * cameraDirection.x
-	};
+std::string Drawable::save() const {
+	std::string tmp;
+
+	tmp += _type + " ";
+	tmp += std::to_string(_vertices.size()) + " ";
+	tmp += std::to_string(_color.GetRGB()) += " ";
+
+	for (const auto& vertex : _vertices)
+	{
+		tmp += vertex.toString() + " ";
+	}
+
+	return tmp;
+}
+
+std::string Drawable::getInfo() const {
+	return "Drawable";
+}
+
+void Drawable::render_panel_to_bitmap(const std::string& filename, int width, int height, wxPanel* panel)
+{
+	wxMemoryDC memDC;
+
+	wxBitmap bitmap(width, height);
+	memDC.SelectObject(bitmap);
+
+	memDC.SetBackground(*wxWHITE_BRUSH);
+	memDC.Clear();
+
+	panel->Refresh();
+	panel->Update();
+	panel->GetUpdateRegion().Clear();
+
+	for (Drawable* figure : figures)
+	{
+		memDC.SetPen(wxPen(figure->_color));
+		memDC.SetBrush(*wxTRANSPARENT_BRUSH);
+		figure->render(memDC, Camera::projectPerspective);
+	}
+
+	wxImage image = bitmap.ConvertToImage();
+	image.SaveFile(filename, wxBITMAP_TYPE_PNG);
 }
