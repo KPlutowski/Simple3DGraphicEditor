@@ -201,6 +201,9 @@ void GUIMyFrame1::Update( wxCommandEvent& event )
 				}
 			}
 		}
+		else {
+			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+		}
 	}
 
 	else if (command_prompt[0] == "rotate") {
@@ -219,6 +222,9 @@ void GUIMyFrame1::Update( wxCommandEvent& event )
 				}
 			}
 		}
+		else {
+			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+		}
 	}
 
 	else if (command_prompt[0] == "save") {
@@ -234,6 +240,9 @@ void GUIMyFrame1::Update( wxCommandEvent& event )
 				}
 			}
 		}
+		else {
+			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+		}
 	}
 
 	else if (command_prompt[0] == "load") {
@@ -248,6 +257,9 @@ void GUIMyFrame1::Update( wxCommandEvent& event )
 					Command_panel->SetValue("ERROR");
 				}
 			}
+		}
+		else {
+			m_error_message_box->SetLabelText("Error: Too little arguments for command");
 		}
 	}
 
@@ -275,6 +287,9 @@ void GUIMyFrame1::Update( wxCommandEvent& event )
 				error = true;
 			}
 		}
+		else {
+			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+		}
 	}
 
 	else if (command_prompt[0] == "camera_fov") {
@@ -287,6 +302,9 @@ void GUIMyFrame1::Update( wxCommandEvent& event )
 			catch (const std::exception& e) {
 				error = true;
 			}
+		}
+		else {
+			m_error_message_box->SetLabelText("Error: Too little arguments for command");
 		}
 	}
 
@@ -302,6 +320,9 @@ void GUIMyFrame1::Update( wxCommandEvent& event )
 					Command_panel->SetValue("ERROR");
 				}
 			}
+		}
+		else {
+			m_error_message_box->SetLabelText("Error: Too little arguments for command");
 		}
 	}
 
@@ -331,6 +352,9 @@ void GUIMyFrame1::Update( wxCommandEvent& event )
 				}
 			}
 		}
+		else {
+			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+		}
 	}
 
 	else if (command_prompt[0] == "render_to_file") {
@@ -350,7 +374,42 @@ void GUIMyFrame1::Update( wxCommandEvent& event )
 				}
 			}
 		}
+		else {
+			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+		}
 	}
+
+	else if (command_prompt[0] == "create_new_group") {
+		if (CommandParser::command_length_check(command_prompt, 1)) {
+			try {
+				
+				m_error_message_box->SetLabelText("");
+			}
+			catch (const std::exception& e) {
+				if (Command_panel) {
+					Command_panel->SetValue("ERROR");
+				}
+			}
+		}
+	}
+
+	else if (command_prompt[0] == "add_to_group") {
+		if (CommandParser::command_length_check(command_prompt, 3)) {
+			try {
+				int group_id = std::stoi(command_prompt[1]);
+				int element_id = std::stoi(command_prompt[2]);
+				m_error_message_box->SetLabelText("");
+			}
+			catch (const std::exception& e) {
+				if (Command_panel) {
+					Command_panel->SetValue("ERROR");
+				}
+			}
+		}
+		else {
+			m_error_message_box->SetLabelText("ERROR: Too few arguments");
+		}
+		}
 
 
 	else {
