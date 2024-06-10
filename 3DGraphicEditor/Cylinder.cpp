@@ -18,7 +18,7 @@ std::string Cylinder::save() const
 {
 	std::string toSave;
 
-	toSave += Drawable::save();
+	toSave += DrawableObject::save();
 
 	toSave += _base1.toString() + " " + std::to_string(_baseRadius1) + " ";
 	toSave += _base2.toString() + " " + std::to_string(_baseRadius2) + " ";

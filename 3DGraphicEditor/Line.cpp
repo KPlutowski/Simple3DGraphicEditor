@@ -4,7 +4,7 @@ Line::Line(double x1, double y1, double z1, double x2, double y2, double z2, wxC
 	: Line(Position(x1, y1, z1), Position(x2, y2, z2), color, vertices) {}
 
 Line::Line(Position start, Position end, wxColour color, const std::vector<Position>& vertices)
-	: Drawable(color, "Line"), _start(start), _end(end)
+	: DrawableObject(color, "Line"), _start(start), _end(end)
 {
 	if (vertices.size() > 0)
 	{
@@ -25,7 +25,7 @@ std::string Line::getInfo() const {
 std::string Line::save() const {
 	std::string toSave;
 
-	toSave += Drawable::save();
+	toSave += DrawableObject::save();
 
 	toSave += _start.toString() + " " + _end.toString() + "\n";
 

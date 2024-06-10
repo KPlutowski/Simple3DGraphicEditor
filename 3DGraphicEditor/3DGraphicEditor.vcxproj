@@ -140,6 +140,7 @@
     <ClCompile Include="Cone.cpp" />
     <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="Drawable.cpp" />
+    <ClCompile Include="DrawableObject.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="GUIMyFrame1.cpp" />
     <ClCompile Include="Line.cpp" />
@@ -149,10 +150,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Box.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="CommandParser.h" />
     <ClInclude Include="Cone.h" />
     <ClInclude Include="Cylinder.h" />
     <ClInclude Include="Drawable.h" />
+    <ClInclude Include="DrawableObject.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="GUIMyFrame1.h" />
     <ClInclude Include="Line.h" />

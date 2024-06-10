@@ -1,12 +1,12 @@
 #pragma once
 #include <vector>
 #include "GUIMyFrame1.h"
-#include "Drawable.h"
+#include "DrawableObject.h"
 
 /**
  * @brief A class representing a sphere object that can be drawn on a 2D canvas from different perspectives.
  */
-class Sphere : public Drawable {
+class Sphere : public DrawableObject {
 public:
 	/**
 	 * @brief Constructs a sphere object.
@@ -18,7 +18,7 @@ public:
 	 * @param numParallels - The number of parallels (latitudes) used to divide the sphere.
 	 * @param color - The color of the sphere.
 	 */
-	Sphere(double x, double y, double z, double radius, int numMeridians, int numParallels, const wxColour& color = Drawable::penColor, const std::vector<Position>& vertices = {});
+	Sphere(double x, double y, double z, double radius, int numMeridians, int numParallels, const wxColour& color = DrawableObject::penColor, const std::vector<Position>& vertices = {});
 
 	/**
 	 * @brief Constructs a sphere object.
@@ -28,7 +28,7 @@ public:
 	 * @param numParallels - The number of parallels (latitudes) used to divide the sphere.
 	 * @param color - The color of the sphere.
 	 */
-	Sphere(const Position& center, double radius, int numMeridians, int numParallels, const wxColour& color = Drawable::penColor, const std::vector<Position>& vertices = {});
+	Sphere(const Position& center, double radius, int numMeridians, int numParallels, const wxColour& color = DrawableObject::penColor, const std::vector<Position>& vertices = {});
 
 	/**
 	 * @brief Returns information about the sphere.

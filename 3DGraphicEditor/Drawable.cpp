@@ -6,22 +6,18 @@
 #include "Box.h"
 #include "Cone.h"
 #include "Cylinder.h"
+#include "DrawableObject.h"
 
-std::vector<Drawable*> Drawable::figures;
+std::vector<DrawableObject*> Drawable::figures;
+
 wxColour Drawable::penColor = wxColour(0, 0, 0);;
 bool Drawable::fill_style = false;
 wxColour Drawable::fill_color = wxColour(255, 255, 255);
 view Drawable::view_style = view::lines;
-double Drawable::panelHeight = 200.0;
-double Drawable::panelWidth = 200.0;
 int Drawable::highlight_duration_ms = 1000;
 double Drawable::highlight_factor = 0.6;
 
-// Camera initializers moved to Camera.cpp
-
-Drawable::Drawable(wxColour color, const std::string& type) : _color(color), _type(type) {};
-
-void Drawable::addObj(Drawable* fig) {
+void Drawable::addObj(DrawableObject* fig) {
 	figures.push_back(fig);
 }
 
@@ -37,81 +33,56 @@ void Drawable::clearAll() {
 	figures.clear();
 }
 
-void Drawable::moveObj(int index, double x_shift, double y_shift, double z_shift) 
+void Drawable::moveObj(int index, double x_shift, double y_shift, double z_shift)
 {
+	if (index < 1 || index > figures.size()) {
+		return;
+	}
 
-	if (index >= 1 && index <= figures.size())
-	{
-		auto figuere_to_move = figures[index - 1];
+	auto figure_to_move = figures[index - 1];
+	int group_id = figure_to_move->getGroupId();
 
-		if (figuere_to_move->_group_id == 0)
-		{
-			figuere_to_move->move(x_shift, y_shift, z_shift);
-		}
-		else
-		{
-			// szukamy reszty z grupy
-			for (const auto figure : figures)
-			{
-				if (figure->_group_id == figuere_to_move->_group_id)
-				{
-					figure->move(x_shift, y_shift, z_shift);
-				}
-			}
+	for (auto& figure : figures) {
+		if (figure->getGroupId() == group_id) {
+			figure->move(x_shift, y_shift, z_shift);
 		}
 	}
 }
 
 void Drawable::rotateObj(int index, double x_cord, double y_cord, double z_cord, double alpha, double beta, double gamma) {
-	if (index >= 1 && index <= figures.size())
-	{
-		auto figuere_to_move = figures[index - 1];
+	if (index < 1 || index > figures.size()) {
+		return;
+	}
 
-		if (figuere_to_move->_group_id == 0)
-		{
-			figuere_to_move->rotate(x_cord, y_cord, z_cord, alpha, beta, gamma);
-		}
-		else
-		{
-			// szukamy reszty z grupy
-			for (const auto figure : figures)
-			{
-				if (figure->_group_id == figuere_to_move->_group_id)
-				{
-					figure->rotate(x_cord, y_cord, z_cord, alpha, beta, gamma);
-				}
-			}
+	auto figure_to_move = figures[index - 1];
+	int group_id = figure_to_move->getGroupId();
+
+	for (auto& figure : figures) {
+		if (figure->getGroupId() == group_id) {
+			figure->rotate(x_cord, y_cord, z_cord, alpha, beta, gamma);
 		}
 	}
 }
 
 void Drawable::touchObj(int index) {
-	if (index >= 1 && index <= figures.size())
-	{
-		auto figuere_to_move = figures[index - 1];
+	if (index < 1 || index > figures.size()) {
+		return;
+	}
 
-		if (figuere_to_move->_group_id == 0)
-		{
-			figuere_to_move->highlightObject();
-		}
-		else
-		{
-			// szukamy reszty z grupy
-			for (const auto figure : figures)
-			{
-				if (figure->_group_id == figuere_to_move->_group_id)
-				{
-					figure->highlightObject();
-				}
-			}
+	auto figure_to_move = figures[index - 1];
+	int group_id = figure_to_move->getGroupId();
+
+	for (auto& figure : figures) {
+		if (figure->getGroupId() == group_id) {
+			figure->highlightObject();
 		}
 	}
 }
 
 void Drawable::DrawAll(wxDC& dcFront, wxDC& dcTop, wxDC& dcSide, wxDC& dcPerspective) {
-	for (Drawable* figure : figures)
+	for (const auto* figure : figures)
 	{
-		wxPen pen(figure->_color, penWidth);
+		wxPen pen(figure->getColor(), figure->getLineWidth());
 		dcFront.SetPen(pen);
 		dcFront.SetBrush(*wxTRANSPARENT_BRUSH);
 		dcTop.SetPen(pen);
@@ -125,28 +96,19 @@ void Drawable::DrawAll(wxDC& dcFront, wxDC& dcTop, wxDC& dcSide, wxDC& dcPerspec
 	}
 }
 
-Drawable* Drawable::getObj(int index) {
-	if (index >= 1 && index <= figures.size())
-		// Use zero-based indexing internally, so adjust index by -1
-		return figures[index - 1];
-	return nullptr;
+DrawableObject* Drawable::getObj(int index) {
+	if (index < 1 || index > figures.size())
+		return nullptr;
+
+	return figures[index - 1];
 }
 
-std::vector<Drawable*> Drawable::getAllObjs() {
+std::vector<DrawableObject*> Drawable::getAllObjs() {
 	return figures;
 }
 
 void Drawable::SetLineColor(const wxColour& newColour) {
 	penColor = newColour;
-}
-
-void Drawable::SetViewSize(const double x, const double y) {
-	panelWidth = x;
-	panelHeight = y;
-}
-
-void Drawable::setColor(const wxColour& newColor) {
-	_color = newColor;
 }
 
 std::vector<std::string> Drawable::getFiguresInfo()
@@ -156,7 +118,7 @@ std::vector<std::string> Drawable::getFiguresInfo()
 	for (const auto figure : figures)
 	{
 		i++;
-		result.push_back("id: "+std::to_string(i)+", group id: "+ std::to_string(figure->_group_id) + " " + figure->getInfo());
+		result.push_back("id: " + std::to_string(i) + ", group id: " + std::to_string(figure->getGroupId()) + " " + figure->getInfo());
 	}
 	return result;
 }
@@ -190,7 +152,7 @@ void Drawable::saveToFile(const std::string& fileName)
 
 	// saving objects setting
 	// type _vertices.size() _color _vertices (optional figure info)
-	for (const Drawable* obj : figures)
+	for (const auto* obj : figures)
 	{
 		outFile << obj->save();
 	}
@@ -355,81 +317,6 @@ void Drawable::loadFromFile(const std::string& fileName)
 	}
 }
 
-void Drawable::highlightObject()
-{
-	if (!_highlightTimer)
-	{
-		wxColour colorBeforeHighlight = _color;
-
-		_color = generateHighlight();
-
-		_highlightTimer = new wxTimer();
-		_highlightTimer->StartOnce(Drawable::highlight_duration_ms);
-
-		// Bind the timer event
-		_highlightTimer->Bind(wxEVT_TIMER, [this, colorBeforeHighlight](wxTimerEvent& event) {
-			ResetHighlight(event, colorBeforeHighlight);
-			});
-	}
-}
-
-const wxColour Drawable::generateHighlight() const {
-	return wxColour(
-		std::min(_color.GetRed() - highlight_factor * 255, 255.0),
-		std::min(_color.GetGreen() - highlight_factor * 255, 255.0),
-		std::min(_color.GetBlue() - highlight_factor * 255, 255.0)
-	);
-};
-
-void  Drawable::ResetHighlight(wxTimerEvent& event, wxColour prev)
-{
-	_color = prev;
-	_highlightTimer->Stop(); // Stop the timer
-	delete _highlightTimer; // Clean up the timer object
-	_highlightTimer = nullptr;
-}
-
-void Drawable::draw(wxDC& dcFront, wxDC& dcTop, wxDC& dcSide, wxDC& dcPerspective) const
-{
-	render(dcFront, Camera::projectFront);
-	render(dcTop, Camera::projectTop);
-	render(dcSide, Camera::projectSide);
-	render(dcPerspective, Camera::projectPerspective);
-}
-
-void Drawable::move(double xShift, double yShift, double zShift) {
-	for (auto& vertex : _vertices)
-	{
-		vertex.shift(xShift, yShift, zShift);
-	}
-}
-
-void Drawable::rotate(double xPivot, double yPivot, double zPivot, double alpha, double beta, double gamma) {
-	for (auto& vertex : _vertices)
-	{
-		vertex.rotate(Position(xPivot, yPivot, zPivot), alpha, beta, gamma);
-	}
-}
-
-std::string Drawable::save() const {
-	std::string tmp;
-
-	tmp += _type + " ";
-	tmp += std::to_string(_vertices.size()) + " ";
-	tmp += std::to_string(_color.GetRGB()) += " ";
-
-	for (const auto& vertex : _vertices)
-	{
-		tmp += vertex.toString() + " ";
-	}
-
-	return tmp;
-}
-
-std::string Drawable::getInfo() const {
-	return "Drawable";
-}
-
 void Drawable::render_panel_to_bitmap(const std::string& filename, int width, int height, wxPanel* panel)
 {
 	wxMemoryDC memDC;
@@ -444,13 +331,19 @@ void Drawable::render_panel_to_bitmap(const std::string& filename, int width, in
 	panel->Update();
 	panel->GetUpdateRegion().Clear();
 
-	for (Drawable* figure : figures)
+	for (auto* figure : figures)
 	{
-		memDC.SetPen(wxPen(figure->_color));
+		memDC.SetPen(wxPen(figure->getColor()));
 		memDC.SetBrush(*wxTRANSPARENT_BRUSH);
 		figure->render(memDC, Camera::projectPerspective);
 	}
 
 	wxImage image = bitmap.ConvertToImage();
 	image.SaveFile(filename, wxBITMAP_TYPE_PNG);
+}
+
+void Drawable::add_to_group(int group_id, int element_id)
+{
+	if (element_id >= 1 && element_id <= figures.size())
+		figures[element_id - 1]->setGroupId(group_id);
 }

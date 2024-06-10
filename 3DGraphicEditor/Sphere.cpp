@@ -4,7 +4,7 @@ Sphere::Sphere(double x, double y, double z, double radius, int numMeridians, in
 	: Sphere(Position(x, y, z), radius, numMeridians, numParallels, color, vertices) {}
 
 Sphere::Sphere(const Position& center, double radius, int numMeridians, int numParallels, const wxColour& color, const std::vector<Position>& vertices)
-	: Drawable(color, "Sphere"), _center(center), _radius(radius), _numMeridians(numMeridians), _numParallels(numParallels) {
+	: DrawableObject(color, "Sphere"), _center(center), _radius(radius), _numMeridians(numMeridians), _numParallels(numParallels) {
 	if (vertices.size() > 0)
 	{
 		_vertices = vertices;
@@ -19,7 +19,7 @@ std::string Sphere::getInfo() const {
 std::string Sphere::save() const {
 	std::string toSave;
 
-	toSave += Drawable::save();
+	toSave += DrawableObject::save();
 
 	toSave += _center.toString() + " ";
 	toSave += std::to_string(_radius) + " " + std::to_string(_numMeridians) + " " + std::to_string(_numParallels) + "\n";
@@ -45,7 +45,7 @@ void Sphere::render(wxDC& dc, wxPoint(*projectionFunc)(const Position&)) const {
 
 void Sphere::rotate(double xPivot, double yPivot, double zPivot, double alpha, double beta, double gamma)
 {
-	Drawable::rotate(xPivot, yPivot, zPivot, alpha, beta, gamma);
+	DrawableObject::rotate(xPivot, yPivot, zPivot, alpha, beta, gamma);
 
 	// Update _center position to proper save sphere
 	_center.rotate(Position(xPivot, yPivot, zPivot), alpha, beta, gamma);

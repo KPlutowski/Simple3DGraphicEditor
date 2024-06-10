@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Drawable.h"
+#include "DrawableObject.h"
 #include <vector>
 #include <string>
 
 /**
  * @brief A class representing a box object that can be drawn on a 2D canvas from different perspectives.
  */
-class Box : public Drawable {
+class Box : public DrawableObject {
 public:
 	/**
 	 * @brief Constructs a box object with specified coordinates for two opposite corners.
@@ -19,7 +19,7 @@ public:
 	 * @param z2 - The Z-coordinate of the second corner.
 	 * @param color - The color of the box.
 	 */
-	Box(double x1, double y1, double z1, double x2, double y2, double z2, const wxColour& color = Drawable::penColor, const std::vector<Position>& vertices = {});
+	Box(double x1, double y1, double z1, double x2, double y2, double z2, const wxColour& color = DrawableObject::penColor, const std::vector<Position>& vertices = {});
 
 	/**
 	 * @brief Constructs a box object with specified coordinates for two opposite corners.
@@ -27,7 +27,7 @@ public:
 	 * @param end - The position of the second corner.
 	 * @param color - The color of the box.
 	 */
-	Box(const Position& start, const Position& end, const wxColour& color = Drawable::penColor, const std::vector<Position>& vertices = {});
+	Box(const Position& start, const Position& end, const wxColour& color = DrawableObject::penColor, const std::vector<Position>& vertices = {});
 
 	/**
 	 * @brief Returns information about the box.

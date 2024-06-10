@@ -6,18 +6,17 @@
 #include "Cone.h"
 #include "Cylinder.h"
 
-GUIMyFrame1::GUIMyFrame1( wxWindow* parent )
-:
-MyFrame1( parent )
+GUIMyFrame1::GUIMyFrame1(wxWindow* parent)
+	:
+	MyFrame1(parent)
 {
 	Drawable::Camera::update();
 	wxInitAllImageHandlers();
 }
 
-void GUIMyFrame1::Update( wxCommandEvent& event )
+void GUIMyFrame1::Update(wxCommandEvent& event)
 {
-// TODO: Implement Update
-
+	// TODO: Implement Update
 
 	std::vector<std::string> command_prompt;
 
@@ -25,7 +24,7 @@ void GUIMyFrame1::Update( wxCommandEvent& event )
 
 	bool error = false;
 	//Wybór odpowiedniej komendy
-	if(CommandParser::command_length_check(command_prompt,0)){
+	if (CommandParser::command_length_check(command_prompt, 0)) {
 		m_error_message_box->SetLabelText("Error: you give an empty command!");
 	}
 	else if (command_prompt[0] == "set_line_color") {
@@ -35,7 +34,6 @@ void GUIMyFrame1::Update( wxCommandEvent& event )
 				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
-				
 				if (m_error_message_box) {
 					m_error_message_box->SetLabelText("Error: Invalid command");
 				}
@@ -213,7 +211,7 @@ void GUIMyFrame1::Update( wxCommandEvent& event )
 				Position rotate_point = CommandParser::get_a_point(command_prompt[2]);
 				Position rotate_angle = CommandParser::get_a_point(command_prompt[3]);
 				Drawable::rotateObj(id, rotate_point.x, rotate_point.y, rotate_point.z,
-				rotate_angle.x, rotate_angle.y, rotate_angle.z);
+					rotate_angle.x, rotate_angle.y, rotate_angle.z);
 				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
@@ -382,7 +380,6 @@ void GUIMyFrame1::Update( wxCommandEvent& event )
 	else if (command_prompt[0] == "create_new_group") {
 		if (CommandParser::command_length_check(command_prompt, 1)) {
 			try {
-				
 				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
@@ -409,8 +406,7 @@ void GUIMyFrame1::Update( wxCommandEvent& event )
 		else {
 			m_error_message_box->SetLabelText("ERROR: Too few arguments");
 		}
-		}
-
+	}
 
 	else {
 		m_error_message_box->SetLabelText("Error: Not recognise command");
@@ -433,7 +429,7 @@ void GUIMyFrame1::Update( wxCommandEvent& event )
 	perspectiveView.Clear();
 
 	// Update when changing window size // size of drawable area
-	Drawable::SetViewSize(vertical_side_panel->GetSize().x, vertical_side_panel->GetSize().y);
+	Drawable::Camera::SetViewSize(vertical_side_panel->GetSize().x, vertical_side_panel->GetSize().y);
 
 	Drawable::DrawAll(frontView, topView, sideView, perspectiveView);
 
@@ -444,6 +440,6 @@ void GUIMyFrame1::Update( wxCommandEvent& event )
 		Elements_ListBox->Append(t);
 	}
 
-	//Command_panel->SetValue(wxT(">>"));
-	//Command_panel->SetInsertionPointEnd();
+	Command_panel->SetValue(wxT(">>"));
+	Command_panel->SetInsertionPointEnd();
 }

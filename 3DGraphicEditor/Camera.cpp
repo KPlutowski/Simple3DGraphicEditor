@@ -7,12 +7,21 @@
 #include "Cone.h"
 #include "Cylinder.h"
 
+#include "Camera.h"
 double Drawable::Camera::frontDistance = 200.0;
 double Drawable::Camera::topDistance = 200.0;
 double Drawable::Camera::rightDistance = 200.0;
 Position Drawable::Camera::cameraPosition = Position(200, 200, 200);
 Position Drawable::Camera::lookAtPosition = Position(0, 0, 0);
 double Drawable::Camera::fieldOfView = 60.0;
+
+double Drawable::Camera::fovInRadians = fieldOfView * (M_PI / 180.0);
+double Drawable::Camera::tanFov = tan(fovInRadians / 2.0);
+double Drawable::Camera::aspectRatio = panelWidth / panelHeight;
+
+double Drawable::Camera::panelHeight = 200.0;
+double Drawable::Camera::panelWidth = 200.0;
+
 Position Drawable::Camera::cameraDirection = {
 			lookAtPosition.x - cameraPosition.x,
 			lookAtPosition.y - cameraPosition.y,
@@ -28,10 +37,6 @@ Position Drawable::Camera::upVector = {
 			rightVector.z * cameraDirection.x - rightVector.x * cameraDirection.z,
 			rightVector.x * cameraDirection.y - rightVector.y * cameraDirection.x
 };
-
-double Drawable::Camera::fovInRadians = fieldOfView * (M_PI / 180.0);
-double Drawable::Camera::tanFov = tan(fovInRadians / 2.0);
-double Drawable::Camera::aspectRatio = panelWidth / panelHeight;
 
 wxPoint Drawable::Camera::projectPerspective(const Position& point) {
 	// Transform the point to camera space
@@ -149,3 +154,8 @@ void Drawable::Camera::setFrontDistance(const double front) { frontDistance = fr
 void Drawable::Camera::setTopDistance(const double top) { topDistance = top; }
 
 void Drawable::Camera::setRightDistance(const double right) { rightDistance = right; }
+
+void Drawable::Camera::SetViewSize(const double x, const double y) {
+	panelWidth = x;
+	panelHeight = y;
+}

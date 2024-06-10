@@ -1,10 +1,10 @@
 #pragma once
-#include "Drawable.h"
+#include "DrawableObject.h"
 
 /**
  * @brief A class representing a cone object that can be drawn on a 2D canvas.
  */
-class Cone :public Drawable
+class Cone :public DrawableObject
 {
 public:
 	/**
@@ -16,7 +16,7 @@ public:
 	 * @param sides The number of sides.
 	 * @param color The color of the cone.
 	 */
-	Cone(const Position& base1, double radius1, const Position& base2, double radius2, int sides, const wxColour& color = Drawable::penColor, const std::vector<Position>& vertices = {});
+	Cone(const Position& base1, double radius1, const Position& base2, double radius2, int sides, const wxColour& color = DrawableObject::penColor, const std::vector<Position>& vertices = {});
 
 	/**
 	 * @brief Constructs a cone object with specified parameters.
@@ -31,7 +31,7 @@ public:
 	 * @param sides The number of sides.
 	 * @param color The color of the cone.
 	 */
-	Cone(double x1, double y1, double z1, double radius1, double x2, double y2, double z2, double radius2, int sides, wxColour color = Drawable::penColor, const std::vector<Position>& vertices = {});
+	Cone(double x1, double y1, double z1, double radius1, double x2, double y2, double z2, double radius2, int sides, wxColour color = DrawableObject::penColor, const std::vector<Position>& vertices = {});
 
 	/**
 	 * @brief Saves the cone's data to a string.

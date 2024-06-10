@@ -2,12 +2,12 @@
 
 #include <vector>
 #include "GUIMyFrame1.h"
-#include "Drawable.h"
+#include "DrawableObject.h"
 
 /**
  * @brief A class representing a line object that can be drawn on a 2D canvas from different perspectives.
  */
-class Line : public Drawable {
+class Line : public DrawableObject {
 public:
 	/**
 	 * @brief Constructs a line object with specified coordinates for its start and end points.
@@ -19,7 +19,7 @@ public:
 	 * @param z2 - The Z-coordinate of the end point.
 	 * @param color - The color of the line. Defaults to Drawable::penColor.
 	 */
-	Line(double x1, double y1, double z1, double x2, double y2, double z2, wxColour color = Drawable::penColor, const std::vector<Position>& vertices = {});
+	Line(double x1, double y1, double z1, double x2, double y2, double z2, wxColour color = DrawableObject::penColor, const std::vector<Position>& vertices = {});
 
 	/**
 	 * @brief Constructs a line object with specified start and end positions.
@@ -27,7 +27,7 @@ public:
 	 * @param end - The end position of the line.
 	 * @param color - The color of the line. Defaults to Drawable::penColor.
 	 */
-	Line(Position start, Position end, wxColour color = Drawable::penColor, const std::vector<Position>& vertices = {});
+	Line(Position start, Position end, wxColour color = DrawableObject::penColor, const std::vector<Position>& vertices = {});
 
 	/**
 	 * @brief Provides information about the line object.

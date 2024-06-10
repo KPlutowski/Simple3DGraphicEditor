@@ -19,7 +19,6 @@ std::vector<std::string> CommandParser::parse_to_vector(wxString command) {
 				text.clear();
 			}
 			catch (std::exception& e) {
-
 			}
 		}
 	}
@@ -42,9 +41,7 @@ Position CommandParser::get_a_point(std::string command) {
 				text.clear();
 			}
 			catch (std::exception& e) {
-				
 			}
-			
 		}
 
 		else {

@@ -1,7 +1,7 @@
 #include "Cone.h"
 
 Cone::Cone(const Position& base1, double radius1, const Position& base2, double radius2, int sides, const wxColour& color, const std::vector<Position>& vertices)
-	: Drawable(color, "Cone"), _base1(base1), _baseRadius1(radius1), _base2(base2), _baseRadius2(radius2), _sides(sides) {
+	: DrawableObject(color, "Cone"), _base1(base1), _baseRadius1(radius1), _base2(base2), _baseRadius2(radius2), _sides(sides) {
 	if (vertices.size() > 0)
 	{
 		_vertices = vertices;
@@ -17,7 +17,7 @@ std::string Cone::save() const
 {
 	std::string toSave;
 
-	toSave += Drawable::save();
+	toSave += DrawableObject::save();
 
 	toSave += _base1.toString() + " " + std::to_string(_baseRadius1) + " ";
 	toSave += _base2.toString() + " " + std::to_string(_baseRadius2) + " ";
@@ -49,7 +49,7 @@ void Cone::render(wxDC& dc, wxPoint(*projectionFunc)(const Position&)) const
 
 void Cone::rotate(double xPivot, double yPivot, double zPivot, double alpha, double beta, double gamma)
 {
-	Drawable::rotate(xPivot, yPivot, zPivot, alpha, beta, gamma);
+	DrawableObject::rotate(xPivot, yPivot, zPivot, alpha, beta, gamma);
 
 	// Update base's position to proper save
 	_base1.rotate(Position(xPivot, yPivot, zPivot), alpha, beta, gamma);

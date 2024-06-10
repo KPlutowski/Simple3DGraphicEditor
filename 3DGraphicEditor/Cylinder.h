@@ -1,6 +1,7 @@
 #pragma once
-#include "Drawable.h"
+#include "DrawableObject.h"
 #include "Cone.h"
+
 class Cylinder : public Cone
 {
 public:
@@ -13,7 +14,7 @@ public:
 	 * @param sides The number of sides.
 	 * @param color The color of the cone.
 	 */
-	Cylinder(const Position& base1, double radius1, const Position& base2, double radius2, int sides, const wxColour& color = Drawable::penColor, const std::vector<Position>& vertices = {});
+	Cylinder(const Position& base1, double radius1, const Position& base2, double radius2, int sides, const wxColour& color = DrawableObject::penColor, const std::vector<Position>& vertices = {});
 
 	/**
 	 * @brief Constructs a Cylinder object with specified parameters.
@@ -28,7 +29,7 @@ public:
 	 * @param sides The number of sides.
 	 * @param color The color of the cone.
 	 */
-	Cylinder(double x1, double y1, double z1, double radius1, double x2, double y2, double z2, double radius2, int sides, wxColour color = Drawable::penColor, const std::vector<Position>& vertices = {});
+	Cylinder(double x1, double y1, double z1, double radius1, double x2, double y2, double z2, double radius2, int sides, wxColour color = DrawableObject::penColor, const std::vector<Position>& vertices = {});
 
 	/**
 	 * @brief Returns information about the Cylinder.
