@@ -12,7 +12,7 @@ Position::Position(double a, double b, double c) { x = a, y = b, z = c; }
 
 std::string Position::toString() const
 {
-	return "(" + std::to_string((int)x) + "," + std::to_string((int)y) + "," + std::to_string((int)z) + ")";
+	return "(" + std::to_string((double)x) + "," + std::to_string((double)y) + "," + std::to_string((double)z) + ")";
 }
 
 Position Position::operator-(const Position& other) const {

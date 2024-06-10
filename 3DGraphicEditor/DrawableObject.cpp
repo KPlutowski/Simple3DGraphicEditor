@@ -62,8 +62,10 @@ std::string DrawableObject::save() const {
 	std::string tmp;
 
 	tmp += _type + " ";
-	tmp += std::to_string(_vertices.size()) + " ";
+	tmp += std::to_string(_group_id) + " ";
 	tmp += std::to_string(_color.GetRGB()) += " ";
+	tmp += std::to_string(_lineWidth) + " ";
+	tmp += std::to_string(_vertices.size()) + " ";
 
 	for (const auto& vertex : _vertices)
 	{

@@ -150,7 +150,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Box.h" />
-    <ClInclude Include="Camera.h" />
     <ClInclude Include="CommandParser.h" />
     <ClInclude Include="Cone.h" />
     <ClInclude Include="Cylinder.h" />

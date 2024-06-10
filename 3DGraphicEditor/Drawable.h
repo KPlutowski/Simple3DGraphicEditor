@@ -173,7 +173,7 @@ protected:
 	static bool fill_style; /// @brief Czy wypelnienie (false jesli nie, true jesli tak)
 	static wxColour fill_color; /// @brief Kolor wypelnienia
 	static view view_style; /// @brief Rodzaj widoku (wire, lines lub solid)
-	static constexpr int penWidth = 1;
+	static int penWidth;
 	static int highlight_duration_ms; /// Duration in milliseconds for highlighting
 	static double highlight_factor; /// Highlight factor
 };

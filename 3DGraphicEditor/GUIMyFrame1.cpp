@@ -440,6 +440,6 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 		Elements_ListBox->Append(t);
 	}
 
-	Command_panel->SetValue(wxT(">>"));
-	Command_panel->SetInsertionPointEnd();
+	//Command_panel->SetValue(wxT(">>"));
+	//Command_panel->SetInsertionPointEnd();
 }

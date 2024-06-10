@@ -14,6 +14,7 @@ wxColour Drawable::penColor = wxColour(0, 0, 0);;
 bool Drawable::fill_style = false;
 wxColour Drawable::fill_color = wxColour(255, 255, 255);
 view Drawable::view_style = view::lines;
+int Drawable::penWidth = 1;
 int Drawable::highlight_duration_ms = 1000;
 double Drawable::highlight_factor = 0.6;
 
@@ -138,20 +139,19 @@ void Drawable::saveToFile(const std::string& fileName)
 	oss << fill_style << " ";
 	oss << fill_color.GetRGB() << " ";
 	oss << std::to_string(static_cast<int>(view_style)) << " ";
+	oss << std::to_string(penWidth) << " ";
+	oss << std::to_string(highlight_duration_ms) << " ";
+	oss << std::to_string(highlight_factor) << " ";
 
 	oss << Camera::getFrontDistance() << " ";
 	oss << Camera::getTopDistance() << " ";
 	oss << Camera::getRightDistance() << " ";
-
 	oss << Camera::getPosition().toString() << " ";
 	oss << Camera::getLookAt().toString() << " ";
+	oss << Camera::getFov() << " ";
 
-	oss << Camera::getFov() << "\n";
+	outFile << oss.str() << std::endl;
 
-	outFile << oss.str();
-
-	// saving objects setting
-	// type _vertices.size() _color _vertices (optional figure info)
 	for (const auto* obj : figures)
 	{
 		outFile << obj->save();
@@ -200,6 +200,27 @@ void Drawable::loadFromFile(const std::string& fileName)
 		}
 		view_style = static_cast<view>(newView);
 
+		int width;
+		if (!(iss >> width)) {
+			std::cerr << "Error: Failed to read PenWidth." << std::endl;
+			return;
+		}
+		penWidth = width;
+
+		int highlightDuration;
+		if (!(iss >> highlightDuration)) {
+			std::cerr << "Error: Failed to read highlightDuration." << std::endl;
+			return;
+		}
+		highlight_duration_ms = highlightDuration;
+
+		double highlightFactor;
+		if (!(iss >> highlightFactor)) {
+			std::cerr << "Error: Failed to read highlightFactor." << std::endl;
+			return;
+		}
+		highlight_factor = highlightFactor;
+
 		double fdist, tdist, rdist;
 		if (!(iss >> fdist >> tdist >> rdist)) {
 			std::cerr << "Error: Failed to read camera distances." << std::endl;
@@ -244,8 +265,10 @@ void Drawable::loadFromFile(const std::string& fileName)
 		std::string type;
 		size_t verticesSize;
 		wxUint32 color;
+		int groupId;
+		int lineWidth;
 
-		iss >> type >> verticesSize >> color;
+		iss >> type >> groupId >> color >> lineWidth >> verticesSize;
 
 		std::string strPoint;
 		Position Point;

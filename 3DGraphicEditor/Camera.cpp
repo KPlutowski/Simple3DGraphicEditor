@@ -7,7 +7,6 @@
 #include "Cone.h"
 #include "Cylinder.h"
 
-#include "Camera.h"
 double Drawable::Camera::frontDistance = 200.0;
 double Drawable::Camera::topDistance = 200.0;
 double Drawable::Camera::rightDistance = 200.0;
@@ -158,4 +157,5 @@ void Drawable::Camera::setRightDistance(const double right) { rightDistance = ri
 void Drawable::Camera::SetViewSize(const double x, const double y) {
 	panelWidth = x;
 	panelHeight = y;
+	Camera::update();
 }
