@@ -40,8 +40,11 @@ void Drawable::moveObj(int index, double x_shift, double y_shift, double z_shift
 	}
 
 	auto figure_to_move = figures[index - 1];
-	int group_id = figure_to_move->getGroupId();
+	figure_to_move->move(x_shift, y_shift, z_shift);
+}
 
+void Drawable::moveGroup(int group_id, double x_shift, double y_shift, double z_shift) 
+{
 	for (auto& figure : figures) {
 		if (figure->getGroupId() == group_id) {
 			figure->move(x_shift, y_shift, z_shift);
@@ -55,11 +58,14 @@ void Drawable::rotateObj(int index, double x_cord, double y_cord, double z_cord,
 	}
 
 	auto figure_to_move = figures[index - 1];
-	int group_id = figure_to_move->getGroupId();
+	figure_to_move->rotate(x_cord, y_cord, z_cord, alpha, beta, gamma);
+}
 
-	for (auto& figure : figures) {
-		if (figure->getGroupId() == group_id) {
-			figure->rotate(x_cord, y_cord, z_cord, alpha, beta, gamma);
+void Drawable::rotateGroup(int group_id, double x_cord, double y_cord, double z_cord, double alpha, double beta, double gamma)
+{
+	for (auto& fig : figures) {
+		if (fig->getGroupId() == group_id) {
+			fig->rotate(x_cord, y_cord, z_cord, alpha, beta, gamma);
 		}
 	}
 }

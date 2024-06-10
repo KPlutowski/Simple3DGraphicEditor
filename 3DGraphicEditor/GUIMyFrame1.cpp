@@ -377,9 +377,14 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 		}
 	}
 
-	else if (command_prompt[0] == "create_new_group") {
-		if (CommandParser::command_length_check(command_prompt, 1)) {
+	else if (command_prompt[0] == "rotate_group") {
+		if (CommandParser::command_length_check(command_prompt, 4)) {
 			try {
+				int id_group = std::stoi(command_prompt[1]);
+				Position rotate_point = CommandParser::get_a_point(command_prompt[2]);
+				Position rotate_angle = CommandParser::get_a_point(command_prompt[3]);
+				Drawable::rotateGroup(id_group, rotate_point.x, rotate_point.y, rotate_point.z,
+					rotate_angle.x, rotate_angle.y, rotate_angle.z);
 				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
@@ -390,12 +395,38 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 		}
 	}
 
+	else if (command_prompt[0] == "move_group") {
+		if (CommandParser::command_length_check(command_prompt, 3)) {
+			try {
+				int id_group = std::stoi(command_prompt[1]);
+				Position shift = CommandParser::get_a_point(command_prompt[2]);
+				Drawable::moveGroup(id_group, shift.x, shift.y, shift.z);
+				m_error_message_box->SetLabelText("");
+			}
+			catch (const std::exception& e) {
+				if (Command_panel) {
+					Command_panel->SetValue("ERROR");
+				}
+			}
+		}
+		else {
+			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+		}
+	}
+
 	else if (command_prompt[0] == "add_to_group") {
 		if (CommandParser::command_length_check(command_prompt, 3)) {
 			try {
 				int group_id = std::stoi(command_prompt[1]);
+				if (group_id > 0) {
 				int element_id = std::stoi(command_prompt[2]);
+				Drawable::add_to_group(group_id, element_id);
 				m_error_message_box->SetLabelText("");
+
+				}
+				else {
+					m_error_message_box->SetLabelText("Error: Group_id must be greater than 0!");
+				}
 			}
 			catch (const std::exception& e) {
 				if (Command_panel) {
