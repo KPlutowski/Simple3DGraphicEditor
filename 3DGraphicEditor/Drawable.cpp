@@ -37,23 +37,74 @@ void Drawable::clearAll() {
 	figures.clear();
 }
 
-void Drawable::moveObj(int index, double x_shift, double y_shift, double z_shift) {
+void Drawable::moveObj(int index, double x_shift, double y_shift, double z_shift) 
+{
+
 	if (index >= 1 && index <= figures.size())
-		// Use zero-based indexing internally, so adjust index by -1
-		figures[index - 1]->move(x_shift, y_shift, z_shift);
+	{
+		auto figuere_to_move = figures[index - 1];
+
+		if (figuere_to_move->_group_id == 0)
+		{
+			figuere_to_move->move(x_shift, y_shift, z_shift);
+		}
+		else
+		{
+			// szukamy reszty z grupy
+			for (const auto figure : figures)
+			{
+				if (figure->_group_id == figuere_to_move->_group_id)
+				{
+					figure->move(x_shift, y_shift, z_shift);
+				}
+			}
+		}
+	}
 }
 
 void Drawable::rotateObj(int index, double x_cord, double y_cord, double z_cord, double alpha, double beta, double gamma) {
 	if (index >= 1 && index <= figures.size())
-		// Use zero-based indexing internally, so adjust index by -1
-		figures[index - 1]->rotate(x_cord, y_cord, z_cord, alpha, beta, gamma);
+	{
+		auto figuere_to_move = figures[index - 1];
+
+		if (figuere_to_move->_group_id == 0)
+		{
+			figuere_to_move->rotate(x_cord, y_cord, z_cord, alpha, beta, gamma);
+		}
+		else
+		{
+			// szukamy reszty z grupy
+			for (const auto figure : figures)
+			{
+				if (figure->_group_id == figuere_to_move->_group_id)
+				{
+					figure->rotate(x_cord, y_cord, z_cord, alpha, beta, gamma);
+				}
+			}
+		}
+	}
 }
 
 void Drawable::touchObj(int index) {
 	if (index >= 1 && index <= figures.size())
 	{
-		// Use zero-based indexing internally, so adjust index by -1
-		figures[index - 1]->highlightObject();
+		auto figuere_to_move = figures[index - 1];
+
+		if (figuere_to_move->_group_id == 0)
+		{
+			figuere_to_move->highlightObject();
+		}
+		else
+		{
+			// szukamy reszty z grupy
+			for (const auto figure : figures)
+			{
+				if (figure->_group_id == figuere_to_move->_group_id)
+				{
+					figure->highlightObject();
+				}
+			}
+		}
 	}
 }
 
@@ -105,7 +156,7 @@ std::vector<std::string> Drawable::getFiguresInfo()
 	for (const auto figure : figures)
 	{
 		i++;
-		result.push_back(std::to_string(i) + " " + figure->getInfo());
+		result.push_back("id: "+std::to_string(i)+", group id: "+ std::to_string(figure->_group_id) + " " + figure->getInfo());
 	}
 	return result;
 }

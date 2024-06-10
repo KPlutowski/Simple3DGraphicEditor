@@ -165,10 +165,18 @@ public:
 
 	static void render_panel_to_bitmap(const std::string& filename, int width, int height, wxPanel* panel);
 
+	static void add_to_group(int group_id, int element_id)
+	{
+		if (element_id >= 1 && element_id <= figures.size())
+			figures[element_id - 1]->_group_id = group_id;
+	}
 protected:
 	std::string _type;
 	wxColour _color; /// @brief kolor obiektu
 	std::vector<Position> _vertices;
+
+	// 0 czyli bez grupy
+	int _group_id = 0; // mo¿e kilka grup?
 
 	/// @brief Rysowanie figury
 	/// @param dcFront - panel z widokiem z przodu
