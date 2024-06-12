@@ -123,6 +123,13 @@ public:
 	/// @param z_shift - shift w osi Z
 	static void moveObj(int index, double x_shift, double y_shift, double z_shift);
 
+	/// @brief Przesuniecie grupy figur o wektor
+	/// @param index - indeks figury
+	/// @param x_shift - shift w osi X
+	/// @param y_shift - shift w osi Y
+	/// @param z_shift - shift w osi Z
+	static void moveGroup(int group_id, double x_shift, double y_shift, double z_shift);
+
 	/// @brief Obrot figury wokol punktu
 	/// @param index - indeks figury
 	/// @param x_cord - wspolrzedna w osi X
@@ -132,6 +139,16 @@ public:
 	/// @param beta - kat wokol punktu w osi Y
 	/// @param gamma - kat wokol puntku w osi Z
 	static void rotateObj(int index, double x_cord, double y_cord, double z_cord, double alpha, double beta, double gamma);
+	
+	/// @brief Obrot grupy figur wokol punktu
+	/// @param index - indeks figury
+	/// @param x_cord - wspolrzedna w osi X
+	/// @param y_cord - wspolrzedna w osi Y
+	/// @param z_cord - wspolrzedna w osi Z
+	/// @param alpha - kat wokol punktu w osi X
+	/// @param beta - kat wokol punktu w osi Y
+	/// @param gamma - kat wokol puntku w osi Z
+	static void rotateGroup(int grouo_id, double x_cord, double y_cord, double z_cord, double alpha, double beta, double gamma);
 
 	/// @brief Podswietlenie figury
 	/// @param index - indeks figury
