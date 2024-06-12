@@ -54,7 +54,9 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
-				error = true;
+				if (m_error_message_box) {
+					m_error_message_box->SetLabelText("Error: Invalid command");
+				}
 			}
 		}
 		else {
@@ -71,8 +73,8 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
-				if (Command_panel) {
-					Command_panel->SetValue("ERROR");
+				if (m_error_message_box) {
+					m_error_message_box->SetLabelText("Error: Invalid command");
 				}
 			}
 		}
@@ -94,8 +96,8 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
-				if (Command_panel) {
-					Command_panel->SetValue("ERROR");
+				if (m_error_message_box) {
+					m_error_message_box->SetLabelText("Error: Invalid command");
 				}
 			}
 		}
@@ -116,8 +118,8 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
-				if (Command_panel) {
-					Command_panel->SetValue("ERROR");
+				if (m_error_message_box) {
+					m_error_message_box->SetLabelText("Error: Invalid command");
 				}
 			}
 		}
@@ -137,8 +139,8 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
-				if (Command_panel) {
-					Command_panel->SetValue("ERROR");
+				if (m_error_message_box) {
+					m_error_message_box->SetLabelText("Error: Invalid command");
 				}
 			}
 		}
@@ -156,8 +158,8 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			}
 
 			catch (const std::exception& e) {
-				if (Command_panel) {
-					Command_panel->SetValue("ERROR");
+				if (m_error_message_box) {
+					m_error_message_box->SetLabelText("Error: Invalid command");
 				}
 			}
 		}
@@ -175,8 +177,8 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
-				if (Command_panel) {
-					Command_panel->SetValue("ERROR");
+				if (m_error_message_box) {
+					m_error_message_box->SetLabelText("Error: Invalid command");
 				}
 			}
 		}
@@ -194,8 +196,8 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
-				if (Command_panel) {
-					Command_panel->SetValue("ERROR");
+				if (m_error_message_box) {
+					m_error_message_box->SetLabelText("Error: Invalid command");
 				}
 			}
 		}
@@ -215,8 +217,8 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
-				if (Command_panel) {
-					Command_panel->SetValue("ERROR");
+				if (m_error_message_box) {
+					m_error_message_box->SetLabelText("Error: Invalid command");
 				}
 			}
 		}
@@ -233,8 +235,8 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
-				if (Command_panel) {
-					Command_panel->SetValue("ERROR");
+				if (m_error_message_box) {
+					m_error_message_box->SetLabelText("Error: Invalid command");
 				}
 			}
 		}
@@ -251,8 +253,8 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
-				if (Command_panel) {
-					Command_panel->SetValue("ERROR");
+				if (m_error_message_box) {
+					m_error_message_box->SetLabelText("Error: Invalid command");
 				}
 			}
 		}
@@ -269,7 +271,9 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
-				error = true;
+				if (m_error_message_box) {
+					m_error_message_box->SetLabelText("Error: Invalid command");
+				}
 			}
 		}
 	}
@@ -282,7 +286,9 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
-				error = true;
+				if (m_error_message_box) {
+					m_error_message_box->SetLabelText("Error: Invalid command");
+				}
 			}
 		}
 		else {
@@ -298,7 +304,9 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
-				error = true;
+				if (m_error_message_box) {
+					m_error_message_box->SetLabelText("Error: Invalid command");
+				}
 			}
 		}
 		else {
@@ -314,8 +322,8 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
-				if (Command_panel) {
-					Command_panel->SetValue("ERROR");
+				if (m_error_message_box) {
+					m_error_message_box->SetLabelText("Error: Invalid command");
 				}
 			}
 		}
@@ -345,8 +353,8 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
-				if (Command_panel) {
-					Command_panel->SetValue("ERROR");
+				if (m_error_message_box) {
+					m_error_message_box->SetLabelText("Error: Invalid command");
 				}
 			}
 		}
@@ -367,8 +375,8 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
-				if (Command_panel) {
-					Command_panel->SetValue("ERROR");
+				if (m_error_message_box) {
+					m_error_message_box->SetLabelText("Error: Invalid command");
 				}
 			}
 		}
@@ -388,8 +396,8 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
-				if (Command_panel) {
-					Command_panel->SetValue("ERROR");
+				if (m_error_message_box) {
+					m_error_message_box->SetLabelText("Error: Invalid command");
 				}
 			}
 		}
@@ -404,8 +412,8 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				m_error_message_box->SetLabelText("");
 			}
 			catch (const std::exception& e) {
-				if (Command_panel) {
-					Command_panel->SetValue("ERROR");
+				if (m_error_message_box) {
+					m_error_message_box->SetLabelText("Error: Invalid command");
 				}
 			}
 		}
@@ -429,13 +437,13 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 				}
 			}
 			catch (const std::exception& e) {
-				if (Command_panel) {
-					Command_panel->SetValue("ERROR");
+				if (m_error_message_box) {
+					m_error_message_box->SetLabelText("Error: Invalid command");
 				}
 			}
 		}
 		else {
-			m_error_message_box->SetLabelText("ERROR: Too few arguments");
+			m_error_message_box->SetLabelText("Error: Too little arguments for command");
 		}
 	}
 
@@ -471,6 +479,6 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 		Elements_ListBox->Append(t);
 	}
 
-	//Command_panel->SetValue(wxT(">>"));
-	//Command_panel->SetInsertionPointEnd();
+	Command_panel->SetValue(wxT(">>"));
+	Command_panel->SetInsertionPointEnd();
 }
