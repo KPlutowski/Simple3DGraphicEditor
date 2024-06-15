@@ -26,11 +26,6 @@ std::string Cone::save() const
 	return  toSave;
 }
 
-std::string Cone::getInfo() const
-{
-	return "Cone";
-}
-
 void Cone::render(wxDC& dc, wxPoint(*projectionFunc)(const Position&)) const
 {
 	for (int i = 0; i < _vertices.size(); i += 4)

@@ -31,12 +31,6 @@ public:
 	Sphere(const Position& center, double radius, int numMeridians, int numParallels, const wxColour& color = DrawableObject::penColor, const std::vector<Position>& vertices = {});
 
 	/**
-	 * @brief Returns information about the sphere.
-	 * @return A string containing the type of the object.
-	 */
-	std::string getInfo() const override;
-
-	/**
 	 * @brief Saves the sphere's data to a string.
 	 * @return A string representation of the sphere's data.
 	 */

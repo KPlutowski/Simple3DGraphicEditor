@@ -19,9 +19,7 @@ void Line::render(wxDC& dc, wxPoint(*projectionFunc)(const Position&)) const {
 	wxPoint p2 = projectionFunc(_vertices[1]);
 	dc.DrawLine(p1.x, p1.y, p2.x, p2.y);
 }
-std::string Line::getInfo() const {
-	return "Line " + _vertices[0].toString() + " " + _vertices[1].toString();
-}
+
 std::string Line::save() const {
 	std::string toSave;
 

@@ -125,7 +125,7 @@ std::vector<std::string> Drawable::getFiguresInfo()
 	for (const auto figure : figures)
 	{
 		i++;
-		result.push_back("id: " + std::to_string(i) + ", group id: " + std::to_string(figure->getGroupId()) + " " + figure->getInfo());
+		result.push_back("id: " + std::to_string(i) + ", g_id: " + std::to_string(figure->getGroupId()) + " " + figure->getInfo());
 	}
 	return result;
 }

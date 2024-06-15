@@ -30,12 +30,6 @@ public:
 	Line(Position start, Position end, wxColour color = DrawableObject::penColor, const std::vector<Position>& vertices = {});
 
 	/**
-	 * @brief Provides information about the line object.
-	 * @return A string containing the line's start and end positions.
-	 */
-	std::string getInfo() const override;
-
-	/**
 	 * @brief Saves the line's data to a string.
 	 * @return A string representation of the line's data.
 	 */

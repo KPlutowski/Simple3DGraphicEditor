@@ -47,11 +47,9 @@ public:
 
 protected:
 	int _group_id = 0;
-
 	std::string _type;
 	wxColour _color; /// @brief kolor obiektu
 	int _lineWidth = Drawable::penWidth;
-
 	std::vector<Position> _vertices;
 
 	virtual void computeVertices() = 0;

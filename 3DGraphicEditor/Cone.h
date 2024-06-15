@@ -39,12 +39,6 @@ public:
 	 */
 	std::string save() const override;
 
-	/**
-	 * @brief Returns information about the cone.
-	 * @return A string containing the type of the object.
-	 */
-	std::string getInfo() const override;
-
 protected:
 
 	/**

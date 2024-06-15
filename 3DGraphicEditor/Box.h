@@ -30,12 +30,6 @@ public:
 	Box(const Position& start, const Position& end, const wxColour& color = DrawableObject::penColor, const std::vector<Position>& vertices = {});
 
 	/**
-	 * @brief Returns information about the box.
-	 * @return A string containing the type of the object.
-	 */
-	std::string getInfo() const override;
-
-	/**
 	 * @brief Saves the box's data to a string.
 	 * @return A string representation of the box's data.
 	 */

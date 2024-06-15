@@ -76,7 +76,7 @@ std::string DrawableObject::save() const {
 }
 
 std::string DrawableObject::getInfo() const {
-	return "DrawableObject";
+	return _type;
 }
 
 void DrawableObject::setColor(const wxColour& newColor) {

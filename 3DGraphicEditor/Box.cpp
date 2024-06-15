@@ -14,10 +14,6 @@ Box::Box(const Position& start, const Position& end, const wxColour& color, cons
 		computeVertices();
 }
 
-std::string Box::getInfo() const {
-	return "Box from " + _start.toString() + " to " + _end.toString();
-}
-
 std::string Box::save() const {
 	std::string toSave;
 

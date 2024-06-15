@@ -32,12 +32,6 @@ public:
 	Cylinder(double x1, double y1, double z1, double radius1, double x2, double y2, double z2, double radius2, int sides, wxColour color = DrawableObject::penColor, const std::vector<Position>& vertices = {});
 
 	/**
-	 * @brief Returns information about the Cylinder.
-	 * @return A string containing the type of the object.
-	 */
-	std::string getInfo() const override;
-
-	/**
 	 * @brief Saves the cylinder's data to a string.
 	 * @return A string representation of the cylinder's data.
 	 */

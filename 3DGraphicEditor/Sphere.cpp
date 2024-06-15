@@ -13,9 +13,6 @@ Sphere::Sphere(const Position& center, double radius, int numMeridians, int numP
 		computeVertices();
 }
 
-std::string Sphere::getInfo() const {
-	return "Sphere at " + _center.toString() + " with radius " + std::to_string(_radius);
-}
 std::string Sphere::save() const {
 	std::string toSave;
 
