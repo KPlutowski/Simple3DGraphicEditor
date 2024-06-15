@@ -184,6 +184,8 @@ public:
 	static void render_panel_to_bitmap(const std::string& filename, int width, int height, wxPanel* panel);
 
 	static void add_to_group(int group_id, int element_id);
+
+	static void touchGroup(int group_id);
 protected:
 	static std::vector<DrawableObject*> figures; /// @brief Wektor figur
 	static wxColour penColor; /// @brief Kolor do rysowania

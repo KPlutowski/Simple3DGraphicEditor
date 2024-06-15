@@ -403,6 +403,24 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 		}
 	}
 
+	else if (command_prompt[0] == "touch_group") {
+		if (CommandParser::command_length_check(command_prompt, 2)) {
+			try {
+				int id = std::stoi(command_prompt[1]);
+				Drawable::touchGroup(id);
+				m_error_message_box->SetLabelText("");
+			}
+			catch (const std::exception& e) {
+				if (m_error_message_box) {
+					m_error_message_box->SetLabelText("Error: Invalid command");
+				}
+			}
+		}
+		else {
+			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+		}
+	}
+
 	else if (command_prompt[0] == "move_group") {
 		if (CommandParser::command_length_check(command_prompt, 3)) {
 			try {

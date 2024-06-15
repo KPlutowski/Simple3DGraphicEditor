@@ -57,16 +57,15 @@ void Drawable::rotateObj(int index, double x_cord, double y_cord, double z_cord,
 	if (index < 1 || index > figures.size()) {
 		return;
 	}
-
-	auto figure_to_move = figures[index - 1];
-	figure_to_move->rotate(x_cord, y_cord, z_cord, alpha, beta, gamma);
+	auto figure_to_rotate = figures[index - 1];
+	figure_to_rotate->rotate(x_cord, y_cord, z_cord, alpha, beta, gamma);
 }
 
 void Drawable::rotateGroup(int group_id, double x_cord, double y_cord, double z_cord, double alpha, double beta, double gamma)
 {
-	for (auto& fig : figures) {
-		if (fig->getGroupId() == group_id) {
-			fig->rotate(x_cord, y_cord, z_cord, alpha, beta, gamma);
+	for (auto& figure : figures) {
+		if (figure->getGroupId() == group_id) {
+			figure->rotate(x_cord, y_cord, z_cord, alpha, beta, gamma);
 		}
 	}
 }
@@ -75,10 +74,11 @@ void Drawable::touchObj(int index) {
 	if (index < 1 || index > figures.size()) {
 		return;
 	}
+	figures[index - 1]->highlightObject();
+}
 
-	auto figure_to_move = figures[index - 1];
-	int group_id = figure_to_move->getGroupId();
-
+void Drawable::touchGroup(int group_id)
+{
 	for (auto& figure : figures) {
 		if (figure->getGroupId() == group_id) {
 			figure->highlightObject();
