@@ -67,10 +67,18 @@ MyFrame1::MyFrame1(wxWindow* parent, wxWindowID id, const wxString& title, const
 
 	// Connect Events
 	Command_panel->Connect(wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler(MyFrame1::Update), NULL, this);
+	side_panel->Connect(wxEVT_SIZE, wxSizeEventHandler(MyFrame1::OnSize), NULL, this);
+	vertical_side_panel->Connect(wxEVT_SIZE, wxSizeEventHandler(MyFrame1::OnSize), NULL, this);
+	horizontal_side_panel->Connect(wxEVT_SIZE, wxSizeEventHandler(MyFrame1::OnSize), NULL, this);
+	perspective_panel->Connect(wxEVT_SIZE, wxSizeEventHandler(MyFrame1::OnSize), NULL, this);
 }
 
 MyFrame1::~MyFrame1()
 {
 	// Disconnect Events
 	Command_panel->Disconnect(wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler(MyFrame1::Update), NULL, this);
+	side_panel->Disconnect(wxEVT_SIZE, wxSizeEventHandler(MyFrame1::OnSize), NULL, this);
+	vertical_side_panel->Disconnect(wxEVT_SIZE, wxSizeEventHandler(MyFrame1::OnSize), NULL, this);
+	horizontal_side_panel->Disconnect(wxEVT_SIZE, wxSizeEventHandler(MyFrame1::OnSize), NULL, this);
+	perspective_panel->Disconnect(wxEVT_SIZE, wxSizeEventHandler(MyFrame1::OnSize), NULL, this);
 }

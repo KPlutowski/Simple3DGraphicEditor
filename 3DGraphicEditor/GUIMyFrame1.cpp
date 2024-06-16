@@ -10,6 +10,7 @@ GUIMyFrame1::GUIMyFrame1(wxWindow* parent)
 	:
 	MyFrame1(parent)
 {
+	SetTitle("Projekt nr 045");
 	Drawable::Camera::update();
 	wxInitAllImageHandlers();
 }
@@ -25,7 +26,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 	bool error = false;
 	//Wybór odpowiedniej komendy
 	if (CommandParser::command_length_check(command_prompt, 0)) {
-		m_error_message_box->SetLabelText("Error: you give an empty command!");
+		m_error_message_box->SetLabelText("Error: No command given");
 	}
 	else if (command_prompt[0] == "set_line_color") {
 		if (CommandParser::command_length_check(command_prompt, 2)) {
@@ -35,12 +36,12 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			}
 			catch (const std::exception& e) {
 				if (m_error_message_box) {
-					m_error_message_box->SetLabelText("Error: Invalid command");
+					m_error_message_box->SetLabelText("Error: Invalid command arguments");
 				}
 			}
 		}
 		else {
-			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+			m_error_message_box->SetLabelText("Error: Not enough arguments");
 		}
 	}
 
@@ -55,12 +56,12 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			}
 			catch (const std::exception& e) {
 				if (m_error_message_box) {
-					m_error_message_box->SetLabelText("Error: Invalid command");
+					m_error_message_box->SetLabelText("Error: Invalid command arguments");
 				}
 			}
 		}
 		else {
-			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+			m_error_message_box->SetLabelText("Error: Not enough arguments");
 		}
 	}
 
@@ -74,12 +75,12 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			}
 			catch (const std::exception& e) {
 				if (m_error_message_box) {
-					m_error_message_box->SetLabelText("Error: Invalid command");
+					m_error_message_box->SetLabelText("Error: Invalid command arguments");
 				}
 			}
 		}
 		else {
-			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+			m_error_message_box->SetLabelText("Error: Not enough arguments");
 		}
 	}
 
@@ -97,12 +98,12 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			}
 			catch (const std::exception& e) {
 				if (m_error_message_box) {
-					m_error_message_box->SetLabelText("Error: Invalid command");
+					m_error_message_box->SetLabelText("Error: Invalid command arguments");
 				}
 			}
 		}
 		else {
-			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+			m_error_message_box->SetLabelText("Error: Not enough arguments");
 		}
 	}
 
@@ -119,12 +120,12 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			}
 			catch (const std::exception& e) {
 				if (m_error_message_box) {
-					m_error_message_box->SetLabelText("Error: Invalid command");
+					m_error_message_box->SetLabelText("Error: Invalid command arguments");
 				}
 			}
 		}
 		else {
-			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+			m_error_message_box->SetLabelText("Error: Not enough arguments");
 		}
 	}
 
@@ -140,12 +141,12 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			}
 			catch (const std::exception& e) {
 				if (m_error_message_box) {
-					m_error_message_box->SetLabelText("Error: Invalid command");
+					m_error_message_box->SetLabelText("Error: Invalid command arguments");
 				}
 			}
 		}
 		else {
-			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+			m_error_message_box->SetLabelText("Error: Not enough arguments");
 		}
 	}
 
@@ -159,12 +160,12 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 
 			catch (const std::exception& e) {
 				if (m_error_message_box) {
-					m_error_message_box->SetLabelText("Error: Invalid command");
+					m_error_message_box->SetLabelText("Error: Invalid command arguments");
 				}
 			}
 		}
 		else {
-			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+			m_error_message_box->SetLabelText("Error: Not enough arguments");
 		}
 	}
 
@@ -178,12 +179,12 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			}
 			catch (const std::exception& e) {
 				if (m_error_message_box) {
-					m_error_message_box->SetLabelText("Error: Invalid command");
+					m_error_message_box->SetLabelText("Error: Invalid command arguments");
 				}
 			}
 		}
 		else {
-			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+			m_error_message_box->SetLabelText("Error: Not enough arguments");
 		}
 	}
 
@@ -197,12 +198,12 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			}
 			catch (const std::exception& e) {
 				if (m_error_message_box) {
-					m_error_message_box->SetLabelText("Error: Invalid command");
+					m_error_message_box->SetLabelText("Error: Invalid command arguments");
 				}
 			}
 		}
 		else {
-			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+			m_error_message_box->SetLabelText("Error: Not enough arguments");
 		}
 	}
 
@@ -218,12 +219,12 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			}
 			catch (const std::exception& e) {
 				if (m_error_message_box) {
-					m_error_message_box->SetLabelText("Error: Invalid command");
+					m_error_message_box->SetLabelText("Error: Invalid command arguments");
 				}
 			}
 		}
 		else {
-			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+			m_error_message_box->SetLabelText("Error: Not enough arguments");
 		}
 	}
 
@@ -236,12 +237,12 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			}
 			catch (const std::exception& e) {
 				if (m_error_message_box) {
-					m_error_message_box->SetLabelText("Error: Invalid command");
+					m_error_message_box->SetLabelText("Error: Invalid command arguments");
 				}
 			}
 		}
 		else {
-			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+			m_error_message_box->SetLabelText("Error: Not enough arguments");
 		}
 	}
 
@@ -254,12 +255,12 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			}
 			catch (const std::exception& e) {
 				if (m_error_message_box) {
-					m_error_message_box->SetLabelText("Error: Invalid command");
+					m_error_message_box->SetLabelText("Error: Invalid command arguments");
 				}
 			}
 		}
 		else {
-			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+			m_error_message_box->SetLabelText("Error: Not enough arguments");
 		}
 	}
 
@@ -272,7 +273,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			}
 			catch (const std::exception& e) {
 				if (m_error_message_box) {
-					m_error_message_box->SetLabelText("Error: Invalid command");
+					m_error_message_box->SetLabelText("Error: Invalid command arguments");
 				}
 			}
 		}
@@ -287,12 +288,12 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			}
 			catch (const std::exception& e) {
 				if (m_error_message_box) {
-					m_error_message_box->SetLabelText("Error: Invalid command");
+					m_error_message_box->SetLabelText("Error: Invalid command arguments");
 				}
 			}
 		}
 		else {
-			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+			m_error_message_box->SetLabelText("Error: Not enough arguments");
 		}
 	}
 
@@ -305,12 +306,12 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			}
 			catch (const std::exception& e) {
 				if (m_error_message_box) {
-					m_error_message_box->SetLabelText("Error: Invalid command");
+					m_error_message_box->SetLabelText("Error: Invalid command arguments");
 				}
 			}
 		}
 		else {
-			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+			m_error_message_box->SetLabelText("Error: Not enough arguments");
 		}
 	}
 
@@ -323,12 +324,12 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			}
 			catch (const std::exception& e) {
 				if (m_error_message_box) {
-					m_error_message_box->SetLabelText("Error: Invalid command");
+					m_error_message_box->SetLabelText("Error: Invalid command arguments");
 				}
 			}
 		}
 		else {
-			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+			m_error_message_box->SetLabelText("Error: Not enough arguments");
 		}
 	}
 
@@ -354,12 +355,12 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			}
 			catch (const std::exception& e) {
 				if (m_error_message_box) {
-					m_error_message_box->SetLabelText("Error: Invalid command");
+					m_error_message_box->SetLabelText("Error: Invalid command arguments");
 				}
 			}
 		}
 		else {
-			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+			m_error_message_box->SetLabelText("Error: Not enough arguments");
 		}
 	}
 
@@ -376,12 +377,12 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			}
 			catch (const std::exception& e) {
 				if (m_error_message_box) {
-					m_error_message_box->SetLabelText("Error: Invalid command");
+					m_error_message_box->SetLabelText("Error: Invalid command arguments");
 				}
 			}
 		}
 		else {
-			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+			m_error_message_box->SetLabelText("Error: Not enough arguments");
 		}
 	}
 
@@ -397,7 +398,7 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			}
 			catch (const std::exception& e) {
 				if (m_error_message_box) {
-					m_error_message_box->SetLabelText("Error: Invalid command");
+					m_error_message_box->SetLabelText("Error: Invalid command arguments");
 				}
 			}
 		}
@@ -412,12 +413,12 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			}
 			catch (const std::exception& e) {
 				if (m_error_message_box) {
-					m_error_message_box->SetLabelText("Error: Invalid command");
+					m_error_message_box->SetLabelText("Error: Invalid command arguments");
 				}
 			}
 		}
 		else {
-			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+			m_error_message_box->SetLabelText("Error: Not enough arguments");
 		}
 	}
 
@@ -431,12 +432,12 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			}
 			catch (const std::exception& e) {
 				if (m_error_message_box) {
-					m_error_message_box->SetLabelText("Error: Invalid command");
+					m_error_message_box->SetLabelText("Error: Invalid command arguments");
 				}
 			}
 		}
 		else {
-			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+			m_error_message_box->SetLabelText("Error: Not enough arguments");
 		}
 	}
 
@@ -456,19 +457,38 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 			}
 			catch (const std::exception& e) {
 				if (m_error_message_box) {
-					m_error_message_box->SetLabelText("Error: Invalid command");
+					m_error_message_box->SetLabelText("Error: Invalid command arguments");
 				}
 			}
 		}
 		else {
-			m_error_message_box->SetLabelText("Error: Too little arguments for command");
+			m_error_message_box->SetLabelText("Error: Not enough arguments");
 		}
 	}
 
 	else {
-		m_error_message_box->SetLabelText("Error: Not recognise command");
+		m_error_message_box->SetLabelText("Error: Unrecognized command");
 	}
 
+	// wxClients moved to Redraw()
+	Redraw();
+
+	// Update List
+	Elements_ListBox->Clear();
+	for (const auto& t : Drawable::getFiguresInfo())
+	{
+		Elements_ListBox->Append(t);
+	}
+
+	Command_panel->SetValue(wxT(">>"));
+	Command_panel->SetInsertionPointEnd();
+}
+
+void GUIMyFrame1::OnSize(wxSizeEvent& event) {
+	Redraw();
+}
+
+void GUIMyFrame1::Redraw() {
 	wxClientDC dc1(vertical_side_panel);
 	wxBufferedDC topView(&dc1);
 	topView.Clear();
@@ -489,14 +509,4 @@ void GUIMyFrame1::Update(wxCommandEvent& event)
 	Drawable::Camera::SetViewSize(vertical_side_panel->GetSize().x, vertical_side_panel->GetSize().y);
 
 	Drawable::DrawAll(frontView, topView, sideView, perspectiveView);
-
-	// Update List
-	Elements_ListBox->Clear();
-	for (const auto& t : Drawable::getFiguresInfo())
-	{
-		Elements_ListBox->Append(t);
-	}
-
-	Command_panel->SetValue(wxT(">>"));
-	Command_panel->SetInsertionPointEnd();
 }

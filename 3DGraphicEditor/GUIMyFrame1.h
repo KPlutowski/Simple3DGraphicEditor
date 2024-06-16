@@ -25,6 +25,8 @@ class GUIMyFrame1 : public MyFrame1
 protected:
 	// Handlers for MyFrame1 events.
 	void Update(wxCommandEvent& event);
+	void OnSize(wxSizeEvent& event);
+	void Redraw();
 public:
 	/** Constructor */
 	GUIMyFrame1(wxWindow* parent);
