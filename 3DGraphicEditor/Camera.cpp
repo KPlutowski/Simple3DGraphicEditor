@@ -148,6 +148,10 @@ double Drawable::Camera::getTopDistance() { return topDistance; }
 
 double Drawable::Camera::getRightDistance() { return rightDistance; }
 
+double Drawable::Camera::getWidth() { return panelWidth; }
+
+double Drawable::Camera::getHeight() { return panelHeight; }
+
 void Drawable::Camera::setFrontDistance(const double front) { frontDistance = front; }
 
 void Drawable::Camera::setTopDistance(const double top) { topDistance = top; }

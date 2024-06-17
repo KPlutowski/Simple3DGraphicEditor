@@ -71,6 +71,10 @@ public:
 
 		static double getRightDistance();
 
+		static double getWidth();
+
+		static double getHeight();
+
 		static void setFrontDistance(const double front);
 
 		static void setTopDistance(const double top);

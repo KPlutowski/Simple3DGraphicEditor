@@ -350,15 +350,14 @@ void Drawable::render_panel_to_bitmap(const std::string& filename, int width, in
 {
 	wxMemoryDC memDC;
 
+	double prev_w = Camera::getWidth(), prev_h = Camera::getHeight();
+	Camera::SetViewSize(width, height);
+
 	wxBitmap bitmap(width, height);
 	memDC.SelectObject(bitmap);
 
 	memDC.SetBackground(*wxWHITE_BRUSH);
 	memDC.Clear();
-
-	panel->Refresh();
-	panel->Update();
-	panel->GetUpdateRegion().Clear();
 
 	for (auto* figure : figures)
 	{
@@ -369,6 +368,8 @@ void Drawable::render_panel_to_bitmap(const std::string& filename, int width, in
 
 	wxImage image = bitmap.ConvertToImage();
 	image.SaveFile(filename, wxBITMAP_TYPE_PNG);
+
+	Camera::SetViewSize(prev_w, prev_h);
 }
 
 void Drawable::add_to_group(int group_id, int element_id)
